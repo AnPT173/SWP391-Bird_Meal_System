@@ -11,10 +11,26 @@ const JWT_SECRET = 'minimal-secret-key';
 const JWT_EXPIRES_IN = '5 days';
 
 const users = [
+  // {
+  //   id: '8864c717-587d-472a-929a-8e5f298024da-0',
+  //   displayName: 'Jaydon Frankie',
+  //   email: 'demo@minimals.cc',
+  //   password: 'demo1234',
+  //   photoURL: '/static/mock-images/avatars/avatar_default.jpg',
+  //   phoneNumber: '+40 777666555',
+  //   country: 'United States',
+  //   address: '90210 Broadway Blvd',
+  //   state: 'California',
+  //   city: 'San Francisco',
+  //   zipCode: '94116',
+  //   about: 'Praesent turpis. Phasellus viverra nulla ut metus varius laoreet. Phasellus tempus.',
+  //   role: 'admin',
+  //   isPublic: true
+  // },
   {
-    id: '8864c717-587d-472a-929a-8e5f298024da-0',
+    id: '8864c717-587d-472a-929a-8e5f298024da-6',
     displayName: 'Jaydon Frankie',
-    email: 'demo@minimals.cc',
+    email: 'staff',
     password: 'demo1234',
     photoURL: '/static/mock-images/avatars/avatar_default.jpg',
     phoneNumber: '+40 777666555',
@@ -24,7 +40,23 @@ const users = [
     city: 'San Francisco',
     zipCode: '94116',
     about: 'Praesent turpis. Phasellus viverra nulla ut metus varius laoreet. Phasellus tempus.',
-    role: 'admin',
+    role: 'staff',
+    isPublic: true
+  },
+  {
+    id: '8864c717-587d-472a-929a-8e5f298024da-0',
+    displayName: 'Jaydon Frankie',
+    email: 'manager',
+    password: 'demo1234',
+    photoURL: '/static/mock-images/avatars/avatar_default.jpg',
+    phoneNumber: '+40 777666555',
+    country: 'United States',
+    address: '90210 Broadway Blvd',
+    state: 'California',
+    city: 'San Francisco',
+    zipCode: '94116',
+    about: 'Praesent turpis. Phasellus viverra nulla ut metus varius laoreet. Phasellus tempus.',
+    role: 'manager',
     isPublic: true
   }
 ];

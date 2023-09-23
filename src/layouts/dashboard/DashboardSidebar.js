@@ -15,9 +15,9 @@ import MyAvatar from '../../components/MyAvatar';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 import { MHidden } from '../../components/@material-extend';
-//
-import sidebarConfig from './SidebarConfig';
+
 import { DocIllustration } from '../../assets';
+import { managerSidebar, sidebarConfig, staffSidebar } from './SidebarConfig';
 
 // ----------------------------------------------------------------------
 
@@ -94,6 +94,7 @@ DashboardSidebar.propTypes = {
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
   const { user } = useAuth();
+  const sidebar = (!!user && user?.role) === 'manager' ? managerSidebar : staffSidebar;
 
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
     useCollapseDrawer();
@@ -156,11 +157,11 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         )}
       </Stack>
 
-      <NavSection navConfig={sidebarConfig} isShow={!isCollapse} />
+      <NavSection navConfig={sidebar} isShow={!isCollapse} />
 
       <Box sx={{ flexGrow: 1 }} />
 
-      {!isCollapse && (
+      {/* {!isCollapse && (
         <Stack spacing={3} alignItems="center" sx={{ px: 5, pb: 5, mt: 10, width: 1, textAlign: 'center' }}>
           <DocIllustration sx={{ width: 1 }} />
 
@@ -177,7 +178,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             Documentation
           </Button>
         </Stack>
-      )}
+      )} */}
     </Scrollbar>
   );
 

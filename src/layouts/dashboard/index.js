@@ -38,6 +38,8 @@ export default function DashboardLayout() {
   const theme = useTheme();
   const { collapseClick } = useCollapseDrawer();
   const [open, setOpen] = useState(false);
+  const role = localStorage.getItem('role');
+  console.log(role);
 
   return (
     <RootStyle>
