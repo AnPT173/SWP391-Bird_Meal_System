@@ -90,11 +90,16 @@ mock.onGet('/api/calendar/events').reply(200, { events });
 
 mock.onPost('/api/calendar/events/new').reply((request) => {
   try {
-    const { title, description, textColor, allDay, end, start } = JSON.parse(request.data);
+    const { title, description, foodtype, cageID, feedingregimen, medicine, textColor, allDay, end, start } =
+      JSON.parse(request.data);
     const event = {
       id: uuidv4(),
       title,
       description,
+      foodtype,
+      cageID,
+      feedingregimen,
+      medicine,
       textColor,
       allDay,
       end,
