@@ -22,10 +22,11 @@ const ICONS = {
   ecommerce: getIcon('ic_ecommerce'),
   analytics: getIcon('ic_analytics'),
   dashboard: getIcon('ic_dashboard'),
-  booking: getIcon('ic_booking')
+  booking: getIcon('ic_booking'),
+  setting: getIcon('ic_setting')
 };
 
-const sidebarConfig = [
+export const sidebarConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
   {
@@ -115,4 +116,45 @@ const sidebarConfig = [
   }
 ];
 
-export default sidebarConfig;
+export const staffSidebar = [
+  {
+    items: [
+      {
+        title: 'Dashboard',
+        path: PATH_DASHBOARD.general.app,
+        icon: ICONS.dashboard
+      },
+
+      { title: 'e-commerce', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
+      { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
+      { title: 'banking', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
+      { title: 'booking', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking }
+    ]
+  }
+];
+
+export const managerSidebar = [
+  {
+    items: [
+      {
+        title: 'Dashboard',
+        path: PATH_DASHBOARD.general.app,
+        icon: ICONS.dashboard
+      },
+      {
+        title: 'Cages',
+        path: PATH_DASHBOARD.mail.root,
+        icon: ICONS.mail,
+        info: <Label color="error">2</Label>
+      },
+      { title: 'Schedule', path: PATH_DASHBOARD.calendar, icon: ICONS.calendar },
+
+      { title: 'Food', path: PATH_DASHBOARD.chat.root, icon: ICONS.cart },
+      {
+        title: 'Setting',
+        path: PATH_DASHBOARD.kanban,
+        icon: ICONS.setting
+      }
+    ]
+  }
+];
