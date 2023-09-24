@@ -90,7 +90,7 @@ mock.onGet('/api/calendar/events').reply(200, { events });
 
 mock.onPost('/api/calendar/events/new').reply((request) => {
   try {
-    const { title, description, textColor, allDay, end, start } = JSON.parse(request.data);
+    const { title, description, textColor, allDay, end, start, country } = JSON.parse(request.data);
     const event = {
       id: uuidv4(),
       title,
@@ -98,7 +98,8 @@ mock.onPost('/api/calendar/events/new').reply((request) => {
       textColor,
       allDay,
       end,
-      start
+      start,
+      country
     };
     events = [...events, event];
     return [200, { event }];

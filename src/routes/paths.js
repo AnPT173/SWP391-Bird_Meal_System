@@ -56,10 +56,19 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/user'),
     profile: path(ROOTS_DASHBOARD, '/user/profile'),
     cards: path(ROOTS_DASHBOARD, '/user/cards'),
+    birds: path(ROOTS_DASHBOARD, '/user/birds'),
     list: path(ROOTS_DASHBOARD, '/user/list'),
     newUser: path(ROOTS_DASHBOARD, '/user/new'),
     editById: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
     account: path(ROOTS_DASHBOARD, '/user/account')
+  },
+  cages: {
+    root: path(ROOTS_DASHBOARD, '/cage'),
+    profile: path(ROOTS_DASHBOARD, '/cage/:cageId/birds/:birtId/profile'),
+    cards: path(ROOTS_DASHBOARD, '/cage/cards'),
+    birds: path(ROOTS_DASHBOARD, '/cage/:cageId/birds'),
+    schedule: path(ROOTS_DASHBOARD, '/cages/:cageId/schedule'),
+    list: path(ROOTS_DASHBOARD, '/cage/list')
   },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),

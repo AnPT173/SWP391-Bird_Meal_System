@@ -124,11 +124,16 @@ export const staffSidebar = [
         path: PATH_DASHBOARD.general.app,
         icon: ICONS.dashboard
       },
-
+      {
+        title: 'Cages',
+        path: PATH_DASHBOARD.cages.cards,
+        icon: ICONS.mail,
+        info: <Label color="error">2</Label>
+      },
       { title: 'e-commerce', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
       { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
       { title: 'banking', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
-      { title: 'booking', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking }
+      { title: 'Schedule', path: PATH_DASHBOARD.calendar, icon: ICONS.booking }
     ]
   }
 ];
@@ -143,7 +148,7 @@ export const managerSidebar = [
       },
       {
         title: 'Cages',
-        path: PATH_DASHBOARD.mail.root,
+        path: PATH_DASHBOARD.user.cards,
         icon: ICONS.mail,
         info: <Label color="error">2</Label>
       },

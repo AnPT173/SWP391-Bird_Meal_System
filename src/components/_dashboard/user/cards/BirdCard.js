@@ -5,9 +5,11 @@ import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
 // material
+import { useParams } from 'react-router';
 import { alpha, styled } from '@material-ui/core/styles';
-import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton } from '@material-ui/core';
+import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton, Link } from '@material-ui/core';
 // utils
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { fShortenNumber } from '../../../../utils/formatNumber';
 //
 import SvgIconStyle from '../../../SvgIconStyle';
@@ -75,12 +77,13 @@ function InfoItem(number) {
   );
 }
 
-UserCard.propTypes = {
+BirdCard.propTypes = {
   user: PropTypes.object.isRequired
 };
 
-export default function UserCard({ user, ...other }) {
-  const { name, cover, position, follower, totalPost, avatarUrl, following } = user;
+export default function BirdCard({ user, ...other }) {
+  const { id, name, cover, position, follower, totalPost, avatarUrl, following } = user;
+  const { cageId, birdId } = useParams();
 
   return (
     <Card {...other}>
@@ -110,9 +113,11 @@ export default function UserCard({ user, ...other }) {
         <CoverImgStyle alt="cover" src={cover} />
       </CardMediaStyle>
 
-      <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
-        {name}
-      </Typography>
+      <Link href={`${PATH_DASHBOARD.cages.root}/${cageId}/birds/${id}/profile`}>
+        <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
+          {name}
+        </Typography>
+      </Link>
       <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
         {position}
       </Typography>
