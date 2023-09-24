@@ -9,8 +9,9 @@ import { useSnackbar } from 'notistack5';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { useState, useRef, useEffect } from 'react';
 // material
-import { useTheme } from '@material-ui/core/styles';
-import { Card, Button, Container, DialogTitle, useMediaQuery } from '@material-ui/core';
+import { styled, useTheme } from '@material-ui/core/styles';
+import { Card, Button, Container, DialogTitle, useMediaQuery, Stack } from '@material-ui/core';
+import { useLocation, useParams } from 'react-router';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getEvents, openModal, closeModal, updateEvent, selectEvent, selectRange } from '../../redux/slices/calendar';
@@ -45,6 +46,9 @@ export default function Calendar() {
   const [view, setView] = useState(isMobile ? 'listWeek' : 'dayGridMonth');
   const selectedEvent = useSelector(selectedEventSelector);
   const { events, isOpenModal, selectedRange } = useSelector((state) => state.calendar);
+  const { cageId } = useParams();
+
+  const cageIdTitle = cageId ? `    ||    CageId: ${cageId}` : '';
 
   useEffect(() => {
     dispatch(getEvents());
@@ -150,20 +154,29 @@ export default function Calendar() {
   };
 
   return (
-    <Page title="Calendar | Minimal-UI">
+    <Page title={`Calendar${cageIdTitle}`}>
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <HeaderBreadcrumbs
-          heading="Calendar"
+          heading={`Calendar${cageIdTitle}`}
           links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, { name: 'Calendar' }]}
-          moreLink="https://fullcalendar.io/docs/react"
+          // moreLink="https://fullcalendar.io/docs/react"
           action={
-            <Button
-              variant="contained"
-              startIcon={<Icon icon={plusFill} width={20} height={20} />}
-              onClick={handleAddEvent}
-            >
-              New Event
-            </Button>
+            <Stack direction="row" spacing={1.5}>
+              <Button
+                variant="contained"
+                startIcon={<Icon icon={plusFill} width={20} height={20} />}
+                onClick={handleAddEvent}
+              >
+                New Event
+              </Button>
+              <Button
+                variant="contained"
+                startIcon={<Icon icon={plusFill} width={20} height={20} />}
+                onClick={handleAddEvent}
+              >
+                New Batch Event
+              </Button>
+            </Stack>
           }
         />
 

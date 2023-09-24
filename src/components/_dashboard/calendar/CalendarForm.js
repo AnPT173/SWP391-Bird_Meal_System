@@ -49,6 +49,7 @@ const getInitialValues = (event, range) => {
     textColor: '#1890FF',
     allDay: false,
     start: range ? new Date(range.start) : new Date(),
+    country: '',
     end: range ? new Date(range.end) : new Date()
   };
 
@@ -94,7 +95,8 @@ export default function CalendarForm({ event, range, onCancel }) {
           textColor: values.textColor,
           allDay: values.allDay,
           start: values.start,
-          end: values.end
+          end: values.end,
+          country: values.country
         };
         if (event) {
           dispatch(updateEvent(event.id, newEvent));
@@ -113,7 +115,7 @@ export default function CalendarForm({ event, range, onCancel }) {
   });
 
   const { values, errors, touched, handleSubmit, isSubmitting, getFieldProps, setFieldValue } = formik;
-
+  console.log('values', values);
   const handleDelete = async () => {
     try {
       onCancel();
@@ -134,6 +136,14 @@ export default function CalendarForm({ event, range, onCancel }) {
             {...getFieldProps('title')}
             error={Boolean(touched.title && errors.title)}
             helperText={touched.title && errors.title}
+          />
+
+          <TextField
+            fullWidth
+            label="country"
+            {...getFieldProps('country')}
+            error={Boolean(touched.country && errors.country)}
+            helperText={touched.country && errors.country}
           />
 
           <TextField

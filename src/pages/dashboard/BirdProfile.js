@@ -7,6 +7,7 @@ import roundPermMedia from '@iconify/icons-ic/round-perm-media';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
 // material
 import { styled } from '@material-ui/core/styles';
+import { useParams } from 'react-router';
 import { Tab, Box, Card, Tabs, Container } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
@@ -47,13 +48,14 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function UserProfile() {
+export default function BirdProfile() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { myProfile, posts, followers, friends, gallery } = useSelector((state) => state.user);
   const { user } = useAuth();
   const [currentTab, setCurrentTab] = useState('profile');
   const [findFriends, setFindFriends] = useState('');
+  const { cageId, birdId } = useParams();
 
   useEffect(() => {
     dispatch(getProfile());
@@ -103,13 +105,14 @@ export default function UserProfile() {
   ];
 
   return (
-    <Page title="User: Profile | Minimal-UI">
+    <Page title="Bird Profile">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Profile"
+          heading="Bird Profile"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
+            { name: 'Cages', href: PATH_DASHBOARD.cages.cards },
+            { name: 'Birds', href: `${PATH_DASHBOARD.cages.root}/${cageId}/birds` },
             { name: user.displayName }
           ]}
         />

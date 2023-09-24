@@ -10,7 +10,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
-import { UserCard } from '../../components/_dashboard/user/cards';
+import { CageCard } from '../../components/_dashboard/user/cards';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 
 // ----------------------------------------------------------------------
@@ -25,7 +25,7 @@ const SkeletonLoad = (
   </>
 );
 
-export default function UserCards() {
+export default function CageCards() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.user);
@@ -35,20 +35,16 @@ export default function UserCards() {
   }, [dispatch]);
 
   return (
-    <Page title="User: Cards | Minimal-UI">
+    <Page title="Cages">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="User Cards"
-          links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
-            { name: 'Cards' }
-          ]}
+          heading="Cages"
+          links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, { name: 'Cages' }]}
         />
         <Grid container spacing={3}>
           {users.map((user) => (
             <Grid key={user.id} item xs={12} sm={6} md={4}>
-              <UserCard user={user} />
+              <CageCard user={user} />
             </Grid>
           ))}
 

@@ -5,9 +5,11 @@ import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
 // material
+import { useParams } from 'react-router';
 import { alpha, styled } from '@material-ui/core/styles';
-import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton } from '@material-ui/core';
+import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton, Link } from '@material-ui/core';
 // utils
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { fShortenNumber } from '../../../../utils/formatNumber';
 //
 import SvgIconStyle from '../../../SvgIconStyle';
@@ -45,7 +47,11 @@ const CardMediaStyle = styled('div')(({ theme }) => ({
     width: '100%',
     height: '100%',
     position: 'absolute',
-    WebkitBackdropFilter: 'blur(3px)' // Fix on Mobile
+    backdropFilter: 'blur(3px)',
+    WebkitBackdropFilter: 'blur(3px)', // Fix on Mobile
+    borderTopLeftRadius: theme.shape.borderRadiusMd,
+    borderTopRightRadius: theme.shape.borderRadiusMd,
+    backgroundColor: alpha(theme.palette.primary.darker, 0.72)
   }
 }));
 
@@ -71,22 +77,47 @@ function InfoItem(number) {
   );
 }
 
-UserCard.propTypes = {
+BirdCard.propTypes = {
   user: PropTypes.object.isRequired
 };
 
-export default function UserCard({ user, ...other }) {
-  const { name, cover, position, follower, totalPost, following } = user;
+export default function BirdCard({ user, ...other }) {
+  const { id, name, cover, position, follower, totalPost, avatarUrl, following } = user;
+  const { cageId, birdId } = useParams();
 
   return (
     <Card {...other}>
       <CardMediaStyle>
+        <SvgIconStyle
+          color="paper"
+          src="/static/icons/shape-avatar.svg"
+          sx={{
+            width: 144,
+            height: 62,
+            zIndex: 10,
+            bottom: -26,
+            position: 'absolute'
+          }}
+        />
+        <Avatar
+          alt={name}
+          src={avatarUrl}
+          sx={{
+            width: 64,
+            height: 64,
+            zIndex: 11,
+            position: 'absolute',
+            transform: 'translateY(-50%)'
+          }}
+        />
         <CoverImgStyle alt="cover" src={cover} />
       </CardMediaStyle>
 
-      <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
-        {name}
-      </Typography>
+      <Link href={`${PATH_DASHBOARD.cages.root}/${cageId}/birds/${id}/profile`}>
+        <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
+          {name}
+        </Typography>
+      </Link>
       <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
         {position}
       </Typography>

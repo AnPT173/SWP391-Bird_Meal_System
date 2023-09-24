@@ -11,7 +11,8 @@ const initialState = {
   events: [],
   isOpenModal: false,
   selectedEventId: null,
-  selectedRange: null
+  selectedRange: null,
+  country: null
 };
 
 const slice = createSlice({

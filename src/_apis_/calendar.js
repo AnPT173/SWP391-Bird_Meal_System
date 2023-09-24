@@ -103,7 +103,8 @@ mock.onPost('/api/calendar/events/new').reply((request) => {
       textColor,
       allDay,
       end,
-      start
+      start,
+      country
     };
     events = [...events, event];
     return [200, { event }];
