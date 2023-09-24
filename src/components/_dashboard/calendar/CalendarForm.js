@@ -1,3 +1,5 @@
+import React from 'react';
+import MenuItem from '@material-ui/core/MenuItem';
 import * as Yup from 'yup';
 import { merge } from 'lodash';
 import PropTypes from 'prop-types';
@@ -40,6 +42,10 @@ const getInitialValues = (event, range) => {
   const _event = {
     title: '',
     description: '',
+    foodtype: '',
+    cageID: '',
+    feedingregimen: '',
+    medicine: '',
     textColor: '#1890FF',
     allDay: false,
     start: range ? new Date(range.start) : new Date(),
@@ -53,8 +59,6 @@ const getInitialValues = (event, range) => {
 
   return _event;
 };
-
-// ----------------------------------------------------------------------
 
 CalendarForm.propTypes = {
   event: PropTypes.object,
@@ -76,7 +80,6 @@ export default function CalendarForm({ event, range, onCancel }) {
     ),
     start: Yup.date()
   });
-
   const formik = useFormik({
     initialValues: getInitialValues(event, range),
     validationSchema: EventSchema,
@@ -85,6 +88,10 @@ export default function CalendarForm({ event, range, onCancel }) {
         const newEvent = {
           title: values.title,
           description: values.description,
+          foodtype: values.foodtype,
+          cageID: values.cageID,
+          feedingregimen: values.feedingregimen,
+          medicine: values.medicine,
           textColor: values.textColor,
           allDay: values.allDay,
           start: values.start,
@@ -148,6 +155,61 @@ export default function CalendarForm({ event, range, onCancel }) {
             error={Boolean(touched.description && errors.description)}
             helperText={touched.description && errors.description}
           />
+          <TextField
+            select
+            {...getFieldProps('foodtype')}
+            value={values.foodtype}
+            fullWidth
+            label="Food Type"
+            error={Boolean(touched.foodtype && errors.foodtype)}
+            helperText={touched.foodtype && errors.foodtype}
+          >
+            <MenuItem value="option 1">Product 1</MenuItem>
+            <MenuItem value="option 2">Product 2</MenuItem>
+            <MenuItem value="option 3">Product 3</MenuItem>
+          </TextField>
+
+          <TextField
+            select
+            {...getFieldProps('cageID')}
+            value={values.cageID}
+            fullWidth
+            label="Cage ID"
+            error={Boolean(touched.cageID && errors.cageID)}
+            helperText={touched.cageID && errors.cageID}
+          >
+            <MenuItem value="option 1">CA001</MenuItem>
+            <MenuItem value="option 2">CA002</MenuItem>
+            <MenuItem value="option 3">CA003</MenuItem>
+            <MenuItem value="option 4">CA004</MenuItem>
+            <MenuItem value="option 5">CA005</MenuItem>
+          </TextField>
+          <TextField
+            select
+            {...getFieldProps('feedingregimen')}
+            value={values.feedingregimen}
+            fullWidth
+            label="Feeding Regimen"
+            error={Boolean(touched.feedingregimen && errors.feedingregimen)}
+            helperText={touched.feedingregimen && errors.feedingregimen}
+          >
+            <MenuItem value="option 1">Normal</MenuItem>
+            <MenuItem value="option 2">Sick</MenuItem>
+            <MenuItem value="option 3">Birth</MenuItem>
+          </TextField>
+          <TextField
+            select
+            {...getFieldProps('medicine')}
+            fullWidth
+            label="Medicine"
+            error={Boolean(touched.medicine && errors.medicine)}
+            helperText={touched.medicine && errors.medicine}
+          >
+            <MenuItem value="option 0">None</MenuItem>
+            <MenuItem value="option 1">Medicine 1</MenuItem>
+            <MenuItem value="option 2">Medicine 2</MenuItem>
+            <MenuItem value="option 3">Medicine 3</MenuItem>
+          </TextField>
 
           <FormControlLabel control={<Switch checked={values.allDay} {...getFieldProps('allDay')} />} label="All day" />
 
