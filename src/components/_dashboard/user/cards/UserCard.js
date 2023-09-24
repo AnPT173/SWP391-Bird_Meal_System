@@ -45,11 +45,7 @@ const CardMediaStyle = styled('div')(({ theme }) => ({
     width: '100%',
     height: '100%',
     position: 'absolute',
-    backdropFilter: 'blur(3px)',
-    WebkitBackdropFilter: 'blur(3px)', // Fix on Mobile
-    borderTopLeftRadius: theme.shape.borderRadiusMd,
-    borderTopRightRadius: theme.shape.borderRadiusMd,
-    backgroundColor: alpha(theme.palette.primary.darker, 0.72)
+    WebkitBackdropFilter: 'blur(3px)' // Fix on Mobile
   }
 }));
 
@@ -80,33 +76,11 @@ UserCard.propTypes = {
 };
 
 export default function UserCard({ user, ...other }) {
-  const { name, cover, position, follower, totalPost, avatarUrl, following } = user;
+  const { name, cover, position, follower, totalPost, following } = user;
 
   return (
     <Card {...other}>
       <CardMediaStyle>
-        <SvgIconStyle
-          color="paper"
-          src="/static/icons/shape-avatar.svg"
-          sx={{
-            width: 144,
-            height: 62,
-            zIndex: 10,
-            bottom: -26,
-            position: 'absolute'
-          }}
-        />
-        <Avatar
-          alt={name}
-          src={avatarUrl}
-          sx={{
-            width: 64,
-            height: 64,
-            zIndex: 11,
-            position: 'absolute',
-            transform: 'translateY(-50%)'
-          }}
-        />
         <CoverImgStyle alt="cover" src={cover} />
       </CardMediaStyle>
 
