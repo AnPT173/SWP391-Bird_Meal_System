@@ -77,6 +77,7 @@ const setColorAndTime = (index) => {
 let events = [...Array(9)].map((_, index) => ({
   id: uuidv4(),
   title: mockData.text.title(index),
+  cageId: '',
   description: mockData.text.description(index),
   allDay: mockData.boolean(index),
   ...setColorAndTime(index)
@@ -104,7 +105,6 @@ mock.onPost('/api/calendar/events/new').reply((request) => {
       allDay,
       end,
       start,
-      country
     };
     events = [...events, event];
     return [200, { event }];

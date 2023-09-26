@@ -95,8 +95,7 @@ export default function CalendarForm({ event, range, onCancel }) {
           textColor: values.textColor,
           allDay: values.allDay,
           start: values.start,
-          end: values.end,
-          country: values.country
+          end: values.end
         };
         if (event) {
           dispatch(updateEvent(event.id, newEvent));
@@ -136,14 +135,6 @@ export default function CalendarForm({ event, range, onCancel }) {
             {...getFieldProps('title')}
             error={Boolean(touched.title && errors.title)}
             helperText={touched.title && errors.title}
-          />
-
-          <TextField
-            fullWidth
-            label="country"
-            {...getFieldProps('country')}
-            error={Boolean(touched.country && errors.country)}
-            helperText={touched.country && errors.country}
           />
 
           <TextField
