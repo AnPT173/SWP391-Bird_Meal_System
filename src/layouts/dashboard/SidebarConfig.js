@@ -148,7 +148,7 @@ export const managerSidebar = [
       },
       {
         title: 'Cages',
-        path: PATH_DASHBOARD.user.cards,
+        path: PATH_DASHBOARD.cages.cards,
         icon: ICONS.mail,
         info: <Label color="error">2</Label>
       },

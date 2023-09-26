@@ -64,7 +64,7 @@ const CoverImgStyle = styled('img')({
 function InfoItem(number) {
   return (
     <Grid item xs={4}>
-      <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', display: 'block' }}>
+      <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary' }}>
         Follower
       </Typography>
       <Typography variant="subtitle1">{fShortenNumber(number)}</Typography>
@@ -77,15 +77,14 @@ CageCard.propTypes = {
 };
 
 export default function CageCard({ user, ...other }) {
-  const { id, name, cover, position, follower, totalPost, avatarUrl, following } = user;
+  const { cageId, name, cover, position, follower, totalPost, avatarUrl, following } = user;
 
   return (
     <Card {...other}>
       <CardMediaStyle>
         <CoverImgStyle alt="cover" src={cover} />
       </CardMediaStyle>
-
-      <Link href={`${PATH_DASHBOARD.cages.root}/${id}/birds`}>
+      <Link href={`${PATH_DASHBOARD.cages.root}/${cageId}/birds`}>
         <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
           {name}
         </Typography>
@@ -93,17 +92,7 @@ export default function CageCard({ user, ...other }) {
       <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
         {position}
       </Typography>
-
-      <Box sx={{ textAlign: 'center', mt: 2, mb: 2.5 }}>
-        {SOCIALS.map((social) => (
-          <Tooltip key={social.name} title={social.name}>
-            <IconButton>{social.icon}</IconButton>
-          </Tooltip>
-        ))}
-      </Box>
-
       <Divider />
-
       <Grid container sx={{ py: 3, textAlign: 'center' }}>
         {InfoItem(follower)}
         {InfoItem(following)}
