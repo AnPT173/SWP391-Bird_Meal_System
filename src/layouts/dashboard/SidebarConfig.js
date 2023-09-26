@@ -148,13 +148,13 @@ export const managerSidebar = [
       },
       {
         title: 'Cages',
-        path: PATH_DASHBOARD.user.cards,
+        path: PATH_DASHBOARD.cages.cards,
         icon: ICONS.mail,
         info: <Label color="error">2</Label>
       },
       { title: 'Schedule', path: PATH_DASHBOARD.calendar, icon: ICONS.calendar },
 
-      { title: 'Food', path: PATH_DASHBOARD.chat.root, icon: ICONS.cart },
+      { title: 'Food', path: PATH_DASHBOARD.eCommerce.root, icon: ICONS.cart },
       {
         title: 'Setting',
         path: PATH_DASHBOARD.kanban,

@@ -64,7 +64,7 @@ export const PATH_DASHBOARD = {
   },
   cages: {
     root: path(ROOTS_DASHBOARD, '/cage'),
-    profile: path(ROOTS_DASHBOARD, '/cage/:cageId/birds/:birtId/profile'),
+    profile: path(ROOTS_DASHBOARD, '/cage/:cageID/birds/:birdID/profile'),
     cards: path(ROOTS_DASHBOARD, '/cage/cards'),
     birds: path(ROOTS_DASHBOARD, '/cage/:cageId/birds'),
     schedule: path(ROOTS_DASHBOARD, '/cages/:cageId/schedule'),

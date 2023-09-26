@@ -46,11 +46,7 @@ const CardMediaStyle = styled('div')(({ theme }) => ({
     width: '100%',
     height: '100%',
     position: 'absolute',
-    backdropFilter: 'blur(3px)',
-    WebkitBackdropFilter: 'blur(3px)', // Fix on Mobile
-    borderTopLeftRadius: theme.shape.borderRadiusMd,
-    borderTopRightRadius: theme.shape.borderRadiusMd,
-    backgroundColor: alpha(theme.palette.primary.darker, 0.72)
+    WebkitBackdropFilter: 'blur(3px)' // Fix on Mobile
   }
 }));
 
@@ -68,7 +64,7 @@ const CoverImgStyle = styled('img')({
 function InfoItem(number) {
   return (
     <Grid item xs={4}>
-      <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', display: 'block' }}>
+      <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary' }}>
         Follower
       </Typography>
       <Typography variant="subtitle1">{fShortenNumber(number)}</Typography>
@@ -81,37 +77,14 @@ CageCard.propTypes = {
 };
 
 export default function CageCard({ user, ...other }) {
-  const { id, name, cover, position, follower, totalPost, avatarUrl, following } = user;
+  const { cageId, name, cover, position, follower, totalPost, avatarUrl, following } = user;
 
   return (
     <Card {...other}>
       <CardMediaStyle>
-        <SvgIconStyle
-          color="paper"
-          src="/static/icons/shape-avatar.svg"
-          sx={{
-            width: 144,
-            height: 62,
-            zIndex: 10,
-            bottom: -26,
-            position: 'absolute'
-          }}
-        />
-        <Avatar
-          alt={name}
-          src={avatarUrl}
-          sx={{
-            width: 64,
-            height: 64,
-            zIndex: 11,
-            position: 'absolute',
-            transform: 'translateY(-50%)'
-          }}
-        />
         <CoverImgStyle alt="cover" src={cover} />
       </CardMediaStyle>
-
-      <Link href={`${PATH_DASHBOARD.cages.root}/${id}/birds`}>
+      <Link href={`${PATH_DASHBOARD.cages.root}/${cageId}/birds`}>
         <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
           {name}
         </Typography>
@@ -119,17 +92,7 @@ export default function CageCard({ user, ...other }) {
       <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
         {position}
       </Typography>
-
-      <Box sx={{ textAlign: 'center', mt: 2, mb: 2.5 }}>
-        {SOCIALS.map((social) => (
-          <Tooltip key={social.name} title={social.name}>
-            <IconButton>{social.icon}</IconButton>
-          </Tooltip>
-        ))}
-      </Box>
-
       <Divider />
-
       <Grid container sx={{ py: 3, textAlign: 'center' }}>
         {InfoItem(follower)}
         {InfoItem(following)}
