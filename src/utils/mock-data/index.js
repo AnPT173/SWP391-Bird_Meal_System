@@ -9,6 +9,8 @@ import { fullAddress, country } from './address';
 import { firstName, lastName, fullName } from './name';
 import { title, sentence, description } from './text';
 import { price, rating, age, percent } from './number';
+import { cagesData } from './cage';
+import { birdsData } from './bird';
 // ----------------------------------------------------------------------
 
 const mockData = {
@@ -43,8 +45,13 @@ const mockData = {
     cover: (index) => `/static/mock-images/covers/cover_${index + 1}.jpg`,
     feed: (index) => `/static/mock-images/feeds/feed_${index + 1}.jpg`,
     product: (index) => `/static/mock-images/products/product_${index + 1}.jpg`,
-    avatar: (index) => `/static/mock-images/avatars/avatar_${index + 1}.jpg`
-  }
+    avatar: (index) => `/static/mock-images/avatars/avatar_${index + 1}.jpg`,
+    cage_image: (index) => `static/mock-images/cages/cage_${index + 1}.jpg`,
+    bird_image: (index) => `static/mock-images/birds/bird_${index + 1}.jpg`
+  },
+  cage: cagesData,
+  bird: birdsData,
+  schedule: scheduleData
 };
 
 export default mockData;
