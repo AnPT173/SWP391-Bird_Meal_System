@@ -9,7 +9,7 @@ import { fullAddress, country } from './address';
 import { firstName, lastName, fullName } from './name';
 import { title, sentence, description } from './text';
 import { price, rating, age, percent } from './number';
-import { cagesData } from './cage';
+import { cagesID } from './cage';
 import { birdsData } from './bird';
 import { scheduleData } from './schedule';
 // ----------------------------------------------------------------------
@@ -50,7 +50,7 @@ const mockData = {
     cage_image: (index) => `static/mock-images/cages/cage_${index + 1}.jpg`,
     bird_image: (index) => `static/mock-images/birds/bird_${index + 1}.jpg`
   },
-  cage: cagesData,
+  cage: cagesID,
   bird: birdsData,
   schedule: scheduleData
 };

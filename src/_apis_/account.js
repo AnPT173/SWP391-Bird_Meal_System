@@ -108,7 +108,7 @@ const users = [
     isPublic: true
   },
   {
-    id: '8864c717-587d-472a-929a-8e5f298024da-0',
+    id: 'MANAGER001',
     displayName: 'Jaydon Frankie',
     email: 'manager',
     password: 'demo1234',
