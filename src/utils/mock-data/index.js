@@ -11,6 +11,7 @@ import { title, sentence, description } from './text';
 import { price, rating, age, percent } from './number';
 import { cagesData } from './cage';
 import { birdsData } from './bird';
+import { scheduleData } from './schedule';
 // ----------------------------------------------------------------------
 
 const mockData = {

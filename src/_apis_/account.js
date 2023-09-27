@@ -28,7 +28,7 @@ const users = [
   //   isPublic: true
   // },
   {
-    id: '8864c717-587d-472a-929a-8e5f298024da-6',
+    id: 'STA001',
     displayName: 'Jaydon Frankie',
     email: 'staff1',
     password: 'demo1234',
@@ -44,11 +44,11 @@ const users = [
     isPublic: true
   },
   {
-    id: '1e846eb9-3502-4c2b-a080-66c0d17f9031',
+    id: 'STA002',
     displayName: 'Liam Davis',
     email: 'staff2',
     password: 'demo1234',
-    photoURL: '/static/mock-images/avatars/avatar4.jpg',
+    photoURL: '/static/mock-images/avatars/avatar_4.jpg',
     phoneNumber: '+61 1234123412',
     country: 'Australia',
     address: '789 Beach Rd',
@@ -56,15 +56,15 @@ const users = [
     city: 'Sydney City',
     zipCode: '2000',
     about: 'Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam.',
-    role: 'user',
+    role: 'staff',
     isPublic: true
   },
   {
-    id: '3fc0743d-e6c5-4e0e-9f9d-2de49e328a83',
+    id: 'STA003',
     displayName: 'Emma Johnson',
     email: 'staff3',
     password: 'demo1234',
-    photoURL: '/static/mock-images/avatars/avatar3.jpg',
+    photoURL: '/static/mock-images/avatars/avatar_3.jpg',
     phoneNumber: '+44 9876543210',
     country: 'United Kingdom',
     address: '456 Park Ave',
@@ -72,15 +72,15 @@ const users = [
     city: 'London City',
     zipCode: 'SW1A 1AA',
     about: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem.',
-    role: 'user',
+    role: 'staff',
     isPublic: true
   },
   {
-    id: 'b4978e4f-7f09-4a10-a9a1-58d49f8c1e12',
+    id: 'STA004',
     displayName: 'Oliver Smith',
     email: 'staff4',
     password: 'demo1234',
-    photoURL: '/static/mock-images/avatars/avatar2.jpg',
+    photoURL: '/static/mock-images/avatars/avatar_2.jpg',
     phoneNumber: '+1 1234567890',
     country: 'United States',
     address: '123 Main St',
@@ -88,11 +88,25 @@ const users = [
     city: 'New York City',
     zipCode: '10001',
     about: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    role: 'user',
+    role: 'staff',
     isPublic: true
   },
-  
-  
+  {
+    id: 'STA005',
+    displayName: 'Oliver Smith',
+    email: 'staff5',
+    password: 'demo1234',
+    photoURL: '/static/mock-images/avatars/avatar_5.jpg',
+    phoneNumber: '+44 1234567890',
+    country: 'United Kingdom',
+    address: '789 Oak Street',
+    state: 'London',
+    city: 'London City',
+    zipCode: 'SW1A 2BB',
+    about: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    role: 'staff',
+    isPublic: true
+  },
   {
     id: '8864c717-587d-472a-929a-8e5f298024da-0',
     displayName: 'Jaydon Frankie',
