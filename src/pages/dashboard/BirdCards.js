@@ -54,7 +54,7 @@ export default function BirdCards() {
             <Button
               variant="contained"
               component={RouterLink}
-              to={`${PATH_DASHBOARD.cages.root}/.${cageId}/schedule`}
+              to={`${PATH_DASHBOARD.cages.root}/${cageId}/schedule`}
               startIcon={<Icon icon={listTask} />}
             >
               View Feeding Schedule

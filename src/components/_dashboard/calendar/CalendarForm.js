@@ -38,6 +38,38 @@ const COLOR_OPTIONS = [
   '#7A0C2E' // theme.palette.error.darker
 ];
 
+const PRODUCTS = [
+  { id: 'P001', value: 'Product 01' },
+  { id: 'P002', value: 'Product 02' },
+  { id: 'P003', value: 'Product 03' },
+  { id: 'P004', value: 'Product 04' }
+];
+
+const STAFFS = [
+  { id: 'STA001', value: 'Staff 001' },
+  { id: 'STA002', value: 'Staff 002' },
+  { id: 'STA003', value: 'Staff 003' },
+  { id: 'STA004', value: 'Staff 004' }
+];
+const CAGES = [
+  { id: 'CA001', value: 'Cage 001' },
+  { id: 'CA002', value: 'Cage 002' },
+  { id: 'CA003', value: 'Cage 003' },
+  { id: 'CA004', value: 'Cage 004' },
+  { id: 'CA005', value: 'Cage 005' }
+];
+const FOODS = [
+  { id: 'FO001', value: 'Food 1' },
+  { id: 'FO002', value: 'Food 2' },
+  { id: 'FO003', value: 'Food 3' },
+  { id: 'FO004', value: 'Food 4' }
+];
+
+const FEEDING_NOTE = [
+  { id: 'FN001', value: 'Normal' },
+  { id: 'FN002', value: 'Sick' },
+  { id: 'FN003', value: 'Bird' }
+];
 const getInitialValues = (event, range) => {
   const _event = {
     title: '',
@@ -67,18 +99,37 @@ CalendarForm.propTypes = {
 };
 
 export default function CalendarForm({ event, range, onCancel }) {
+  console.log('event', event);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const isCreating = !event;
+  // id: '003',
+  //   cageId: 'CA002',
+  //   title: 'Feed Bird',
+  //   description: 'Feeding for CA002',
+  //   foodType: 'Product 1',
+  //   start: sub(new Date(), { days: 1, hours: 0, minutes: 45 }),
+  //   end: sub(new Date(), { days: 1, hours: 0, minutes: 35 }),
+  //   foodQuantity: '90 grams',
+  //   staffId: 'STA002',
+  //   status: 'Completed',
+  //   textColor: COLOR_OPTIONS[2]
 
   const EventSchema = Yup.object().shape({
     title: Yup.string().max(255).required('Title is required'),
     description: Yup.string().max(5000),
+    cageId: Yup.string(),
+    foodtype: Yup.string(),
+    foodQuantity: Yup.string(),
+    staffId: Yup.string(),
+    status: Yup.string(),
+    feedingRegimen: Yup.string(),
     end: Yup.date().when(
       'start',
       (start, schema) => start && schema.min(start, 'End date must be later than start date')
     ),
-    start: Yup.date()
+    start: Yup.date(),
+    feedingTime: Yup.date()
   });
   const formik = useFormik({
     initialValues: getInitialValues(event, range),
@@ -92,10 +143,15 @@ export default function CalendarForm({ event, range, onCancel }) {
           cageID: values.cageID,
           feedingregimen: values.feedingregimen,
           medicine: values.medicine,
+          foodQuantity: values.foodQuantity,
+          staffId: values.staffId,
+          status: values.status,
           textColor: values.textColor,
           allDay: values.allDay,
           start: values.start,
-          end: values.end
+          end: values.end,
+          feedingRegimen: values.feedingRegimen,
+          feedingTime: values.feedingTime
         };
         if (event) {
           dispatch(updateEvent(event.id, newEvent));
@@ -148,47 +204,71 @@ export default function CalendarForm({ event, range, onCancel }) {
           />
           <TextField
             select
-            {...getFieldProps('foodtype')}
+            {...getFieldProps('foodType')}
             value={values.foodtype}
             fullWidth
             label="Food Type"
             error={Boolean(touched.foodtype && errors.foodtype)}
             helperText={touched.foodtype && errors.foodtype}
+            SelectProps={{ native: true }}
           >
-            <MenuItem value="option 1">Product 1</MenuItem>
-            <MenuItem value="option 2">Product 2</MenuItem>
-            <MenuItem value="option 3">Product 3</MenuItem>
+            {FOODS.map((f) => (
+              <option key={f.id} value={f.id}>
+                {f.value}
+              </option>
+            ))}
           </TextField>
 
           <TextField
             select
-            {...getFieldProps('cageID')}
+            {...getFieldProps('cageId')}
             value={values.cageID}
             fullWidth
             label="Cage ID"
             error={Boolean(touched.cageID && errors.cageID)}
             helperText={touched.cageID && errors.cageID}
+            SelectProps={{ native: true }}
           >
-            <MenuItem value="option 1">CA001</MenuItem>
-            <MenuItem value="option 2">CA002</MenuItem>
-            <MenuItem value="option 3">CA003</MenuItem>
-            <MenuItem value="option 4">CA004</MenuItem>
-            <MenuItem value="option 5">CA005</MenuItem>
+            {CAGES.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.value}
+              </option>
+            ))}
+          </TextField>
+
+          <TextField
+            select
+            {...getFieldProps('staffId')}
+            value={values.cageID}
+            fullWidth
+            label="Staff ID"
+            error={Boolean(touched.cageID && errors.cageID)}
+            helperText={touched.cageID && errors.cageID}
+            SelectProps={{ native: true }}
+          >
+            {STAFFS.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.value}
+              </option>
+            ))}
           </TextField>
           <TextField
             select
-            {...getFieldProps('feedingregimen')}
+            {...getFieldProps('feedingRegimen')}
             value={values.feedingregimen}
             fullWidth
             label="Feeding Regimen"
             error={Boolean(touched.feedingregimen && errors.feedingregimen)}
             helperText={touched.feedingregimen && errors.feedingregimen}
+            SelectProps={{ native: true }}
           >
-            <MenuItem value="option 1">Normal</MenuItem>
-            <MenuItem value="option 2">Sick</MenuItem>
-            <MenuItem value="option 3">Birth</MenuItem>
+            {FEEDING_NOTE.map((f) => (
+              <option key={f.id} value={f.id}>
+                {f.value}
+              </option>
+            ))}
           </TextField>
-          <TextField
+          {/* <TextField
             select
             {...getFieldProps('medicine')}
             fullWidth
@@ -200,19 +280,20 @@ export default function CalendarForm({ event, range, onCancel }) {
             <MenuItem value="option 1">Medicine 1</MenuItem>
             <MenuItem value="option 2">Medicine 2</MenuItem>
             <MenuItem value="option 3">Medicine 3</MenuItem>
-          </TextField>
+          </TextField> */}
 
-          <FormControlLabel control={<Switch checked={values.allDay} {...getFieldProps('allDay')} />} label="All day" />
 
-          <MobileDateTimePicker
+          {/* <FormControlLabel control={<Switch checked={values.allDay} {...getFieldProps('allDay')} />} label="All day" /> */}
+
+           {isCreating && <MobileDateTimePicker
             label="Start date"
             value={values.start}
             inputFormat="dd/MM/yyyy hh:mm a"
             onChange={(date) => setFieldValue('start', date)}
             renderInput={(params) => <TextField {...params} fullWidth />}
-          />
+          />}
 
-          <MobileDateTimePicker
+          {isCreating && <MobileDateTimePicker
             label="End date"
             value={values.end}
             inputFormat="dd/MM/yyyy hh:mm a"
@@ -226,9 +307,25 @@ export default function CalendarForm({ event, range, onCancel }) {
                 sx={{ mb: 3 }}
               />
             )}
-          />
+          />}
 
-          <ColorSinglePicker {...getFieldProps('textColor')} colors={COLOR_OPTIONS} />
+          {!isCreating && <MobileDateTimePicker
+            label="Feeding time"
+            value={values.end}
+            inputFormat="dd/MM/yyyy hh:mm a"
+            onChange={(date) => setFieldValue('feedingTime', date)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                fullWidth
+                error={Boolean(touched.end && errors.end)}
+                helperText={touched.end && errors.end}
+                sx={{ mb: 3 }}
+              />
+            )}
+          />}
+
+          {isCreating && <ColorSinglePicker {...getFieldProps('textColor')} colors={COLOR_OPTIONS} />}
         </Stack>
 
         <DialogActions>
@@ -244,7 +341,7 @@ export default function CalendarForm({ event, range, onCancel }) {
             Cancel
           </Button>
           <LoadingButton type="submit" variant="contained" loading={isSubmitting} loadingIndicator="Loading...">
-            Add
+            {isCreating ? "Add" : "Update"}
           </LoadingButton>
         </DialogActions>
       </Form>

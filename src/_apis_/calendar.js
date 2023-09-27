@@ -5,6 +5,7 @@ import { map, assign, reject } from 'lodash';
 import mockData from '../utils/mock-data';
 //
 import mock from './mock';
+import { scheduleData } from '../utils/mock-data/schedule';
 
 // ----------------------------------------------------------------------
 
@@ -74,14 +75,16 @@ const setColorAndTime = (index) => {
   };
 };
 
-let events = [...Array(9)].map((_, index) => ({
-  id: uuidv4(),
-  title: mockData.text.title(index),
-  cageId: '',
-  description: mockData.text.description(index),
-  allDay: mockData.boolean(index),
-  ...setColorAndTime(index)
-}));
+// let events = [...Array(9)].map((_, index) => ({
+//   id: uuidv4(),
+//   title: mockData.text.title(index),
+//   cageId: '',
+//   description: mockData.text.description(index),
+//   allDay: mockData.boolean(index),
+//   ...setColorAndTime(index)
+// }));
+
+let events = scheduleData;
 
 // ----------------------------------------------------------------------
 

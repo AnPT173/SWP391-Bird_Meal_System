@@ -28,7 +28,7 @@ const users = [
   //   isPublic: true
   // },
   {
-    id: '8864c717-587d-472a-929a-8e5f298024da-6',
+    id: 'STA001',
     displayName: 'Jaydon Frankie',
     email: 'staff1',
     password: 'demo1234',
@@ -44,7 +44,7 @@ const users = [
     isPublic: true
   },
   {
-    id: '1e846eb9-3502-4c2b-a080-66c0d17f9031',
+    id: 'STA002',
     displayName: 'Liam Davis',
     email: 'staff2',
     password: 'demo1234',
@@ -60,7 +60,7 @@ const users = [
     isPublic: true
   },
   {
-    id: '3fc0743d-e6c5-4e0e-9f9d-2de49e328a83',
+    id: 'STA003',
     displayName: 'Emma Johnson',
     email: 'staff3',
     password: 'demo1234',
@@ -76,7 +76,7 @@ const users = [
     isPublic: true
   },
   {
-    id: 'b4978e4f-7f09-4a10-a9a1-58d49f8c1e12',
+    id: 'STA004',
     displayName: 'Oliver Smith',
     email: 'staff4',
     password: 'demo1234',
@@ -94,7 +94,7 @@ const users = [
   
   
   {
-    id: '8864c717-587d-472a-929a-8e5f298024da-0',
+    id: 'MANAGER001',
     displayName: 'Jaydon Frankie',
     email: 'manager',
     password: 'demo1234',

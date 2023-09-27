@@ -13,6 +13,7 @@ import { styled, useTheme } from '@material-ui/core/styles';
 import { Card, Button, Container, DialogTitle, useMediaQuery, Stack } from '@material-ui/core';
 import { useLocation, useParams } from 'react-router';
 import useAuth from '../../hooks/useAuth';
+import { scheduleData } from '../../utils/mock-data/schedule';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getEvents, openModal, closeModal, updateEvent, selectEvent, selectRange } from '../../redux/slices/calendar';
@@ -50,7 +51,14 @@ export default function Calendar() {
   const { user } = useAuth();
   const { cageId } = useParams();
   const isManager = !!user && user?.role === 'manager';
-
+  console.log(events);
+  const scheduleBaseOnCage = scheduleData.filter((data) => data.cageId === cageId);
+  const fullScheduleBaseOnRole = isManager 
+  ? scheduleData
+  : scheduleData.filter((data) => data.staffId === user.id);
+  
+  const filterdScheduleData = cageId ? scheduleBaseOnCage : fullScheduleBaseOnRole;
+  
   const cageIdTitle = cageId ? `    ||    CageId: ${cageId}` : '';
 
   useEffect(() => {
@@ -147,6 +155,7 @@ export default function Calendar() {
       console.error(error);
     }
   };
+  console.log('data', isManager);
 
   const handleAddEvent = () => {
     dispatch(openModal());
@@ -203,7 +212,7 @@ export default function Calendar() {
               editable
               droppable
               selectable
-              events={events}
+              events={filterdScheduleData}
               ref={calendarRef}
               rerenderDelay={10}
               initialDate={date}
@@ -223,11 +232,20 @@ export default function Calendar() {
           </CalendarStyle>
         </Card>
 
-        <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
-          <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
+        {isManager && (
+          <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
+            <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
 
-          <CalendarForm event={selectedEvent} range={selectedRange} onCancel={handleCloseModal} />
-        </DialogAnimate>
+            <CalendarForm event={selectedEvent} range={selectedRange} onCancel={handleCloseModal} />
+          </DialogAnimate>
+        )}
+        {!isManager && selectedEvent && (
+          <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
+            <DialogTitle>Update Feeding Schedule</DialogTitle>
+
+            <CalendarForm event={selectedEvent} range={selectedRange} onCancel={handleCloseModal} />
+          </DialogAnimate>
+        )}
       </Container>
     </Page>
   );

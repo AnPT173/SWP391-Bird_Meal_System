@@ -77,14 +77,15 @@ CageCard.propTypes = {
 };
 
 export default function CageCard({ user, ...other }) {
-  const { cageId, name, cover, position, follower, totalPost, avatarUrl, following } = user;
+  const { id, name, cover, position, follower, totalPost, avatarUrl, following } = user;
+  console.log(user);
 
   return (
     <Card {...other}>
       <CardMediaStyle>
         <CoverImgStyle alt="cover" src={cover} />
       </CardMediaStyle>
-      <Link href={`${PATH_DASHBOARD.cages.root}/${cageId}/birds`}>
+      <Link href={`${PATH_DASHBOARD.cages.root}/${id}/birds`}>
         <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
           {name}
         </Typography>

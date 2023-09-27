@@ -1,4 +1,4 @@
-export const cages_ID =[ 
+export const cagesID =[ 
    'CA001',
    'CA002',
    'CA003',
@@ -10,7 +10,7 @@ export const cages_ID =[
 'CA009',
 'CA010'
 ];
-export const cage_type= [
+export const cageType= [
     'Small',
     'Medium',
     'Large',
