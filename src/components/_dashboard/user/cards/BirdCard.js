@@ -1,13 +1,9 @@
 import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
-import twitterFill from '@iconify/icons-eva/twitter-fill';
-import linkedinFill from '@iconify/icons-eva/linkedin-fill';
-import facebookFill from '@iconify/icons-eva/facebook-fill';
-import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
 // material
 import { useParams } from 'react-router';
 import { alpha, styled } from '@material-ui/core/styles';
 import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton, Link } from '@material-ui/core';
+import { birdsData } from '../../../../utils/mock-data/bird';
 // utils
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { fShortenNumber } from '../../../../utils/formatNumber';
@@ -16,24 +12,7 @@ import SvgIconStyle from '../../../SvgIconStyle';
 
 // ----------------------------------------------------------------------
 
-const SOCIALS = [
-  {
-    name: 'Facebook',
-    icon: <Icon icon={facebookFill} width={20} height={20} color="#1877F2" />
-  },
-  {
-    name: 'Instagram',
-    icon: <Icon icon={instagramFilled} width={20} height={20} color="#D7336D" />
-  },
-  {
-    name: 'Linkedin',
-    icon: <Icon icon={linkedinFill} width={20} height={20} color="#006097" />
-  },
-  {
-    name: 'Twitter',
-    icon: <Icon icon={twitterFill} width={20} height={20} color="#1C9CEA" />
-  }
-];
+
 
 const CardMediaStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -66,77 +45,88 @@ const CoverImgStyle = styled('img')({
 
 // ----------------------------------------------------------------------
 
-function InfoItem(number) {
-  return (
-    <Grid item xs={4}>
-      <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', display: 'block' }}>
-        Follower
-      </Typography>
-      <Typography variant="subtitle1">{fShortenNumber(number)}</Typography>
-    </Grid>
-  );
-}
+
 
 BirdCard.propTypes = {
-  user: PropTypes.object.isRequired
+  cageId: PropTypes.string.isRequired,
 };
 
-export default function BirdCard({ user, ...other }) {
-  const { id, name, cover, position, follower, totalPost, avatarUrl, following } = user;
-  const { cageId, birdId } = useParams();
+export default function BirdCard({ cageId }) {
+  const birdsInCage = birdsData.filter((bird) => bird.cageId === cageId);
 
   return (
-    <Card {...other}>
-      <CardMediaStyle>
-        <SvgIconStyle
-          color="paper"
-          src="/static/icons/shape-avatar.svg"
-          sx={{
-            width: 144,
-            height: 62,
-            zIndex: 10,
-            bottom: -26,
-            position: 'absolute'
-          }}
-        />
-        <Avatar
-          alt={name}
-          src={avatarUrl}
-          sx={{
-            width: 64,
-            height: 64,
-            zIndex: 11,
-            position: 'absolute',
-            transform: 'translateY(-50%)'
-          }}
-        />
-        <CoverImgStyle alt="cover" src={cover} />
-      </CardMediaStyle>
+    <Grid container spacing={3}>
+      {birdsInCage.map((bird, index) => (
+        <Grid item xs={12} sm={6} md={4} key={bird.birdId}>
+          <Card key={bird.birdId}>
+            <CardMediaStyle>
+              <SvgIconStyle
+                color="paper"
+                src="/static/icons/shape-avatar.svg"
+                sx={{
+                  width: 144,
+                  height: 62,
+                  zIndex: 10,
+                  bottom: -26,
+                  position: 'absolute',
+                }}
+              />
+              <Avatar
+                alt={bird.birdName}
+                src={`/static/mock-images/birds/bird_${index + 1}.jpg`}
+                sx={{
+                  width: 64,
+                  height: 64,
+                  zIndex: 11,
+                  position: 'absolute',
+                  transform: 'translateY(-50%)',
+                }}
+              />
+              <CoverImgStyle
+                alt="cover"
+                src={`/static/mock-images/cages/cage_${cageId}.jpg`}
+              />
+            </CardMediaStyle>
 
-      <Link href={`${PATH_DASHBOARD.cages.root}/${cageId}/birds/${id}/profile`}>
-        <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
-          {name}
-        </Typography>
-      </Link>
-      <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
-        {position}
-      </Typography>
-
-      <Box sx={{ textAlign: 'center', mt: 2, mb: 2.5 }}>
-        {SOCIALS.map((social) => (
-          <Tooltip key={social.name} title={social.name}>
-            <IconButton>{social.icon}</IconButton>
-          </Tooltip>
-        ))}
-      </Box>
-
-      <Divider />
-
-      <Grid container sx={{ py: 3, textAlign: 'center' }}>
-        {InfoItem(follower)}
-        {InfoItem(following)}
-        {InfoItem(totalPost)}
-      </Grid>
-    </Card>
+            <Link href={`${PATH_DASHBOARD.cages.root}/${bird.cageId}/birds/${bird.birdId}/profile`}>
+              <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
+                {bird.birdName}
+              </Typography>
+            </Link>
+            <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
+              {bird.species}
+            </Typography>
+            <Divider />
+            <Grid container sx={{ py: 3, textAlign: 'center' }}>
+              <Grid item xs={4}>
+                <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
+                  Age
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {bird.birdAge}
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
+                  Quantity
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {bird.foodQuantity} gr
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
+                  Status
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {bird.status}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Card>
+        </Grid>
+      ))
+      }
+    </Grid >
   );
 }

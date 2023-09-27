@@ -1,12 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+// material
 import { Container, Grid, Skeleton } from '@material-ui/core';
+// redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUsers } from '../../redux/slices/user';
+// routes
 import { PATH_DASHBOARD } from '../../routes/paths';
+// hooks
 import useSettings from '../../hooks/useSettings';
+// components
 import Page from '../../components/Page';
 import CageCard from '../../components/_dashboard/user/cards/CageCard';
+
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+
+// ----------------------------------------------------------------------
 
 const SkeletonLoad = (
   <>
@@ -21,10 +29,13 @@ const SkeletonLoad = (
 export default function CageCards() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { users, loading } = useSelector((state) => state.user); // Assuming there is a "loading" state in your Redux store
-
+  const { users } = useSelector((state) => state.user);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    dispatch(getUsers());
+    setTimeout(() => {
+      setLoading(false);
+      dispatch(getUsers());
+    }, 2000);
   }, [dispatch]);
 
   return (
@@ -37,11 +48,11 @@ export default function CageCards() {
         <Grid container spacing={3}>
           {loading ? (
             SkeletonLoad
-          ) : users.map((user) => (
-            <Grid key={user.id} item xs={12} sm={6} md={4}>
-              <CageCard user={user} />
-            </Grid>
-          ))}
+          ) : (      
+            <CageCard />
+          )
+          }
+          {!users.length && SkeletonLoad}
         </Grid>
       </Container>
     </Page>

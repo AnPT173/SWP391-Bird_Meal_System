@@ -35,9 +35,12 @@ export default function BirdCards() {
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.user);
   const { cageId } = useParams();
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    dispatch(getUsers());
+    setTimeout(() => {
+      setLoading(false);
+      dispatch(getUsers());
+    }, 2000);
   }, [dispatch]);
 
   return (
@@ -48,7 +51,7 @@ export default function BirdCards() {
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'Cages', href: PATH_DASHBOARD.cages.cards },
-            { name: 'Birds' }
+            { name: 'Birds', href: PATH_DASHBOARD.cages.birds }
           ]}
           action={
             <Button
@@ -61,15 +64,13 @@ export default function BirdCards() {
             </Button>
           }
         />
-        <Grid container spacing={3}>
-          {users.map((user) => (
-            <Grid key={user.id} item xs={12} sm={6} md={4}>
-              <BirdCard user={user} />
-            </Grid>
-          ))}
-
+          {loading ? (
+            SkeletonLoad
+          ) : (      
+            <BirdCard cageId={cageId}/>
+          )
+          }
           {!users.length && SkeletonLoad}
-        </Grid>
       </Container>
     </Page>
   );
