@@ -34,7 +34,7 @@ function CageCard() {
     <Grid container spacing={3}>
       {cagesData.map((cage, index) => (
         <Grid item xs={12} sm={6} md={4} key={cage.cageID}>
-          <Card sx={{ maxWidth: 300, margin: 'auto' }}>
+          <Card>
             <CardMediaStyle>
               <CoverImgStyle
                 alt="cover"
