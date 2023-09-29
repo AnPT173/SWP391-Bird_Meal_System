@@ -21,6 +21,7 @@ import {
 } from '@material-ui/core';
 import { LoadingButton, MobileDateTimePicker } from '@material-ui/lab';
 // redux
+import useAuth from '../../../hooks/useAuth';
 import { useDispatch } from '../../../redux/store';
 import { createEvent, updateEvent, deleteEvent } from '../../../redux/slices/calendar';
 //
@@ -102,7 +103,9 @@ export default function CalendarForm({ event, range, onCancel }) {
   console.log('event', event);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
+  const { user } = useAuth();
   const isCreating = !event;
+  const isManager = user?.role === 'manager';
   // id: '003',
   //   cageId: 'CA002',
   //   title: 'Feed Bird',
@@ -189,6 +192,7 @@ export default function CalendarForm({ event, range, onCancel }) {
             fullWidth
             label="Title"
             {...getFieldProps('title')}
+            disabled={!isManager || values?.status === 'completed'}
             error={Boolean(touched.title && errors.title)}
             helperText={touched.title && errors.title}
           />
@@ -208,6 +212,7 @@ export default function CalendarForm({ event, range, onCancel }) {
             value={values.foodtype}
             fullWidth
             label="Food Type"
+            disabled={!isManager || values?.status === 'completed'}
             error={Boolean(touched.foodtype && errors.foodtype)}
             helperText={touched.foodtype && errors.foodtype}
             SelectProps={{ native: true }}
@@ -225,6 +230,7 @@ export default function CalendarForm({ event, range, onCancel }) {
             value={values.cageID}
             fullWidth
             label="Cage ID"
+            disabled={!isManager || values?.status === 'completed'}
             error={Boolean(touched.cageID && errors.cageID)}
             helperText={touched.cageID && errors.cageID}
             SelectProps={{ native: true }}
@@ -242,6 +248,7 @@ export default function CalendarForm({ event, range, onCancel }) {
             value={values.cageID}
             fullWidth
             label="Staff ID"
+            disabled={!isManager || values?.status === 'completed'}
             error={Boolean(touched.cageID && errors.cageID)}
             helperText={touched.cageID && errors.cageID}
             SelectProps={{ native: true }}
@@ -329,13 +336,6 @@ export default function CalendarForm({ event, range, onCancel }) {
         </Stack>
 
         <DialogActions>
-          {!isCreating && (
-            <Tooltip title="Delete Event">
-              <IconButton onClick={handleDelete}>
-                <Icon icon={trash2Fill} width={20} height={20} />
-              </IconButton>
-            </Tooltip>
-          )}
           <Box sx={{ flexGrow: 1 }} />
           <Button type="button" variant="outlined" color="inherit" onClick={onCancel}>
             Cancel
