@@ -84,7 +84,7 @@ export default function BirdCard({ cageId }) {
               />
               <CoverImgStyle
                 alt="cover"
-                src={`/static/mock-images/cages/cage_${cageId}.jpg`}
+                src={`/static/mock-images/cages/cage_${index + 1}.jpg`}
               />
             </CardMediaStyle>
 

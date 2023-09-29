@@ -7,7 +7,7 @@ import roundPermMedia from '@iconify/icons-ic/round-perm-media';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
 // material
 import { styled } from '@material-ui/core/styles';
-import { useParams } from 'react-router';
+import { useParams, Link } from 'react-router-dom'; // Import Link from react-router-dom
 import { Tab, Box, Card, Tabs, Container } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
@@ -20,14 +20,9 @@ import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import {
-  Profile,
-  ProfileCover,
-  ProfileFriends,
-  ProfileGallery,
-  ProfileFollowers
-} from '../../components/_dashboard/user/profile';
 
+
+import BirdProfile from '../../components/_dashboard/user/BirdProfile'; 
 // ----------------------------------------------------------------------
 
 const TabsWrapperStyle = styled('div')(({ theme }) => ({
@@ -48,13 +43,12 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function BirdProfile() {
+export default function BirdProfileWrapper() { // Rename the component to avoid conflicts
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { myProfile, posts, followers, friends, gallery } = useSelector((state) => state.user);
   const { user } = useAuth();
   const [currentTab, setCurrentTab] = useState('profile');
-  const [findFriends, setFindFriends] = useState('');
   const { cageId, birdId } = useParams();
 
   useEffect(() => {
@@ -69,40 +63,31 @@ export default function BirdProfile() {
     setCurrentTab(newValue);
   };
 
-  const handleToggleFollow = (followerId) => {
-    dispatch(onToggleFollow(followerId));
-  };
-
-  const handleFindFriends = (event) => {
-    setFindFriends(event.target.value);
-  };
-
   if (!myProfile) {
     return null;
   }
-
-  const PROFILE_TABS = [
-    {
-      value: 'profile',
-      icon: <Icon icon={roundAccountBox} width={20} height={20} />,
-      component: <Profile myProfile={myProfile} posts={posts} />
-    },
-    {
-      value: 'followers',
-      icon: <Icon icon={heartFill} width={20} height={20} />,
-      component: <ProfileFollowers followers={followers} onToggleFollow={handleToggleFollow} />
-    },
-    {
-      value: 'friends',
-      icon: <Icon icon={peopleFill} width={20} height={20} />,
-      component: <ProfileFriends friends={friends} findFriends={findFriends} onFindFriends={handleFindFriends} />
-    },
-    {
-      value: 'gallery',
-      icon: <Icon icon={roundPermMedia} width={20} height={20} />,
-      component: <ProfileGallery gallery={gallery} />
-    }
-  ];
+//  const PROFILE_TABS = [
+ //   {
+ //     value: 'profile',
+ //     icon: <Icon icon={roundAccountBox} width={20} height={20} />,
+ //     component: <BirdProfile myProfile={myProfile} posts={posts} /> // Use BirdProfile component here
+ //   },
+  //  {
+  //    value: 'followers',
+ //     icon: <Icon icon={heartFill} width={20} height={20} />,
+ //     component: <ProfileFollowers followers={followers} onToggleFollow={handleToggleFollow} />
+  //  },
+   // {
+ //     value: 'friends',
+  //    icon: <Icon icon={peopleFill} width={20} height={20} />,
+ //     component: <ProfileFriends friends={friends} findFriends={findFriends} onFindFriends={handleFindFriends} />
+ //   },
+ //   {
+  //    value: 'gallery',
+  //    icon: <Icon icon={roundPermMedia} width={20} height={20} />,
+ //     component: <ProfileGallery gallery={gallery} />
+ //   }
+ // ];
 
   return (
     <Page title="Bird Profile">
@@ -113,37 +98,19 @@ export default function BirdProfile() {
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'Cages', href: PATH_DASHBOARD.cages.cards },
             { name: 'Birds', href: `${PATH_DASHBOARD.cages.root}/${cageId}/birds` },
-            { name: user.displayName }
+            { name: 'Bird Profile', href: `${PATH_DASHBOARD.cages.root}/${cageId}/birds/${birdId}` }
           ]}
         />
         <Card
           sx={{
             mb: 3,
-            height: 280,
-            position: 'relative'
           }}
         >
-          <ProfileCover myProfile={myProfile} />
-
-          <TabsWrapperStyle>
-            <Tabs
-              value={currentTab}
-              scrollButtons="auto"
-              variant="scrollable"
-              allowScrollButtonsMobile
-              onChange={handleChangeTab}
-            >
-              {PROFILE_TABS.map((tab) => (
-                <Tab disableRipple key={tab.value} value={tab.value} icon={tab.icon} label={capitalCase(tab.value)} />
-              ))}
-            </Tabs>
-          </TabsWrapperStyle>
-        </Card>
-
-        {PROFILE_TABS.map((tab) => {
-          const isMatched = tab.value === currentTab;
-          return isMatched && <Box key={tab.value}>{tab.component}</Box>;
-        })}
+        <BirdProfile 
+          isEdit
+          currentUser={myProfile} 
+        />
+      </Card>
       </Container>
     </Page>
   );
