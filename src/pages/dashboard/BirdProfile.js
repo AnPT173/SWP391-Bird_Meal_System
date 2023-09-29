@@ -22,7 +22,7 @@ import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 
 
-import BirdProfile from '../../components/_dashboard/user/BirdProfile'; 
+import BirdProfileForm from '../../components/_dashboard/user/BirdProfileForm';
 // ----------------------------------------------------------------------
 
 const TabsWrapperStyle = styled('div')(({ theme }) => ({
@@ -43,7 +43,7 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function BirdProfileWrapper() { // Rename the component to avoid conflicts
+export default function BirdProfile() { // Rename the component to avoid conflicts
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { myProfile, posts, followers, friends, gallery } = useSelector((state) => state.user);
@@ -66,28 +66,6 @@ export default function BirdProfileWrapper() { // Rename the component to avoid 
   if (!myProfile) {
     return null;
   }
-//  const PROFILE_TABS = [
- //   {
- //     value: 'profile',
- //     icon: <Icon icon={roundAccountBox} width={20} height={20} />,
- //     component: <BirdProfile myProfile={myProfile} posts={posts} /> // Use BirdProfile component here
- //   },
-  //  {
-  //    value: 'followers',
- //     icon: <Icon icon={heartFill} width={20} height={20} />,
- //     component: <ProfileFollowers followers={followers} onToggleFollow={handleToggleFollow} />
-  //  },
-   // {
- //     value: 'friends',
-  //    icon: <Icon icon={peopleFill} width={20} height={20} />,
- //     component: <ProfileFriends friends={friends} findFriends={findFriends} onFindFriends={handleFindFriends} />
- //   },
- //   {
-  //    value: 'gallery',
-  //    icon: <Icon icon={roundPermMedia} width={20} height={20} />,
- //     component: <ProfileGallery gallery={gallery} />
- //   }
- // ];
 
   return (
     <Page title="Bird Profile">
@@ -106,9 +84,9 @@ export default function BirdProfileWrapper() { // Rename the component to avoid 
             mb: 3,
           }}
         >
-        <BirdProfile 
-          isEdit
-          currentUser={myProfile} 
+        <BirdProfileForm 
+          isEdit={false}
+          currentUser={myProfile}
         />
       </Card>
       </Container>

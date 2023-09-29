@@ -130,10 +130,13 @@ export const staffSidebar = [
         icon: ICONS.mail,
         info: <Label color="error">2</Label>
       },
-      { title: 'e-commerce', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
-      { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
-      { title: 'banking', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
-      { title: 'Schedule', path: PATH_DASHBOARD.calendar, icon: ICONS.booking }
+      { title: 'Schedule', path: PATH_DASHBOARD.calendar, icon: ICONS.booking },
+      { title: 'Food', path: PATH_DASHBOARD.eCommerce.root, icon: ICONS.cart },
+      {
+        title: 'Setting',
+        path: PATH_DASHBOARD.kanban,
+        icon: ICONS.setting
+      }
     ]
   }
 ];

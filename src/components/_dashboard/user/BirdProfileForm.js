@@ -33,12 +33,12 @@ import Label from '../../Label';
 import { UploadAvatar } from '../../upload';
 
 
-BirdProfile.propTypes = {
+BirdProfileForm.propTypes = {
   isEdit: PropTypes.bool,
   currentBird: PropTypes.object,
 };
 
-export default function BirdProfile({ isEdit, currentUser }) {
+export default function BirdProfileForm({ isEdit }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { birdId } = useParams();
@@ -53,29 +53,20 @@ export default function BirdProfile({ isEdit, currentUser }) {
     avatarUrl: Yup.mixed().required('Avatar is required'),
   });
 
-  const findBirdById = (birdId) => birdsData.find((bird) => bird.birdId === birdId);
+  const currentBird = birdsData.find((bird) => bird.birdId === birdId);
 
-
-  const [selectedBird, setSelectedBird] = useState(null);
-
-  useEffect(() => {
-    if (birdId) {
-      const bird = findBirdById(birdId);
-      setSelectedBird(bird);
-    }
-  }, [birdId]);
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      birdId: selectedBird ? selectedBird.birdId : '',
-      birdName: selectedBird ? selectedBird.birdName : '',
-      birdAge: selectedBird ? selectedBird.birdAge : '',
-      status: selectedBird ? selectedBird.status : '',
-      species: selectedBird ? selectedBird.species : '',
-      cageId: selectedBird ? selectedBird.cageId : '',
-      foodQuantity: selectedBird ? selectedBird.foodQuantity : '',
-      avatarUrl: selectedBird ? selectedBird.avatarUrl : null,
+      birdId: currentBird ? currentBird.birdId : '',
+      birdName: currentBird ? currentBird.birdName : '',
+      birdAge: currentBird ? currentBird.birdAge : '',
+      status: currentBird ? currentBird.status : '',
+      species: currentBird ? currentBird.species : '',
+      cageId: currentBird ? currentBird.cageId : '',
+      foodQuantity: currentBird ? currentBird.foodQuantity : '',
+      avatarUrl: currentBird ? currentBird.avatarUrl : null,
     },
     validationSchema: NewBirdSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
@@ -92,7 +83,7 @@ export default function BirdProfile({ isEdit, currentUser }) {
       }
     },
   });
-  const { errors, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
+  const { values, errors, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
 
   const handleDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -103,6 +94,7 @@ export default function BirdProfile({ isEdit, currentUser }) {
       });
     }
   }, [setFieldValue]);
+  console.log("values", values)
 
 
   return (
@@ -113,17 +105,17 @@ export default function BirdProfile({ isEdit, currentUser }) {
             <Card sx={{ py: 10, px: 3 }}>
               {isEdit && (
                 <Label
-                  color={selectedBird && selectedBird.status !== 'active' ? 'error' : 'success'}
+                  color={currentBird && currentBird.status !== 'active' ? 'error' : 'success'}
                   sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
                 >
-                  {selectedBird && selectedBird.status}
+                  {currentBird && currentBird.status}
                 </Label>
               )}
 
               <Box sx={{ mb: 5 }}>
                 <UploadAvatar
                   accept="image/*"
-                  file={formik.values.avatarUrl || (selectedBird && selectedBird.avatarUrl)}
+                  file={formik.values.avatarUrl || (currentBird && currentBird.avatarUrl)}
                   maxSize={3145728}
                   onDrop={handleDrop}
                   error={Boolean(touched.avatarUrl && errors.avatarUrl)}

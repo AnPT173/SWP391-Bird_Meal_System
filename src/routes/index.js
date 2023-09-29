@@ -115,7 +115,7 @@ export default function Router() {
           path: 'cage',
           children: [
             { path: '/', element: <Navigate to="/dashboard/user/profile" replace /> },
-            { path: '/:cageId/birds/:birthId/profile', element: <BirdProfile/> },
+            { path: '/:cageId/birds/:birdId/profile', element: <BirdProfile/> },
             { path: 'cards', element: <CageCards /> },
             { path: '/:cageId/birds', element: <BirdCards /> },
             { path: '/:cageId/schedule', element: <Calendar /> },
