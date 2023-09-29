@@ -26,6 +26,7 @@ import { createEvent, updateEvent, deleteEvent } from '../../../redux/slices/cal
 //
 import ColorSinglePicker from '../../ColorSinglePicker';
 
+
 // ----------------------------------------------------------------------
 
 const COLOR_OPTIONS = [
@@ -70,8 +71,14 @@ const FEEDING_NOTE = [
   { id: 'FN002', value: 'Sick' },
   { id: 'FN003', value: 'Bird' }
 ];
+const STATUS =[
+  {id:'ST001',value:"Pending"},
+  {id:'ST002',value:"Feeded"},
+  {id:'ST003',value:"Late"}
+]
 const getInitialValues = (event, range) => {
   const _event = {
+    status:'',
     title: '',
     description: '',
     foodtype: '',
@@ -185,6 +192,22 @@ export default function CalendarForm({ event, range, onCancel }) {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3} sx={{ p: 3 }}>
+          <TextField
+           select
+           fullWidth
+           label="Status"
+           value={values.status}
+           {...getFieldProps('status')}
+           error={Boolean(touched.status && errors.status)}
+           helperText={touched.status && errors.status}
+           SelectProps={{native: true}}
+          >
+           {STATUS.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.value}
+              </option>
+            ))}
+          </TextField>
           <TextField
             fullWidth
             label="Title"
@@ -325,7 +348,7 @@ export default function CalendarForm({ event, range, onCancel }) {
             )}
           />}
 
-          {isCreating && <ColorSinglePicker {...getFieldProps('textColor')} colors={COLOR_OPTIONS} />}
+          {isCreating}<ColorSinglePicker {...getFieldProps('textColor')} colors={COLOR_OPTIONS} />
         </Stack>
 
         <DialogActions>
