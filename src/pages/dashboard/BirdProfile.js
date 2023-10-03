@@ -22,7 +22,7 @@ import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 
 
-import BirdProfileForm from '../../components/_dashboard/user/BirdProfileForm';
+import BirdProfile from '../../components/_dashboard/user/BirdProfileForm';
 // ----------------------------------------------------------------------
 
 const TabsWrapperStyle = styled('div')(({ theme }) => ({
@@ -43,10 +43,10 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function BirdProfile() { // Rename the component to avoid conflicts
+export default function BirdProfileWrapper() { // Rename the component to avoid conflicts
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { myProfile, posts, followers, friends, gallery } = useSelector((state) => state.user);
+  const { birdProfile, posts, followers, friends, gallery } = useSelector((state) => state.user);
   const { user } = useAuth();
   const [currentTab, setCurrentTab] = useState('profile');
   const { cageId, birdId } = useParams();
@@ -63,9 +63,31 @@ export default function BirdProfile() { // Rename the component to avoid conflic
     setCurrentTab(newValue);
   };
 
-  if (!myProfile) {
+  if (!birdProfile) {
     return null;
   }
+  //  const PROFILE_TABS = [
+  //   {
+  //     value: 'profile',
+  //     icon: <Icon icon={roundAccountBox} width={20} height={20} />,
+  //     component: <BirdProfile myProfile={myProfile} posts={posts} /> // Use BirdProfile component here
+  //   },
+  //  {
+  //    value: 'followers',
+  //     icon: <Icon icon={heartFill} width={20} height={20} />,
+  //     component: <ProfileFollowers followers={followers} onToggleFollow={handleToggleFollow} />
+  //  },
+  // {
+  //     value: 'friends',
+  //    icon: <Icon icon={peopleFill} width={20} height={20} />,
+  //     component: <ProfileFriends friends={friends} findFriends={findFriends} onFindFriends={handleFindFriends} />
+  //   },
+  //   {
+  //    value: 'gallery',
+  //    icon: <Icon icon={roundPermMedia} width={20} height={20} />,
+  //     component: <ProfileGallery gallery={gallery} />
+  //   }
+  // ];
 
   return (
     <Page title="Bird Profile">
@@ -84,11 +106,11 @@ export default function BirdProfile() { // Rename the component to avoid conflic
             mb: 3,
           }}
         >
-        <BirdProfileForm 
-          isEdit={false}
-          currentUser={myProfile}
-        />
-      </Card>
+          <BirdProfile
+            isEdit
+            currentBird={birdProfile}
+          />
+        </Card>
       </Container>
     </Page>
   );

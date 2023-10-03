@@ -1,14 +1,14 @@
 export const status = [
    {
-      status_id: "STATUS001",
+      statusId: "STATUS001",
       status: "Normal"
    },
    {
-      status_id: "STATUS002",
+      statusId: "STATUS002",
       status: "Sick"
    },
    {
-      status_id: "STATUS003",
+      statusId: "STATUS003",
       status: "Birth"
    }
 ]

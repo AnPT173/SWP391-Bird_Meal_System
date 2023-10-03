@@ -64,6 +64,7 @@ export default function BirdCards() {
             </Button>
           }
         />
+        <Grid container spacing={3}>
           {loading ? (
             SkeletonLoad
           ) : (      
@@ -71,6 +72,7 @@ export default function BirdCards() {
           )
           }
           {!users.length && SkeletonLoad}
+        </Grid>
       </Container>
     </Page>
   );

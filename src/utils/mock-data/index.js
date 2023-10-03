@@ -53,7 +53,7 @@ const mockData = {
   cage: cagesID,
   cageData: cagesData,
   bird: birdsData,
-  schedule: scheduleData
+  schedule: scheduleData,
 };
 
 export default mockData;

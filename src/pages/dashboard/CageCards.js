@@ -48,7 +48,8 @@ export default function CageCards() {
         <Grid container spacing={3}>
           {loading ? (
             SkeletonLoad
-          ) : (      
+          ) : (
+      
             <CageCard />
           )
           }

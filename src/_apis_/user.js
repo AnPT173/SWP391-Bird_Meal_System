@@ -29,19 +29,19 @@ mock.onGet('/api/user/profile').reply(() => {
 
 // ----------------------------------------------------------------------
 
-mock.onGet('/api/user/all').reply(() => {
-  const users = [...Array(24)].map((_, index) => ({
-    id: mockData.id(index),
-    cover: mockData.image.cover(index),
-    name: mockData.name.fullName(index),
-    follower: random(9999),
-    following: random(9999),
-    totalPost: random(9999),
-    position: mockData.role(index)
-  }));
+// mock.onGet('/api/user/all').reply(() => {
+//  const users = [...Array(24)].map((_, index) => ({
+//  id: mockData.id(index),
+//  cover: mockData.image.cover(index),
+//  name: mockData.name.fullName(index),
+//  follower: random(9999),
+//  following: random(9999),
+//  totalPost: random(9999),
+//  position: mockData.role(index)
+// }));
 
-  return [200, { users }];
-});
+// return [200, { users }];
+// });
 
 // ----------------------------------------------------------------------
 
@@ -64,4 +64,20 @@ mock.onGet('/api/user/manage-users').reply(() => {
   }));
 
   return [200, { users }];
+});
+
+mock.onGet('/api/bird/profile').reply(() => {
+  const birdProfile = {
+    birdId: mockData.bird,
+    birdName: 'Sample Bird',
+    birdAge: 2,
+    status: 'active',
+    species: 'Parrot',
+    cageId: 'Cage123',
+    foodQuantity: 3,
+    avatarUrl: mockData.image.avatar(1),
+    // Add more fields as needed
+  };
+
+  return [200, { birdProfile }];
 });
