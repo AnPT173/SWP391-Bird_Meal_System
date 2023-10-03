@@ -130,7 +130,7 @@ export const staffSidebar = [
         icon: ICONS.mail,
       },
       { title: 'Schedule', path: PATH_DASHBOARD.calendar, icon: ICONS.booking },
-      { title: 'Food', path: PATH_DASHBOARD.eCommerce.root, icon: ICONS.cart },
+      { title: 'Food', path: PATH_DASHBOARD.food.root, icon: ICONS.cart },
       {
         title: 'Setting',
         path: PATH_DASHBOARD.kanban,
@@ -155,9 +155,9 @@ export const managerSidebar = [
       },
       { title: 'Schedule', path: PATH_DASHBOARD.calendar, icon: ICONS.calendar },
 
-      { title: 'Food', path: PATH_DASHBOARD.species.root, icon: ICONS.cart },
+      { title: 'Food', path: PATH_DASHBOARD.food.root, icon: ICONS.cart },
       {
-        title: 'Setting',
+        title: 'Report',
         path: PATH_DASHBOARD.kanban,
         icon: ICONS.setting
       }
