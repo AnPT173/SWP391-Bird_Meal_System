@@ -126,6 +126,20 @@ export default function Router() {
           ]
         },
         {
+          path: 'foodPlan',
+          children: [
+            { path: '/', element: <Navigate to="/dashboard/foodPlan/species" replace /> },
+            { path: '/species', element: <BirdSpecies /> },
+            { path: '/species/:speciesId/period', element: <BirdPeriod/> },
+            { path: '/species/:speciesId/period/:periodId/status', element: <BirdStatus /> },
+            { path: '/:cageId/schedule', element: <Calendar /> },
+            { path: 'list', element: <UserList /> },
+            { path: 'new', element: <UserCreate /> },
+            { path: '/:name/edit', element: <UserCreate /> },
+            { path: 'account', element: <UserAccount /> }
+          ]
+        },
+        {
           path: 'blog',
           children: [
             { path: '/', element: <Navigate to="/dashboard/blog/posts" replace /> },
@@ -265,6 +279,11 @@ const BlogNewPost = Loadable(lazy(() => import('../pages/dashboard/BlogNewPost')
 const BirdProfile = Loadable(lazy(() => import('../pages/dashboard/BirdProfile')));
 const CageCards = Loadable(lazy(() => import('../pages/dashboard/CageCards')));
 const BirdCards = Loadable(lazy(() => import('../pages/dashboard/BirdCards')));
+
+const BirdSpecies = Loadable(lazy(()=> import('../pages/dashboard/BirdSpecies')));
+const BirdPeriod = Loadable(lazy(()=> import('../pages/dashboard/BirdPeriod')));
+const BirdStatus = Loadable(lazy(()=> import('../pages/dashboard/BirdStatus')));
+
 const UserList = Loadable(lazy(() => import('../pages/dashboard/UserList')));
 const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
 const UserCreate = Loadable(lazy(() => import('../pages/dashboard/UserCreate')));

@@ -49,14 +49,18 @@ const CoverImgStyle = styled('img')({
 });
 
 // ----------------------------------------------------------------------
-
+const STATUS = [
+  { id: 1, value: 'P01' },
+  { id: 2, value: 'P02' },
+  { id: 3, value: 'P03' }
+];
 
 export default function StatusCard() {
   return (
     <Grid container spacing={3}>
-      {status.map((status) => (
-        <Grid item xs={12} sm={6} md={4} key={status.statusId}>
-          <Card key={status.statusId}>
+      {STATUS.map((item, index) => (
+        <Grid item xs={12} sm={6} md={4} key={item.id}>
+          <Card key={item.id}>
             <CardMediaStyle>
               <CoverImgStyle
                 alt="cover"
@@ -64,12 +68,7 @@ export default function StatusCard() {
               />
             </CardMediaStyle>
 
-            <Link href={`${PATH_DASHBOARD.food.root}/${species.speciesID}/period/${period.periodId}/status/cards`}>
-            <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
-              {status.status}
-            </Typography>
-            </Link>
-            <Divider />
+            
           </Card>
         </Grid>
       ))
