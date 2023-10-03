@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
 import { alpha, styled } from '@material-ui/core/styles';
 import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton, Link } from '@material-ui/core';
+import { species } from '../../../../utils/mock-data/species';
+import { periodData } from '../../../../utils/mock-data/period';
+import { status } from '../../../../utils/mock-data/status';
 import { birdsData } from '../../../../utils/mock-data/bird';
 
 
@@ -11,9 +14,6 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { fShortenNumber } from '../../../../utils/formatNumber';
 //
 import SvgIconStyle from '../../../SvgIconStyle';
-import { species } from 'src/utils/mock-data/species';
-import { periodData } from 'src/utils/mock-data/period';
-import { status } from 'src/utils/mock-data/status';
 
 // ----------------------------------------------------------------------
 
