@@ -20,7 +20,7 @@ export default function DialogAnimate({ open = false, animate, onClose, children
       {open && (
         <Dialog
           fullWidth
-          maxWidth="sm"
+          maxWidth="md"
           open={open}
           onClose={onClose}
           PaperComponent={motion.div}

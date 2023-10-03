@@ -26,6 +26,7 @@ import Page from '../../components/Page';
 import { DialogAnimate } from '../../components/animate';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { CalendarForm, CalendarStyle, CalendarToolbar } from '../../components/_dashboard/calendar';
+import Label from '../../components/Label';
 
 // ----------------------------------------------------------------------
 
@@ -53,12 +54,10 @@ export default function Calendar() {
   const isManager = !!user && user?.role === 'manager';
   console.log(events);
   const scheduleBaseOnCage = scheduleData.filter((data) => data.cageId === cageId);
-  const fullScheduleBaseOnRole = isManager 
-  ? scheduleData
-  : scheduleData.filter((data) => data.staffId === user.id);
-  
+  const fullScheduleBaseOnRole = isManager ? scheduleData : scheduleData.filter((data) => data.staffId === user.id);
+
   const filterdScheduleData = cageId ? scheduleBaseOnCage : fullScheduleBaseOnRole;
-  
+
   const cageIdTitle = cageId ? `    ||    CageId: ${cageId}` : '';
 
   useEffect(() => {
@@ -171,7 +170,6 @@ export default function Calendar() {
         <HeaderBreadcrumbs
           heading={`Calendar${cageIdTitle}`}
           links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, { name: 'Calendar' }]}
-          // moreLink="https://fullcalendar.io/docs/react"
           action={
             <Stack direction="row" spacing={1.5}>
               {isManager && (
@@ -234,14 +232,26 @@ export default function Calendar() {
 
         {isManager && (
           <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
-            <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
+            <DialogTitle>
+              {selectedEvent ? 'Edit Event' : 'Add Event'}
+              <Label color="primary">Completed</Label>
+            </DialogTitle>
 
             <CalendarForm event={selectedEvent} range={selectedRange} onCancel={handleCloseModal} />
           </DialogAnimate>
         )}
         {!isManager && selectedEvent && (
           <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
-            <DialogTitle>Update Feeding Schedule</DialogTitle>
+            <DialogTitle 
+            style=
+            {{'display': 'flex', 
+            'justify-content': 'space-between', 
+          }}
+            >
+              Update Feeding Schedule
+            <Label color="primary">Completed</Label>
+              
+            </DialogTitle>
 
             <CalendarForm event={selectedEvent} range={selectedRange} onCancel={handleCloseModal} />
           </DialogAnimate>

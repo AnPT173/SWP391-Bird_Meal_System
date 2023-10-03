@@ -40,13 +40,6 @@ const COLOR_OPTIONS = [
   '#7A0C2E' // theme.palette.error.darker
 ];
 
-const PRODUCTS = [
-  { id: 'P001', value: 'Product 01' },
-  { id: 'P002', value: 'Product 02' },
-  { id: 'P003', value: 'Product 03' },
-  { id: 'P004', value: 'Product 04' }
-];
-
 const STAFFS = [
   { id: 'STA001', value: 'Staff 001' },
   { id: 'STA002', value: 'Staff 002' },
@@ -113,17 +106,6 @@ export default function CalendarForm({ event, range, onCancel }) {
   const { user } = useAuth();
   const isCreating = !event;
   const isManager = user?.role === 'manager';
-  // id: '003',
-  //   cageId: 'CA002',
-  //   title: 'Feed Bird',
-  //   description: 'Feeding for CA002',
-  //   foodType: 'Product 1',
-  //   start: sub(new Date(), { days: 1, hours: 0, minutes: 45 }),
-  //   end: sub(new Date(), { days: 1, hours: 0, minutes: 35 }),
-  //   foodQuantity: '90 grams',
-  //   staffId: 'STA002',
-  //   status: 'Completed',
-  //   textColor: COLOR_OPTIONS[2]
 
   const EventSchema = Yup.object().shape({
     title: Yup.string().max(255).required('Title is required'),
@@ -181,15 +163,6 @@ export default function CalendarForm({ event, range, onCancel }) {
 
   const { values, errors, touched, handleSubmit, isSubmitting, getFieldProps, setFieldValue } = formik;
   console.log('values', values);
-  const handleDelete = async () => {
-    try {
-      onCancel();
-      dispatch(deleteEvent(event.id));
-      enqueueSnackbar('Delete event success', { variant: 'success' });
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <FormikProvider value={formik}>
@@ -229,142 +202,139 @@ export default function CalendarForm({ event, range, onCancel }) {
             error={Boolean(touched.description && errors.description)}
             helperText={touched.description && errors.description}
           />
-          <TextField
-            select
-            {...getFieldProps('foodType')}
-            value={values.foodtype}
-            fullWidth
-            label="Food Type"
-            disabled={!isManager || values?.status === 'completed'}
-            error={Boolean(touched.foodtype && errors.foodtype)}
-            helperText={touched.foodtype && errors.foodtype}
-            SelectProps={{ native: true }}
-          >
-            {FOODS.map((f) => (
-              <option key={f.id} value={f.id}>
-                {f.value}
-              </option>
-            ))}
-          </TextField>
+          <Stack direction="row" spacing={1.0}>
+            <TextField
+              select
+              {...getFieldProps('foodType')}
+              value={values.foodtype}
+              fullWidth
+              label="Food Type"
+              disabled={!isManager || values?.status === 'completed'}
+              error={Boolean(touched.foodtype && errors.foodtype)}
+              helperText={touched.foodtype && errors.foodtype}
+              SelectProps={{ native: true }}
+            >
+              {FOODS.map((f) => (
+                <option key={f.id} value={f.id}>
+                  {f.value}
+                </option>
+              ))}
+            </TextField>
 
-          <TextField
-            select
-            {...getFieldProps('cageId')}
-            value={values.cageID}
-            fullWidth
-            label="Cage ID"
-            disabled={!isManager || values?.status === 'completed'}
-            error={Boolean(touched.cageID && errors.cageID)}
-            helperText={touched.cageID && errors.cageID}
-            SelectProps={{ native: true }}
-          >
-            {CAGES.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.value}
-              </option>
-            ))}
-          </TextField>
+            <TextField
+              select
+              {...getFieldProps('cageId')}
+              value={values.cageID}
+              fullWidth
+              label="Cage ID"
+              disabled={!isManager || values?.status === 'completed'}
+              error={Boolean(touched.cageID && errors.cageID)}
+              helperText={touched.cageID && errors.cageID}
+              SelectProps={{ native: true }}
+            >
+              {CAGES.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.value}
+                </option>
+              ))}
+            </TextField>
 
-          <TextField
-            select
-            {...getFieldProps('staffId')}
-            value={values.cageID}
-            fullWidth
-            label="Staff ID"
-            disabled={!isManager || values?.status === 'completed'}
-            error={Boolean(touched.cageID && errors.cageID)}
-            helperText={touched.cageID && errors.cageID}
-            SelectProps={{ native: true }}
-          >
-            {STAFFS.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.value}
-              </option>
-            ))}
-          </TextField>
-          <TextField
-            select
-            {...getFieldProps('feedingRegimen')}
-            value={values.feedingregimen}
-            fullWidth
-            label="Feeding Regimen"
-            error={Boolean(touched.feedingregimen && errors.feedingregimen)}
-            helperText={touched.feedingregimen && errors.feedingregimen}
-            SelectProps={{ native: true }}
-          >
-            {FEEDING_NOTE.map((f) => (
-              <option key={f.id} value={f.id}>
-                {f.value}
-              </option>
-            ))}
-          </TextField>
-          {/* <TextField
-            select
-            {...getFieldProps('medicine')}
-            fullWidth
-            label="Medicine"
-            error={Boolean(touched.medicine && errors.medicine)}
-            helperText={touched.medicine && errors.medicine}
-          >
-            <MenuItem value="option 0">None</MenuItem>
-            <MenuItem value="option 1">Medicine 1</MenuItem>
-            <MenuItem value="option 2">Medicine 2</MenuItem>
-            <MenuItem value="option 3">Medicine 3</MenuItem>
-          </TextField> */}
+            <TextField
+              select
+              {...getFieldProps('staffId')}
+              value={values.cageID}
+              fullWidth
+              label="Staff ID"
+              disabled={!isManager || values?.status === 'completed'}
+              error={Boolean(touched.cageID && errors.cageID)}
+              helperText={touched.cageID && errors.cageID}
+              SelectProps={{ native: true }}
+            >
+              {STAFFS.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.value}
+                </option>
+              ))}
+            </TextField>
+          </Stack>
 
+          <Stack direction="row" spacing={1.0}>
+            <TextField
+              select
+              {...getFieldProps('feedingRegimen')}
+              value={values.feedingregimen}
+              fullWidth
+              label="Feeding Regimen"
+              error={Boolean(touched.feedingregimen && errors.feedingregimen)}
+              helperText={touched.feedingregimen && errors.feedingregimen}
+              SelectProps={{ native: true }}
+            >
+              {FEEDING_NOTE.map((f) => (
+                <option key={f.id} value={f.id}>
+                  {f.value}
+                </option>
+              ))}
+            </TextField>
 
-          {/* <FormControlLabel control={<Switch checked={values.allDay} {...getFieldProps('allDay')} />} label="All day" /> */}
-
-           {isCreating && <MobileDateTimePicker
-            label="Start date"
-            value={values.start}
-            inputFormat="dd/MM/yyyy hh:mm a"
-            onChange={(date) => setFieldValue('start', date)}
-            renderInput={(params) => <TextField {...params} fullWidth />}
-          />}
-
-          {isCreating && <MobileDateTimePicker
-            label="End date"
-            value={values.end}
-            inputFormat="dd/MM/yyyy hh:mm a"
-            onChange={(date) => setFieldValue('end', date)}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                fullWidth
-                error={Boolean(touched.end && errors.end)}
-                helperText={touched.end && errors.end}
-                sx={{ mb: 3 }}
+            {!isCreating && (
+              <MobileDateTimePicker
+                label="Feeding time"
+                value={values.end}
+                inputFormat="dd/MM/yyyy hh:mm a"
+                onChange={(date) => setFieldValue('feedingTime', date)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    error={Boolean(touched.end && errors.end)}
+                    helperText={touched.end && errors.end}
+                    sx={{ mb: 3 }}
+                  />
+                )}
               />
             )}
-          />}
+          </Stack>
 
-          {!isCreating && <MobileDateTimePicker
-            label="Feeding time"
-            value={values.end}
-            inputFormat="dd/MM/yyyy hh:mm a"
-            onChange={(date) => setFieldValue('feedingTime', date)}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                fullWidth
-                error={Boolean(touched.end && errors.end)}
-                helperText={touched.end && errors.end}
-                sx={{ mb: 3 }}
+          {isCreating && (
+            <MobileDateTimePicker
+              label="Start date"
+              value={values.start}
+              inputFormat="dd/MM/yyyy hh:mm a"
+              onChange={(date) => setFieldValue('start', date)}
+              renderInput={(params) => <TextField {...params} fullWidth />}
+            />
+          )}
+          <Stack direction="row" spacing={1.0}>
+            {isCreating && (
+              <MobileDateTimePicker
+                label="End date"
+                value={values.end}
+                inputFormat="dd/MM/yyyy hh:mm a"
+                onChange={(date) => setFieldValue('end', date)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    error={Boolean(touched.end && errors.end)}
+                    helperText={touched.end && errors.end}
+                    sx={{ mb: 3 }}
+                  />
+                )}
               />
             )}
-          />}
+          </Stack>
 
           {isCreating}<ColorSinglePicker {...getFieldProps('textColor')} colors={COLOR_OPTIONS} />
         </Stack>
 
         <DialogActions>
+          can the staff/manger/addmin update task with Complete status?
           <Box sx={{ flexGrow: 1 }} />
           <Button type="button" variant="outlined" color="inherit" onClick={onCancel}>
             Cancel
           </Button>
           <LoadingButton type="submit" variant="contained" loading={isSubmitting} loadingIndicator="Loading...">
-            {isCreating ? "Add" : "Update"}
+            {isCreating ? 'Add' : 'Update'}
           </LoadingButton>
         </DialogActions>
       </Form>
