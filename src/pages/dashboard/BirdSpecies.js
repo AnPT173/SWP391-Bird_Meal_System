@@ -10,10 +10,9 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
-import CageCard from '../../components/_dashboard/user/cards/CageCard';
 
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import SpeciesCard from 'src/components/_dashboard/user/cards/BirdSpeciesCard';
+import SpeciesCard from '../../components/_dashboard/user/cards/BirdSpeciesCard';
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +35,7 @@ export default function SpeciesCards() {
     setTimeout(() => {
       setLoading(false);
       dispatch(getUsers());
-    }, 2000);
+    }, 20);
   }, [dispatch]);
 
   return (

@@ -10,9 +10,9 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
-import CageCard from '../../components/_dashboard/user/cards/CageCard';
 
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import PeriodCard from '../../components/_dashboard/user/cards/PeriodCard';
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ export default function PeriodCards() {
     setTimeout(() => {
       setLoading(false);
       dispatch(getUsers());
-    }, 2000);
+    }, 20);
   }, [dispatch]);
 
   return (
@@ -43,20 +43,18 @@ export default function PeriodCards() {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Periods"
-          links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, 
-                  { name: 'Species', href: PATH_DASHBOARD },
-                  { name: 'Period'}]}
+          links={[
+            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: 'Species', href: PATH_DASHBOARD },
+            { name: 'Period'}]}
         />
-        <Grid container spacing={3}>
           {loading ? (
             SkeletonLoad
-          ) : (
-      
-            <PeriodCards />
+          ) : (      
+            <PeriodCard />
           )
           }
           {!users.length && SkeletonLoad}
-        </Grid>
       </Container>
     </Page>
   );

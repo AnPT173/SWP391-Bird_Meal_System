@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 // material
-import { Container, Grid, Skeleton } from '@material-ui/core';
+import { Container, Tab, Box, Tabs, Stack, Grid, Skeleton } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUsers } from '../../redux/slices/user';
@@ -13,7 +13,8 @@ import Page from '../../components/Page';
 import CageCard from '../../components/_dashboard/user/cards/CageCard';
 
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import StatusCard from 'src/components/_dashboard/user/cards/BirdStatus';
+import StatusForm from '../../components/_dashboard/user/StatusForm';
+
 
 // ----------------------------------------------------------------------
 
@@ -27,17 +28,38 @@ const SkeletonLoad = (
   </>
 );
 
+const STATUS_TABS = [
+  {
+    value: 'general',
+    component: <StatusForm />
+  },
+  {
+    value: 'Status1',
+    component: <StatusForm />
+  },
+  {
+    value: 'Status2',
+    component: <StatusForm />
+  },
+];
+
 export default function PeriodCards() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
+  const [currentTab, setCurrentTab] = useState('general');
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
       dispatch(getUsers());
-    }, 2000);
+    }, 20);
   }, [dispatch]);
+
+  const handleChangeTab = (event, newValue) => {
+    setCurrentTab(newValue);
+  };
+
 
   return (
     <Page title="Status">
@@ -49,16 +71,24 @@ export default function PeriodCards() {
                   { name: 'Period', href: PATH_DASHBOARD.food.period },
                   { name: 'Status'}]}
         />
-        <Grid container spacing={3}>
-          {loading ? (
-            SkeletonLoad
-          ) : (
-      
-            <StatusCard />
-          )
-          }
-          {!users.length && SkeletonLoad}
-        </Grid>
+<Stack spacing={5}>
+          <Tabs
+            value={currentTab}
+            scrollButtons="auto"
+            variant="scrollable"
+            allowScrollButtonsMobile
+            onChange={handleChangeTab}
+          >
+            {STATUS_TABS.map((tab) => (
+              <Tab disableRipple key={tab.value} label={tab.value} value={tab.value} />
+            ))}
+          </Tabs>
+
+          {STATUS_TABS.map((tab) => {
+            const isMatched = tab.value === currentTab;
+            return isMatched && <Box key={tab.value}>{tab.component}</Box>;
+          })}
+        </Stack>
       </Container>
     </Page>
   );

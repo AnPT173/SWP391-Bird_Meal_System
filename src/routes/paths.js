@@ -70,9 +70,9 @@ export const PATH_DASHBOARD = {
     schedule: path(ROOTS_DASHBOARD, '/cages/:cageId/schedule'),
     list: path(ROOTS_DASHBOARD, '/cage/list')
   },
-  food:{
-    root: path(PATH_DASHBOARD, '/foodPlan'),
-    species: path(PATH_DASHBOARD, '/foodPlan/species'),
+  food: {
+    root: path(ROOTS_DASHBOARD, '/foodPlan'),
+    species: path(ROOTS_DASHBOARD, '/foodPlan/species'),
     period: path(ROOTS_DASHBOARD, '/foodPlan/species/:speciesId/period'),
     status: path(ROOTS_DASHBOARD, '/foodPlan/species/:speciesId/period/:periodId/status')
   },
