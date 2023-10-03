@@ -64,11 +64,17 @@ export const PATH_DASHBOARD = {
   },
   cages: {
     root: path(ROOTS_DASHBOARD, '/cage'),
-    profile: path(ROOTS_DASHBOARD, '/cage/:cageID/birds/:birdID/profile'),
+    profile: path(ROOTS_DASHBOARD, '/cage/:cageId/birds/:birdId/profile'),
     cards: path(ROOTS_DASHBOARD, '/cage/cards'),
     birds: path(ROOTS_DASHBOARD, '/cage/:cageId/birds'),
     schedule: path(ROOTS_DASHBOARD, '/cages/:cageId/schedule'),
     list: path(ROOTS_DASHBOARD, '/cage/list')
+  },
+  food:{
+    root: path(PATH_DASHBOARD, '/foodPlan'),
+    species: path(PATH_DASHBOARD, '/foodPlan/species'),
+    period: path(ROOTS_DASHBOARD, '/foodPlan/species/:speciesId/period'),
+    status: path(ROOTS_DASHBOARD, '/foodPlan/species/:speciesId/period/:periodId/status')
   },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),

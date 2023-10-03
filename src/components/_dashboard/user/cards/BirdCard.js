@@ -113,7 +113,7 @@ export default function BirdCard({ cageId }) {
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   {bird.foodQuantity} gr
                 </Typography>
-              </Grid>
+              </Grid>              
               <Grid item xs={4}>
                 <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
                   Status
