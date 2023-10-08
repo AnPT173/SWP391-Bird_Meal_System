@@ -1,5 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, useRoutes, useLocation } from 'react-router-dom';
+import { BirdSpeciesCard } from '../components/_dashboard/user/cards';
+import StatusForm from '../components/_dashboard/user/StatusForm';
 // layouts
 import MainLayout from '../layouts/main';
 import DashboardLayout from '../layouts/dashboard';
@@ -10,6 +12,11 @@ import AuthGuard from '../guards/AuthGuard';
 // import RoleBasedGuard from '../guards/RoleBasedGuard';
 // components
 import LoadingScreen from '../components/LoadingScreen';
+import PeriodCards from '../pages/dashboard/BirdPeriod';
+
+
+
+
 
 // ----------------------------------------------------------------------
 
@@ -118,6 +125,20 @@ export default function Router() {
             { path: '/:cageId/birds/:birdId/profile', element: <BirdProfile/> },
             { path: 'cards', element: <CageCards /> },
             { path: '/:cageId/birds', element: <BirdCards /> },
+            { path: '/:cageId/schedule', element: <Calendar /> },
+            { path: 'list', element: <UserList /> },
+            { path: 'new', element: <UserCreate /> },
+            { path: '/:name/edit', element: <UserCreate /> },
+            { path: 'account', element: <UserAccount /> }
+          ]
+        },
+        {
+          path: 'foodPlan',
+          children: [
+            { path: '/', element: <Navigate to="/dashboard/foodPlan/species" replace /> },
+            { path: '/species', element: <BirdSpeciesCard /> },
+            { path: '/species/:speciesId/period', element: <PeriodCards/> },
+            { path: '/species/:speciesId/period/:periodId/status', element: <StatusForm/> },
             { path: '/:cageId/schedule', element: <Calendar /> },
             { path: 'list', element: <UserList /> },
             { path: 'new', element: <UserCreate /> },

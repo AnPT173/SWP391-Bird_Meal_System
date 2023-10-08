@@ -53,7 +53,6 @@ export default function SpeciesCards() {
             <SpeciesCard />
           )
           }
-          {!users.length && SkeletonLoad}
       </Container>
     </Page>
   );

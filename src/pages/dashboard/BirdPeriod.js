@@ -45,7 +45,7 @@ export default function PeriodCards() {
           heading="Periods"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Species', href: PATH_DASHBOARD },
+            { name: 'Species', href: PATH_DASHBOARD.food.species },
             { name: 'Period'}]}
         />
           {loading ? (
@@ -54,7 +54,6 @@ export default function PeriodCards() {
             <PeriodCard />
           )
           }
-          {!users.length && SkeletonLoad}
       </Container>
     </Page>
   );

@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
 import { alpha, styled } from '@material-ui/core/styles';
 import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton, Link } from '@material-ui/core';
+import { species } from '../../../../utils/mock-data/species';
+import { birdsData } from '../../../../utils/mock-data/bird';
 
 
 // utils
 import { PATH_DASHBOARD } from '../../../../routes/paths';
+import { fShortenNumber } from '../../../../utils/formatNumber';
 //
 import SvgIconStyle from '../../../SvgIconStyle';
-import { species } from '../../../../utils/mock-data/species';
+
 
 // ----------------------------------------------------------------------
 
@@ -27,11 +30,8 @@ const CardMediaStyle = styled('div')(({ theme }) => ({
     width: '100%',
     height: '100%',
     position: 'absolute',
-    backdropFilter: 'blur(3px)',
-    WebkitBackdropFilter: 'blur(3px)', // Fix on Mobile
     borderTopLeftRadius: theme.shape.borderRadiusMd,
     borderTopRightRadius: theme.shape.borderRadiusMd,
-    backgroundColor: alpha(theme.palette.primary.darker, 0.72)
   }
 }));
 
@@ -52,22 +52,24 @@ export default function SpeciesCard() {
     <Grid container spacing={3}>
       {species.map((specie, index) => (
         <Grid item xs={12} sm={6} md={4} key={specie.speciesID}>
-        <Card key={specie.speciesID}>
+          <Card key={specie.speciesID}>
             <CardMediaStyle>
               <CoverImgStyle
                 alt="cover"
                 src={`/static/mock-images/cages/cage_${index + 1}.jpg`}
               />
             </CardMediaStyle>
+
             <Link href={`${PATH_DASHBOARD.food.species}/${specie.speciesID}/period`}>
               <Typography variant="subtitle1" align="center" sx={{ mt: 2, fontWeight: 'bold' }}>
-              {specie.speciesID}
+              {specie.specie}
               </Typography>
             </Link>
-
+            <Divider />
           </Card>
         </Grid>
-      ))}
+      ))
+      }
     </Grid >
   );
 }

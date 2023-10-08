@@ -30,15 +30,15 @@ const SkeletonLoad = (
 
 const STATUS_TABS = [
   {
-    value: 'general',
+    value: 'Normal',
     component: <StatusForm />
   },
   {
-    value: 'Status1',
+    value: 'Sick',
     component: <StatusForm />
   },
   {
-    value: 'Status2',
+    value: 'Birth',
     component: <StatusForm />
   },
 ];
@@ -62,16 +62,16 @@ export default function PeriodCards() {
 
 
   return (
-    <Page title="Status">
+    <Page title="Food Plan">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Status"
-          links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, 
-                  { name: 'Species', href: PATH_DASHBOARD.food.species },
-                  { name: 'Period', href: PATH_DASHBOARD.food.period },
-                  { name: 'Status'}]}
+          heading="Food Plan"
+          links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root },
+          { name: 'Species', href: PATH_DASHBOARD.food.species },
+          { name: 'Period', href: PATH_DASHBOARD.food.period },
+          { name: 'Food Plan' }]}
         />
-<Stack spacing={5}>
+        <Stack spacing={5}>
           <Tabs
             value={currentTab}
             scrollButtons="auto"

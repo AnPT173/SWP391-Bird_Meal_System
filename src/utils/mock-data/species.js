@@ -13,7 +13,7 @@ export const species = [
     },
     {
         speciesID: "SPE004",
-        specie: "Brown-rumped Shama"
+        specie: "Red-rumped Shama"
     },
     {
         speciesID: "SPE005",

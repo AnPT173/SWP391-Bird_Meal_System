@@ -15,7 +15,9 @@ import {
   TextField,
   Typography,
   FormHelperText,
-  FormControlLabel
+  FormControlLabel,
+  Menu,
+  MenuItem
 } from '@material-ui/core';
 // utils
 import { fData } from '../../../utils/formatNumber';
@@ -31,44 +33,35 @@ import countries from './countries';
 
 StatusForm.propTypes = {
   isEdit: PropTypes.bool,
-  currentUser: PropTypes.object
+  currentPlan: PropTypes.object
 };
 
-export default function StatusForm({ isEdit, currentUser }) {
+export default function StatusForm({ isEdit, currentPlan }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email(),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role Number is required'),
-    avatarUrl: Yup.mixed().required('Avatar is required')
+  const FoodPlanSchema = Yup.object().shape({
+    product1: Yup.string().required('Product 1 is required'),
+    product2: Yup.string().required('Product 2 is required'),
+    product3: Yup.string().required('Product 3 is required'),
+    product4: Yup.string().required('Product 4 is required'),
+    water: Yup.string().required('Water Amount is required'),
+    medicine: Yup.string().required('Medicine is required'),
+    note: Yup.string().required('Note is required'),
   });
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: currentUser?.name || '',
-      email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      address: currentUser?.address || '',
-      country: currentUser?.country || '',
-      state: currentUser?.state || '',
-      city: currentUser?.city || '',
-      zipCode: currentUser?.zipCode || '',
-      avatarUrl: currentUser?.avatarUrl || null,
-      isVerified: currentUser?.isVerified || true,
-      status: currentUser?.status,
-      company: currentUser?.company || '',
-      role: currentUser?.role || ''
+      product1: currentPlan?.product1 || '',
+      product2: currentPlan?.product2 || '',
+      product3: currentPlan?.product3 || '',
+      product4: currentPlan?.product4 || '',
+      water: currentPlan?.water || '',
+      medicine: currentPlan?.medicine || '',
+      note: currentPlan?.note || '',
     },
-    validationSchema: NewUserSchema,
+    validationSchema: FoodPlanSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
         await fakeRequest(500);
@@ -103,98 +96,78 @@ export default function StatusForm({ isEdit, currentUser }) {
     <FormikProvider value={formik}>
       <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
         <Grid container spacing={3}>
-
           <Grid item xs={12} md={8}>
             <Card sx={{ p: 3 }}>
               <Stack spacing={3}>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                   <TextField
                     fullWidth
-                    label="Full Name"
-                    {...getFieldProps('name')}
-                    error={Boolean(touched.name && errors.name)}
-                    helperText={touched.name && errors.name}
+                    label="Product 1"
+                    {...getFieldProps('product1')}
+                    error={Boolean(touched.product1 && errors.product1)}
+                    helperText={touched.product1 && errors.product1}
                   />
                   <TextField
                     fullWidth
-                    label="Email Address"
-                    {...getFieldProps('email')}
-                    error={Boolean(touched.email && errors.email)}
-                    helperText={touched.email && errors.email}
+                    label="Product 2"
+                    {...getFieldProps('product2')}
+                    error={Boolean(touched.product2 && errors.product2)}
+                    helperText={touched.product2 && errors.product2}
                   />
                 </Stack>
 
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                   <TextField
                     fullWidth
-                    label="Phone Number"
-                    {...getFieldProps('phoneNumber')}
-                    error={Boolean(touched.phoneNumber && errors.phoneNumber)}
-                    helperText={touched.phoneNumber && errors.phoneNumber}
+                    label="Product 3"
+                    {...getFieldProps('product3')}
+                    error={Boolean(touched.product3 && errors.product3)}
+                    helperText={touched.product3 && errors.product3}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Product 4"
+                    {...getFieldProps('product4')}
+                    error={Boolean(touched.product4 && errors.product4)}
+                    helperText={touched.product4 && errors.product4}
+                  />
+                </Stack>
+
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
+                  <TextField
+                    fullWidth
+                    label="Water Amount"
+                    {...getFieldProps('water')}
+                    error={Boolean(touched.water && errors.water)}
+                    helperText={touched.water && errors.water}
                   />
                   <TextField
                     select
                     fullWidth
-                    label="Country"
-                    placeholder="Country"
-                    {...getFieldProps('country')}
-                    SelectProps={{ native: true }}
-                    error={Boolean(touched.country && errors.country)}
-                    helperText={touched.country && errors.country}
-                  >
-                    <option value="" />
-                    {countries.map((option) => (
-                      <option key={option.code} value={option.label}>
-                        {option.label}
-                      </option>
-                    ))}
+                    label="Medicine"
+                    {...getFieldProps('medicine')}
+                    error={Boolean(touched.medicine && errors.medicine)}
+                    helperText={touched.medicine && errors.medicine}
+
+                  > <MenuItem value="Yes">Yes</MenuItem>
+                    <MenuItem value="No">No</MenuItem>
                   </TextField>
                 </Stack>
+                <TextField
 
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
-                  <TextField
-                    fullWidth
-                    label="State/Region"
-                    {...getFieldProps('state')}
-                    error={Boolean(touched.state && errors.state)}
-                    helperText={touched.state && errors.state}
-                  />
-                  <TextField
-                    fullWidth
-                    label="City"
-                    {...getFieldProps('city')}
-                    error={Boolean(touched.city && errors.city)}
-                    helperText={touched.city && errors.city}
-                  />
-                </Stack>
-
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
-                  <TextField
-                    fullWidth
-                    label="Address"
-                    {...getFieldProps('address')}
-                    error={Boolean(touched.address && errors.address)}
-                    helperText={touched.address && errors.address}
-                  />
-                  <TextField fullWidth label="Zip/Code" {...getFieldProps('zipCode')} />
-                </Stack>
-
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
-                  <TextField
-                    fullWidth
-                    label="Company"
-                    {...getFieldProps('company')}
-                    error={Boolean(touched.company && errors.company)}
-                    helperText={touched.company && errors.company}
-                  />
-                  <TextField
-                    fullWidth
-                    label="Role"
-                    {...getFieldProps('role')}
-                    error={Boolean(touched.role && errors.role)}
-                    helperText={touched.role && errors.role}
-                  />
-                </Stack>
+                  fullWidth
+                  label="Medicine Details"
+                  {...getFieldProps('medicineDetail')}
+                  error={Boolean(touched.medicineDetail && errors.medicineDetail)}
+                  helperText={touched.medicineDetail && errors.medicineDetail}
+                />
+                <TextField
+                  fullWidth
+                  label="Note"
+                  {...getFieldProps('note')}
+                  error={Boolean(touched.note && errors.note)}
+                  helperText={touched.note && errors.note}
+                />
 
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                   <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
@@ -209,3 +182,4 @@ export default function StatusForm({ isEdit, currentUser }) {
     </FormikProvider>
   );
 }
+
