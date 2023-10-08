@@ -53,7 +53,6 @@ export default function CageCards() {
             <CageCard />
           )
           }
-          {!users.length && SkeletonLoad}
         </Grid>
       </Container>
     </Page>

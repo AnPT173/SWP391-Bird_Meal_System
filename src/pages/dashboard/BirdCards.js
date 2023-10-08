@@ -29,7 +29,6 @@ const SkeletonLoad = (
     ))}
   </>
 );
-
 export default function BirdCards() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
@@ -71,9 +70,8 @@ export default function BirdCards() {
             <BirdCard cageId={cageId}/>
           )
           }
-          {!users.length && SkeletonLoad}
         </Grid>
       </Container>
     </Page>
-  );
+  )
 }

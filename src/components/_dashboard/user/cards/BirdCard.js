@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
 import { alpha, styled } from '@material-ui/core/styles';
 import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton, Link } from '@material-ui/core';
+import Label from '../../../Label';
 import { birdsData } from '../../../../utils/mock-data/bird';
 // utils
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { fShortenNumber } from '../../../../utils/formatNumber';
 //
 import SvgIconStyle from '../../../SvgIconStyle';
+
 
 // ----------------------------------------------------------------------
 
@@ -56,7 +58,18 @@ export default function BirdCard({ cageId }) {
 
   return (
     <Grid container spacing={3}>
-      {birdsInCage.map((bird, index) => (
+      {birdsInCage.map((bird, index) => {
+        let statusColor = 'info'; 
+
+        if (bird.status === 'Normal') {
+          statusColor = 'success'; 
+        } else if (bird.status === 'Sick') {
+          statusColor = 'error'; 
+        } else if (bird.status === 'Birth') {
+          statusColor = 'warning'; 
+        }
+
+        return (
         <Grid item xs={12} sm={6} md={4} key={bird.birdId}>
           <Card key={bird.birdId}>
             <CardMediaStyle>
@@ -108,25 +121,34 @@ export default function BirdCard({ cageId }) {
               </Grid>
               <Grid item xs={4}>
                 <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
+                  Status
+                </Typography>
+                <Label
+                  color={statusColor} 
+                  sx={{
+                    textTransform: 'uppercase',
+                    position: 'absolute',
+                    bottom: 24, 
+                    left: '50%', 
+                    transform: 'translateX(-50%)', 
+                  }}
+                >
+                  {bird.status}
+                </Label>
+                </Grid>
+              <Grid item xs={4}>
+                <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
                   Quantity
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   {bird.foodQuantity} gr
                 </Typography>
-              </Grid>              
-              <Grid item xs={4}>
-                <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
-                  Status
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {bird.status}
-                </Typography>
+              </Grid>               
               </Grid>
-            </Grid>
-          </Card>
-        </Grid>
-      ))
-      }
-    </Grid >
+            </Card>
+          </Grid>
+        );
+      })}
+    </Grid>
   );
 }

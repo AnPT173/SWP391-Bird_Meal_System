@@ -63,9 +63,6 @@ export default function BirdProfileWrapper() { // Rename the component to avoid 
     setCurrentTab(newValue);
   };
 
-  if (!birdProfile) {
-    return null;
-  }
   //  const PROFILE_TABS = [
   //   {
   //     value: 'profile',

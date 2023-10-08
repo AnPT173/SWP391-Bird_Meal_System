@@ -163,7 +163,18 @@ export default function Calendar() {
   const handleCloseModal = () => {
     dispatch(closeModal());
   };
-
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Feeded':
+        return 'success';
+      case 'Pending':
+        return 'warning';
+      case 'Late':
+        return 'error';
+      default:
+        return 'primary';
+    }
+  };
   return (
     <Page title={`Calendar${cageIdTitle}`}>
       <Container maxWidth={themeStretch ? false : 'xl'}>
@@ -232,25 +243,39 @@ export default function Calendar() {
 
         {isManager && (
           <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
-            <DialogTitle>
+            <DialogTitle
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+              }}
+            >
               {selectedEvent ? 'Edit Event' : 'Add Event'}
-              <Label color="primary">Completed</Label>
+              <Label
+                color={
+                  selectedEvent
+                    ? getStatusColor(selectedEvent.status)
+                    : 'primary'
+                }
+              >
+                {selectedEvent ? selectedEvent.status : 'Status'}
+              </Label>
             </DialogTitle>
-
             <CalendarForm event={selectedEvent} range={selectedRange} onCancel={handleCloseModal} />
           </DialogAnimate>
         )}
         {!isManager && selectedEvent && (
           <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
-            <DialogTitle 
-            style=
-            {{'display': 'flex', 
-            'justify-content': 'space-between', 
-          }}
+            <DialogTitle
+              style=
+              {{
+                'display': 'flex',
+                'justify-content': 'space-between',
+              }}
             >
               Update Feeding Schedule
-            <Label color="primary">Completed</Label>
-              
+              <Label color="primary">Completed</Label>
+
             </DialogTitle>
 
             <CalendarForm event={selectedEvent} range={selectedRange} onCancel={handleCloseModal} />

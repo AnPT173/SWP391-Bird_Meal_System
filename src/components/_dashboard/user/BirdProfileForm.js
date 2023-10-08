@@ -95,8 +95,17 @@ export default function BirdProfileForm({ isEdit }) {
     }
   }, [setFieldValue]);
   console.log("values", values)
+  let color = 'info'; 
 
-
+  if (currentBird) {
+    if (currentBird.status === 'Normal') {
+      color = 'success'; 
+    } else if (currentBird.status === 'Birth') {
+      color = 'warning'; 
+    } else if (currentBird.status === 'Sick') {
+      color = 'error'; 
+    }
+  }
   return (
     <FormikProvider value={formik}>
       <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -105,13 +114,12 @@ export default function BirdProfileForm({ isEdit }) {
             <Card sx={{ py: 10, px: 3 }}>
               {isEdit && (
                 <Label
-                  color={currentBird && currentBird.status !== 'active' ? 'error' : 'success'}
+                  color={color}
                   sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
                 >
                   {currentBird && currentBird.status}
                 </Label>
               )}
-
               <Box sx={{ mb: 5 }}>
                 <UploadAvatar
                   accept="image/*"

@@ -45,8 +45,7 @@ export default function SpeciesCards() {
           heading="Species"
           links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, 
                   { name: 'Species' }]}
-        />
-        <Grid container spacing={3}>
+        /> 
           {loading ? (
             SkeletonLoad
           ) : (
@@ -55,7 +54,6 @@ export default function SpeciesCards() {
           )
           }
           {!users.length && SkeletonLoad}
-        </Grid>
       </Container>
     </Page>
   );
