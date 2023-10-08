@@ -156,7 +156,7 @@ export const managerSidebar = [
 
       { title: 'Food', path: PATH_DASHBOARD.food.root, icon: ICONS.cart },
       {
-        title: 'Setting',
+        title: 'Report',
         path: PATH_DASHBOARD.kanban,
         icon: ICONS.setting
       }
