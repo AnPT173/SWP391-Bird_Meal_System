@@ -51,6 +51,7 @@ export default function BirdProfileForm({ isEdit }) {
     cageId: Yup.string().required('Cage is required'),
     foodQuantity: Yup.number().required('Food Quantity is required'),
     avatarUrl: Yup.mixed().required('Avatar is required'),
+    birdGender: Yup.string().required('Bird Gender is required')
   });
 
   const currentBird = birdsData.find((bird) => bird.birdId === birdId);
@@ -62,6 +63,7 @@ export default function BirdProfileForm({ isEdit }) {
       birdId: currentBird ? currentBird.birdId : '',
       birdName: currentBird ? currentBird.birdName : '',
       birdAge: currentBird ? currentBird.birdAge : '',
+      birdGender: currentBird ? currentBird.birdGender : '',
       status: currentBird ? currentBird.status : '',
       species: currentBird ? currentBird.species : '',
       cageId: currentBird ? currentBird.cageId : '',
@@ -95,17 +97,18 @@ export default function BirdProfileForm({ isEdit }) {
     }
   }, [setFieldValue]);
   console.log("values", values)
-  let color = 'info'; 
+  let color = 'info'; // Default color
 
   if (currentBird) {
     if (currentBird.status === 'Normal') {
-      color = 'success'; 
+      color = 'success';
     } else if (currentBird.status === 'Birth') {
-      color = 'warning'; 
+      color = 'warning';
     } else if (currentBird.status === 'Sick') {
-      color = 'error'; 
+      color = 'error';
     }
   }
+
   return (
     <FormikProvider value={formik}>
       <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -120,6 +123,7 @@ export default function BirdProfileForm({ isEdit }) {
                   {currentBird && currentBird.status}
                 </Label>
               )}
+
               <Box sx={{ mb: 5 }}>
                 <UploadAvatar
                   accept="image/*"
@@ -203,7 +207,20 @@ export default function BirdProfileForm({ isEdit }) {
                     ))}
                   </TextField>
                 </Stack>
-
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
+                  <TextField
+                    select
+                    fullWidth
+                    label="Gender"
+                    value={formik.values.birdGender}
+                    {...getFieldProps('birdGender')}
+                    error={Boolean(touched.birdGender && errors.birdGender)}
+                    helperText={touched.birdGender && errors.birdGender}
+                  >
+                    <MenuItem value="Male">Male</MenuItem>
+                    <MenuItem value="Female">Female</MenuItem>
+                  </TextField>
+                </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                   <TextField
                     select

@@ -7,7 +7,8 @@ export const birdsData = [
     species: 'Magpie-robin',
     cageId: 'CA001',
     foodQuantity: 200,
-    periodId: 'PER002'
+    periodId: 'PER002',
+    birdGender: 'Male'
   },
   {
     birdId: 'BIRD002',
@@ -17,7 +18,8 @@ export const birdsData = [
     species: 'Magpie-robin',
     cageId: 'CA001',
     foodQuantity: 150,
-    periodId: 'PER001'
+    periodId: 'PER001',
+    birdGender: 'Female'
   },
   {
     birdId: 'BIRD003',
@@ -27,7 +29,8 @@ export const birdsData = [
     species: 'Magpie-robin',
     cageId: 'CA001',
     foodQuantity: 180,
-    periodId:'PER003'
+    periodId:'PER003',
+    birdGender: 'Female'
   },
   {
     birdId: 'BIRD004',
@@ -37,7 +40,8 @@ export const birdsData = [
     species: 'Red-whispered bulbul',
     cageId: 'CA002',
     foodQuantity: 250,
-    periodId:'PER001'
+    periodId:'PER001',
+    birdGender: 'Female'
   },
   {
     birdId: 'BIRD005',
@@ -47,7 +51,8 @@ export const birdsData = [
     species: 'Red-whispered bulbul',
     cageId: 'CA002',
     foodQuantity: 220,
-    periodId:'PER003'
+    periodId:'PER003',
+    birdGender: 'Male'
   },
     {
       birdId: 'BIRD006',
@@ -57,9 +62,20 @@ export const birdsData = [
       species: 'Red-whispered bulbul',
       cageId: 'CA002',
       foodQuantity: 190,
-      periodId: 'PER001' 
+      periodId: 'PER001', 
+      birdGender: 'Female'
     },
-
+    {
+      birdId: 'BIRD007',
+      birdName: 'Janet',
+      birdAge: 4,
+      status: 'Birth',
+      species: 'White-rumped Shama',
+      cageId: 'CA003',
+      foodQuantity: 220,
+      periodId: 'PER003', 
+      birdGender: 'Female'
+    },
     {
       birdId: 'BIRD008',
       birdName: 'Max',
@@ -68,9 +84,20 @@ export const birdsData = [
       species: 'White-rumped Shama',
       cageId: 'CA003',
       foodQuantity: 240,
-      periodId: 'PER002' 
+      periodId: 'PER002', 
+      birdGender: 'Male'
     },
-
+    {
+      birdId: 'BIRD009',
+      birdName: 'Laura',
+      birdAge: 1,
+      status: 'Normal',
+      species: 'White-rumped Shama',
+      cageId: 'CA003',
+      foodQuantity: 250,
+      periodId: 'PER001', 
+      birdGender: 'Female'
+    },
     {
       birdId: 'BIRD010',
       birdName: 'Rocky',
@@ -79,7 +106,8 @@ export const birdsData = [
       species: 'White-rumped Shama',
       cageId: 'CA004',
       foodQuantity: 270,
-      periodId: 'PER003' 
+      periodId: 'PER003',
+      birdGender: 'Male' 
     },
 
     {
@@ -90,7 +118,8 @@ export const birdsData = [
       species: 'White-rumped Shama',
       cageId: 'CA004',
       foodQuantity: 230,
-      periodId: 'PER001' 
+      periodId: 'PER001',
+      birdGender: 'Female'
     },
 
     {
@@ -101,7 +130,8 @@ export const birdsData = [
       species: 'White-rumped Shama',
       cageId: 'CA004',
       foodQuantity: 290,
-      periodId: 'PER002' 
+      periodId: 'PER002',
+      birdGender: 'Female' 
     },
 
     {
@@ -112,7 +142,8 @@ export const birdsData = [
       species: 'Seychelles magpie-robin',
       cageId: 'CA005',
       foodQuantity: 310,
-      periodId: 'PER001'
+      periodId: 'PER001',
+      birdGender: 'Male'
     },
 
     {
@@ -123,7 +154,8 @@ export const birdsData = [
       species: 'Seychelles magpie-robin',
       cageId: 'CA005',
       foodQuantity: 270,
-      periodId: 'PER003' 
+      periodId: 'PER003',
+      birdGender: 'Female'
     },
     {
       birdId: 'BIRD015',
@@ -133,7 +165,8 @@ export const birdsData = [
       species: 'Seychelles magpie-robin',
       cageId: 'CA005',
       foodQuantity: 250,
-      periodId: 'PER001' 
+      periodId: 'PER001',
+      birdGender:'Male'
     }
   ];
   
