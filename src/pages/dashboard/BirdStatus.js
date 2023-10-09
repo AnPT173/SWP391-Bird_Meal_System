@@ -43,12 +43,12 @@ const STATUS_TABS = [
   },
 ];
 
-export default function PeriodCards() {
+export default function BirdStatus() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
-  const [currentTab, setCurrentTab] = useState('general');
+  const [currentTab, setCurrentTab] = useState('Normal');
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);

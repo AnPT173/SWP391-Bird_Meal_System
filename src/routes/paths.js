@@ -68,7 +68,8 @@ export const PATH_DASHBOARD = {
     cards: path(ROOTS_DASHBOARD, '/cage/cards'),
     birds: path(ROOTS_DASHBOARD, '/cage/:cageId/birds'),
     schedule: path(ROOTS_DASHBOARD, '/cages/:cageId/schedule'),
-    list: path(ROOTS_DASHBOARD, '/cage/list')
+    list: path(ROOTS_DASHBOARD, '/cage/list'),
+    createBird: path(ROOTS_DASHBOARD, '/cage/:cageId/birds/create')
   },
   food: {
     root: path(ROOTS_DASHBOARD, '/foodPlan'),

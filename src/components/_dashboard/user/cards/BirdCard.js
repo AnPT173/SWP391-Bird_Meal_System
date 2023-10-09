@@ -55,7 +55,6 @@ BirdCard.propTypes = {
 
 export default function BirdCard({ cageId }) {
   const birdsInCage = birdsData.filter((bird) => bird.cageId === cageId);
-
   return (
     <Grid container spacing={3}>
       {birdsInCage.map((bird, index) => {

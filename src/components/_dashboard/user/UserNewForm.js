@@ -1,87 +1,76 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack5';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
-import { LoadingButton } from '@material-ui/lab';
+import { DatePicker, LoadingButton } from '@material-ui/lab';
 import {
   Box,
   Card,
   Grid,
   Stack,
-  Switch,
   TextField,
   Typography,
   FormHelperText,
-  FormControlLabel
+  FormControlLabel,
+  MenuItem,
 } from '@material-ui/core';
-// utils
 import { fData } from '../../../utils/formatNumber';
+import { species } from '../../../utils/mock-data/species';
+import { cagesData } from '../../../utils/mock-data/cage';
 import fakeRequest from '../../../utils/fakeRequest';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
-//
-import Label from '../../Label';
+
 import { UploadAvatar } from '../../upload';
-import countries from './countries';
 
-// ----------------------------------------------------------------------
 
-UserNewForm.propTypes = {
-  isEdit: PropTypes.bool,
-  currentUser: PropTypes.object
-};
 
-export default function UserNewForm({ isEdit, currentUser }) {
+
+export default function CreateNewBirdForm() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-
-  const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email(),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role Number is required'),
-    avatarUrl: Yup.mixed().required('Avatar is required')
+  const { cageId } = useParams();
+  const NewBirdSchema = Yup.object().shape({
+    birdName: Yup.string().required('Bird Name is required'),
+    birdAge: Yup.number().required('Bird Age is required'),
+    status: Yup.string().required('Status is required'),
+    species: Yup.string().required('Species is required'),
+    cageId: Yup.string().required('Cage is required'),
+    foodQuantity: Yup.number().required('Food Quantity is required'),
+    avatarUrl: Yup.mixed().required('Avatar is required'),
+    birdGender: Yup.string().required('Bird Gender is required'),
+    hatchingDate: Yup.date().required('Hatching Date is required'),
   });
 
   const formik = useFormik({
-    enableReinitialize: true,
     initialValues: {
-      name: currentUser?.name || '',
-      email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      address: currentUser?.address || '',
-      country: currentUser?.country || '',
-      state: currentUser?.state || '',
-      city: currentUser?.city || '',
-      zipCode: currentUser?.zipCode || '',
-      avatarUrl: currentUser?.avatarUrl || null,
-      isVerified: currentUser?.isVerified || true,
-      status: currentUser?.status,
-      company: currentUser?.company || '',
-      role: currentUser?.role || ''
+      birdName: '',
+      birdAge: '',
+      status: '',
+      species: '',
+      cageId,
+      foodQuantity: '',
+      avatarUrl: null,
+      birdGender: '',
+      hatchingDate: null,
     },
-    validationSchema: NewUserSchema,
+    validationSchema: NewBirdSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
         await fakeRequest(500);
         resetForm();
         setSubmitting(false);
-        enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
+        enqueueSnackbar('Create success', { variant: 'success' });
         navigate(PATH_DASHBOARD.user.list);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
         setErrors(error);
       }
-    }
+    },
   });
 
   const { errors, values, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
@@ -92,7 +81,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
       if (file) {
         setFieldValue('avatarUrl', {
           ...file,
-          preview: URL.createObjectURL(file)
+          preview: URL.createObjectURL(file),
         });
       }
     },
@@ -105,15 +94,6 @@ export default function UserNewForm({ isEdit, currentUser }) {
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             <Card sx={{ py: 10, px: 3 }}>
-              {isEdit && (
-                <Label
-                  color={values.status !== 'active' ? 'error' : 'success'}
-                  sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
-                >
-                  {values.status}
-                </Label>
-              )}
-
               <Box sx={{ mb: 5 }}>
                 <UploadAvatar
                   accept="image/*"
@@ -129,7 +109,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
                         mx: 'auto',
                         display: 'block',
                         textAlign: 'center',
-                        color: 'text.secondary'
+                        color: 'text.secondary',
                       }}
                     >
                       Allowed *.jpeg, *.jpg, *.png, *.gif
@@ -141,143 +121,117 @@ export default function UserNewForm({ isEdit, currentUser }) {
                   {touched.avatarUrl && errors.avatarUrl}
                 </FormHelperText>
               </Box>
-
-              {isEdit && (
-                <FormControlLabel
-                  labelPlacement="start"
-                  control={
-                    <Switch
-                      onChange={(event) => setFieldValue('status', event.target.checked ? 'banned' : 'active')}
-                      checked={values.status !== 'active'}
-                    />
-                  }
-                  label={
-                    <>
-                      <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                        Banned
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        Apply disable account
-                      </Typography>
-                    </>
-                  }
-                  sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
-                />
-              )}
-
-              <FormControlLabel
-                labelPlacement="start"
-                control={<Switch {...getFieldProps('isVerified')} checked={values.isVerified} />}
-                label={
-                  <>
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Email Verified
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Disabling this will automatically send the user a verification email
-                    </Typography>
-                  </>
-                }
-                sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-              />
             </Card>
           </Grid>
-
           <Grid item xs={12} md={8}>
             <Card sx={{ p: 3 }}>
               <Stack spacing={3}>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                   <TextField
                     fullWidth
-                    label="Full Name"
-                    {...getFieldProps('name')}
-                    error={Boolean(touched.name && errors.name)}
-                    helperText={touched.name && errors.name}
+                    label="Bird Name"
+                    {...getFieldProps('birdName')}
+                    error={Boolean(touched.birdName && errors.birdName)}
+                    helperText={touched.birdName && errors.birdName}
                   />
                   <TextField
                     fullWidth
-                    label="Email Address"
-                    {...getFieldProps('email')}
-                    error={Boolean(touched.email && errors.email)}
-                    helperText={touched.email && errors.email}
+                    label="Bird Age"
+                    type="number"
+                    {...getFieldProps('birdAge')}
+                    error={Boolean(touched.birdAge && errors.birdAge)}
+                    helperText={touched.birdAge && errors.birdAge}
                   />
                 </Stack>
-
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
-                  <TextField
-                    fullWidth
-                    label="Phone Number"
-                    {...getFieldProps('phoneNumber')}
-                    error={Boolean(touched.phoneNumber && errors.phoneNumber)}
-                    helperText={touched.phoneNumber && errors.phoneNumber}
-                  />
                   <TextField
                     select
                     fullWidth
-                    label="Country"
-                    placeholder="Country"
-                    {...getFieldProps('country')}
-                    SelectProps={{ native: true }}
-                    error={Boolean(touched.country && errors.country)}
-                    helperText={touched.country && errors.country}
+                    label="Status"
+                    {...getFieldProps('status')}
+                    error={Boolean(touched.status && errors.status)}
+                    helperText={touched.status && errors.status}
                   >
-                    <option value="" />
-                    {countries.map((option) => (
-                      <option key={option.code} value={option.label}>
-                        {option.label}
-                      </option>
-                    ))}
+                    <MenuItem value="" disabled>
+                      Select Status
+                    </MenuItem>
+                    <MenuItem value="Normal">Normal</MenuItem>
+                    <MenuItem value="Sick">Sick</MenuItem>
+                    <MenuItem value="Birth">Birth</MenuItem>
+                  </TextField>
+                  <TextField
+                    select
+                    fullWidth
+                    label="Bird Gender"
+                    {...getFieldProps('birdGender')}
+                    error={Boolean(touched.birdGender && errors.birdGender)}
+                    helperText={touched.birdGender && errors.birdGender}
+                  >
+                    <MenuItem value="" disabled>
+                      Select Gender
+                    </MenuItem>
+                    <MenuItem value="Male">Male</MenuItem>
+                    <MenuItem value="Female">Female</MenuItem>
                   </TextField>
                 </Stack>
-
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                   <TextField
+                    select
                     fullWidth
-                    label="State/Region"
-                    {...getFieldProps('state')}
-                    error={Boolean(touched.state && errors.state)}
-                    helperText={touched.state && errors.state}
-                  />
+                    label="Cage"
+                    value={cageId}
+                    {...getFieldProps('cageId')}
+                    error={Boolean(touched.cageId && errors.cageId)}
+                    helperText={touched.cageId && errors.cageId}
+                  >
+                    {cagesData.map((option) => (
+                      <MenuItem key={option.cageID} value={option.cageID}>
+                        {option.cageID}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                   <TextField
                     fullWidth
-                    label="City"
-                    {...getFieldProps('city')}
-                    error={Boolean(touched.city && errors.city)}
-                    helperText={touched.city && errors.city}
+                    label="Food Quantity"
+                    type="number"
+                    {...getFieldProps('foodQuantity')}
+                    error={Boolean(touched.foodQuantity && errors.foodQuantity)}
+                    helperText={touched.foodQuantity && errors.foodQuantity}
                   />
                 </Stack>
-
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                   <TextField
+                    select
                     fullWidth
-                    label="Address"
-                    {...getFieldProps('address')}
-                    error={Boolean(touched.address && errors.address)}
-                    helperText={touched.address && errors.address}
+                    label="Species"
+                    {...getFieldProps('species')}
+                    error={Boolean(touched.species && errors.species)}
+                    helperText={touched.species && errors.species}
+                  >
+                    <MenuItem value="" disabled>
+                      Select Species
+                    </MenuItem>
+                    {species.map((option) => (
+                      <MenuItem key={option.speciesID} value={option.specie}>
+                        {option.specie}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <DatePicker
+                    fullWidth
+                    label="Hatching Date"
+                    value={formik.values.hatchingDate}
+                    onChange={(date) => {
+                      formik.setFieldValue('hatchingDate', date); 
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                    error={Boolean(touched.hatchingDate && errors.hatchingDate)}
+                    helperText={touched.hatchingDate && errors.hatchingDate}
                   />
-                  <TextField fullWidth label="Zip/Code" {...getFieldProps('zipCode')} />
                 </Stack>
-
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
-                  <TextField
-                    fullWidth
-                    label="Company"
-                    {...getFieldProps('company')}
-                    error={Boolean(touched.company && errors.company)}
-                    helperText={touched.company && errors.company}
-                  />
-                  <TextField
-                    fullWidth
-                    label="Role"
-                    {...getFieldProps('role')}
-                    error={Boolean(touched.role && errors.role)}
-                    helperText={touched.role && errors.role}
-                  />
-                </Stack>
-
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                   <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                    {!isEdit ? 'Create User' : 'Save Changes'}
+                    Create Bird
                   </LoadingButton>
                 </Box>
               </Stack>

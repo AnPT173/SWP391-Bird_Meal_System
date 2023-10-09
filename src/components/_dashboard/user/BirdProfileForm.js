@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack5';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
-import { LoadingButton } from '@material-ui/lab';
+import { DatePicker, LoadingButton } from '@material-ui/lab';
 import {
   Box,
   Card,
@@ -32,7 +32,6 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import Label from '../../Label';
 import { UploadAvatar } from '../../upload';
 
-
 BirdProfileForm.propTypes = {
   isEdit: PropTypes.bool,
   currentBird: PropTypes.object,
@@ -51,11 +50,11 @@ export default function BirdProfileForm({ isEdit }) {
     cageId: Yup.string().required('Cage is required'),
     foodQuantity: Yup.number().required('Food Quantity is required'),
     avatarUrl: Yup.mixed().required('Avatar is required'),
-    birdGender: Yup.string().required('Bird Gender is required')
+    birdGender: Yup.string().required('Bird Gender is required'),
+    hatchingDate: Yup.date().required('Hatching Date is required'),
   });
 
   const currentBird = birdsData.find((bird) => bird.birdId === birdId);
-
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -69,6 +68,7 @@ export default function BirdProfileForm({ isEdit }) {
       cageId: currentBird ? currentBird.cageId : '',
       foodQuantity: currentBird ? currentBird.foodQuantity : '',
       avatarUrl: currentBird ? currentBird.avatarUrl : null,
+      hatchingDate: currentBird ? new Date(currentBird.hatchingDate) : null,
     },
     validationSchema: NewBirdSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
@@ -96,7 +96,7 @@ export default function BirdProfileForm({ isEdit }) {
       });
     }
   }, [setFieldValue]);
-  console.log("values", values)
+
   let color = 'info'; // Default color
 
   if (currentBird) {
@@ -153,7 +153,6 @@ export default function BirdProfileForm({ isEdit }) {
               </Box>
             </Card>
           </Grid>
-
           <Grid item xs={12} md={8}>
             <Card sx={{ p: 3 }}>
               <Stack spacing={3}>
@@ -211,20 +210,6 @@ export default function BirdProfileForm({ isEdit }) {
                   <TextField
                     select
                     fullWidth
-                    label="Gender"
-                    value={formik.values.birdGender}
-                    {...getFieldProps('birdGender')}
-                    error={Boolean(touched.birdGender && errors.birdGender)}
-                    helperText={touched.birdGender && errors.birdGender}
-                  >
-                    <MenuItem value="Male">Male</MenuItem>
-                    <MenuItem value="Female">Female</MenuItem>
-                  </TextField>
-                </Stack>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
-                  <TextField
-                    select
-                    fullWidth
                     label="Species"
                     value={formik.values.species}
                     {...getFieldProps('species')}
@@ -239,6 +224,31 @@ export default function BirdProfileForm({ isEdit }) {
                         {option.specie}
                       </MenuItem>
                     ))}
+                  </TextField>
+                  <DatePicker
+                    fullWidth
+                    label="Hatching Date"
+                    value={formik.values.hatchingDate}
+                    onChange={(date) => {
+                      formik.setFieldValue('hatchingDate', date); 
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                    error={Boolean(touched.hatchingDate && errors.hatchingDate)}
+                    helperText={touched.hatchingDate && errors.hatchingDate}
+                  />
+                </Stack>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
+                  <TextField
+                    select
+                    fullWidth
+                    label="Gender"
+                    value={formik.values.birdGender}
+                    {...getFieldProps('birdGender')}
+                    error={Boolean(touched.birdGender && errors.birdGender)}
+                    helperText={touched.birdGender && errors.birdGender}
+                  >
+                    <MenuItem value="Male">Male</MenuItem>
+                    <MenuItem value="Female">Female</MenuItem>
                   </TextField>
                   <TextField
                     select
@@ -258,8 +268,6 @@ export default function BirdProfileForm({ isEdit }) {
                       </MenuItem>
                     ))}
                   </TextField>
-                </Stack>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                   <TextField
                     fullWidth
                     label="Food Quantity"

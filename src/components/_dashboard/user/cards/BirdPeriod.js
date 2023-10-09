@@ -51,6 +51,7 @@ const CoverImgStyle = styled('img')({
 
 
 export default function PeriodCard() {
+  const { speciesID } = useParams();
   return (
     <Grid container spacing={3}>
       {periodData.map((period) => (
@@ -63,7 +64,7 @@ export default function PeriodCard() {
               />
             </CardMediaStyle>
 
-            <Link href={`${PATH_DASHBOARD.food.root}/${species.speciesID}/period/${period.periodId}/status`}>
+            <Link href={`${PATH_DASHBOARD.food.species}/${speciesID}/period/${period.periodId}/status`}>
             <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
               {period.period}
             </Typography>
