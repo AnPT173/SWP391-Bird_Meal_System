@@ -31,10 +31,11 @@ const CoverImgStyle = styled('img')({
   position: 'absolute',
 });
 
-function CageCard() {
+function CageCard({status}) {
+  const filterdData = cagesData.filter(item => item.type === status)
   return (
     <Grid container spacing={3}>
-      {cagesData.map((cage, index) => {
+      {filterdData.map((cage, index) => {
         let statusColor = 'info'; 
 
         if (cage.status === 'Feeded') {

@@ -43,7 +43,7 @@ export default function BirdCards() {
     setTimeout(() => {
       setLoading(false);
       dispatch(getUsers());
-    }, 2000);
+    }, 200);
   }, [dispatch]);
 
   

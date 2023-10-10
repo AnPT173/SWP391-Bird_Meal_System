@@ -17,34 +17,39 @@ export const cagesData = [
     numberOfBirds: 3,
     species: 'Magpie-robin',
     cageType: 'Large',
-    status: 'Feeded'
+    status: 'Feeded',
+    type: 'Normal'
   },
   {
     cageID: 'CA002',
     numberOfBirds: 3,
     species: 'Red-whispered bulbul',
     cageType: 'Small',
-    status: 'Pending'
+    status: 'Pending',
+    type: 'Normal'
   },
   {
     cageID: 'CA003',
     numberOfBirds: 3,
     species: 'White-rumped Shama',
     cageType: 'Medium',
-    status: 'Late'
+    status: 'Late',
+    type: 'Sick',
   },
   {
     cageID: 'CA004',
     numberOfBirds: 3,
     species: 'White-rumped Shama',
     cageType: 'Small',
-    status: 'Feeded'
+    status: 'Feeded',
+    type: 'Sick',
   },
   {
     cageID: 'CA005',
     numberOfBirds: 3,
     species: 'Seychelles magpie-robin',
     cageType: 'Medium',
-    status: 'Pending'
+    status: 'Pending',
+    type: 'Birth'
   }
 ];

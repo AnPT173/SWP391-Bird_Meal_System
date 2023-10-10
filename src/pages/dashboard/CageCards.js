@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 // material
-import { Container, Grid, Skeleton } from '@material-ui/core';
+import { Container, Grid, Skeleton, Stack, Tab, Tabs, Box } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUsers } from '../../redux/slices/user';
@@ -26,17 +26,29 @@ const SkeletonLoad = (
   </>
 );
 
+const LOCATION_TABS = [
+  {
+    value: 'Normal',
+    component: <CageCard status="Normal" />
+  },
+  {
+    value: 'Sick',
+    component: <CageCard status="Sick" />
+  },
+  {
+    value: 'Birth',
+    component: <CageCard status="Birth" />
+  }
+];
+
 export default function CageCards() {
   const { themeStretch } = useSettings();
-  const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.user);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-      dispatch(getUsers());
-    }, 2000);
-  }, [dispatch]);
+  const [currentTab, setCurrentTab] = useState('Normal');
+
+  const handleChangeTab = (event, newValue) => {
+    console.log(newValue)
+    setCurrentTab(newValue);
+  };
 
   return (
     <Page title="Cages">
@@ -45,15 +57,17 @@ export default function CageCards() {
           heading="Cages"
           links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, { name: 'Cages' }]}
         />
-        <Grid container spacing={3}>
-          {loading ? (
-            SkeletonLoad
-          ) : (
-      
-            <CageCard />
-          )
-          }
-        </Grid>
+        <Stack spacing={5}>
+          <Tabs value={currentTab} scrollButtons="auto" variant="scrollable" onChange={handleChangeTab}>
+            {LOCATION_TABS.map((tab) => (
+              <Tab disableRipple key={tab.value} label={tab.value} value={tab.value} />
+            ))}
+          </Tabs>
+          {LOCATION_TABS.map((tab)=>{
+            const isMatched = tab.value === currentTab;
+            return isMatched && <Box key={tab.value}>{tab.component}</Box>
+          })}
+        </Stack>
       </Container>
     </Page>
   );
