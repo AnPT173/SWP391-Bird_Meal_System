@@ -19,18 +19,20 @@ import {
   MenuItem,
   Avatar,
 } from '@material-ui/core';
+import { CheckBox } from '@material-ui/icons';
+import { fData } from '../../../utils/formatNumber';
 import { status } from '../../../utils/mock-data/status';
 import { species } from '../../../utils/mock-data/species';
 import { cagesData } from '../../../utils/mock-data/cage';
 import { birdsData } from '../../../utils/mock-data/bird';
 // utils
-import { fData } from '../../../utils/formatNumber';
 import fakeRequest from '../../../utils/fakeRequest';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //
 import Label from '../../Label';
 import { UploadAvatar } from '../../upload';
+
 
 BirdProfileForm.propTypes = {
   isEdit: PropTypes.bool,
@@ -48,10 +50,14 @@ export default function BirdProfileForm({ isEdit }) {
     status: Yup.string().required('Status is required'),
     species: Yup.string().required('Species is required'),
     cageId: Yup.string().required('Cage is required'),
-    foodQuantity: Yup.number().required('Food Quantity is required'),
     avatarUrl: Yup.mixed().required('Avatar is required'),
     birdGender: Yup.string().required('Bird Gender is required'),
     hatchingDate: Yup.date().required('Hatching Date is required'),
+    attitudes: Yup.string().required('Attitudes are required'),
+    featherColor: Yup.string().required('Feather Color is required'),
+    appearance: Yup.string().required('Appearance is required'),
+    qualities: Yup.string().required('Qualities are required'),
+    area: Yup.string().required('Area is required'),
   });
 
   const currentBird = birdsData.find((bird) => bird.birdId === birdId);
@@ -66,9 +72,13 @@ export default function BirdProfileForm({ isEdit }) {
       status: currentBird ? currentBird.status : '',
       species: currentBird ? currentBird.species : '',
       cageId: currentBird ? currentBird.cageId : '',
-      foodQuantity: currentBird ? currentBird.foodQuantity : '',
       avatarUrl: currentBird ? currentBird.avatarUrl : null,
       hatchingDate: currentBird ? new Date(currentBird.hatchingDate) : null,
+      attitudes: currentBird ? currentBird.attitudes : '',
+      featherColor: currentBird ? currentBird.featherColor : '',
+      appearance: currentBird ? currentBird.appearance : '',
+      qualities: currentBird ? currentBird.qualities : '',
+      area: currentBird ? currentBird.qualities : '',
     },
     validationSchema: NewBirdSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
@@ -108,6 +118,7 @@ export default function BirdProfileForm({ isEdit }) {
       color = 'error';
     }
   }
+  const [isExoticChecked, setExoticChecked] = useState(false);
 
   return (
     <FormikProvider value={formik}>
@@ -122,7 +133,8 @@ export default function BirdProfileForm({ isEdit }) {
                 >
                   {currentBird && currentBird.status}
                 </Label>
-              )}
+              )
+              }
 
               <Box sx={{ mb: 5 }}>
                 <UploadAvatar
@@ -150,8 +162,21 @@ export default function BirdProfileForm({ isEdit }) {
                 <FormHelperText error sx={{ px: 2, textAlign: 'center' }}>
                   {touched.avatarUrl && errors.avatarUrl}
                 </FormHelperText>
+
+                <FormControlLabel
+                  control={
+                    <input
+                      type="checkbox"
+                      checked={isExoticChecked}
+                      onChange={(e) => setExoticChecked(e.target.checked)}
+                    />
+                  }
+                  label="Exotic"
+                />
+
               </Box>
             </Card>
+
           </Grid>
           <Grid item xs={12} md={8}>
             <Card sx={{ p: 3 }}>
@@ -176,6 +201,17 @@ export default function BirdProfileForm({ isEdit }) {
                     error={Boolean(touched.birdName && errors.birdName)}
                     helperText={touched.birdName && errors.birdName}
                   />
+                  {isExoticChecked && (
+                    <TextField
+                      fullWidth
+                      label="Exotic Rate (%)"
+                      type="number"
+                      {...getFieldProps('exoticRate')}
+                      error={Boolean(touched.exoticRate && errors.exoticRate)}
+                      helperText={touched.exoticRate && errors.exoticRate}
+                    />
+                  )
+                  }
                 </Stack>
 
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
@@ -200,7 +236,7 @@ export default function BirdProfileForm({ isEdit }) {
                       Select Status
                     </MenuItem>
                     {status.map((option) => (
-                      <MenuItem key={option.status_id} value={option.status}>
+                      <MenuItem key={option.statusId} value={option.status}>
                         {option.status}
                       </MenuItem>
                     ))}
@@ -230,7 +266,7 @@ export default function BirdProfileForm({ isEdit }) {
                     label="Hatching Date"
                     value={formik.values.hatchingDate}
                     onChange={(date) => {
-                      formik.setFieldValue('hatchingDate', date); 
+                      formik.setFieldValue('hatchingDate', date);
                     }}
                     renderInput={(params) => <TextField {...params} />}
                     error={Boolean(touched.hatchingDate && errors.hatchingDate)}
@@ -253,30 +289,50 @@ export default function BirdProfileForm({ isEdit }) {
                   <TextField
                     select
                     fullWidth
-                    label="Cage"
-                    value={formik.values.cageId}
-                    {...getFieldProps('cageId')}
-                    error={Boolean(touched.cageId && errors.cageId)}
-                    helperText={touched.cageId && errors.cageId}
+                    label="Area"
+                    value={formik.values.area}
+                    {...getFieldProps('area')}
+                    error={Boolean(touched.area && errors.area)}
+                    helperText={touched.area && errors.area}
                   >
-                    <MenuItem value="" disabled>
-                      Select Cage
-                    </MenuItem>
-                    {cagesData.map((option) => (
-                      <MenuItem key={option.cageID} value={option.cageID}>
-                        {option.cageID}
-                      </MenuItem>
-                    ))}
+                    <MenuItem value="Normal">Normal</MenuItem>
+                    <MenuItem value="Birth">Birth</MenuItem>
+                    <MenuItem value="Sick">Sick</MenuItem>
+                    <MenuItem value="Exotic">Exotic</MenuItem>
                   </TextField>
                   <TextField
                     fullWidth
-                    label="Food Quantity"
-                    value={formik.values.foodQuantity}
-                    {...getFieldProps('foodQuantity')}
-                    error={Boolean(touched.foodQuantity && errors.foodQuantity)}
-                    helperText={touched.foodQuantity && errors.foodQuantity}
+                    label="Attitudes"
+                    value={formik.values.attitudes}
+                    {...getFieldProps('attitudes')}
+                    error={Boolean(touched.attitudes && errors.attitudes)}
+                    helperText={touched.attitudes && errors.attitudes}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Feather Color"
+                    value={formik.values.featherColor}
+                    {...getFieldProps('featherColor')}
+                    error={Boolean(touched.featherColor && errors.featherColor)}
+                    helperText={touched.featherColor && errors.featherColor}
                   />
                 </Stack>
+                <TextField
+                  fullWidth
+                  label="Appearance"
+                  value={formik.values.appearance}
+                  {...getFieldProps('appearance')}
+                  error={Boolean(touched.appearance && errors.appearance)}
+                  helperText={touched.appearance && errors.appearance}
+                />
+                <TextField
+                  fullWidth
+                  label="Qualities"
+                  value={formik.values.qualities}
+                  {...getFieldProps('qualities')}
+                  error={Boolean(touched.qualities && errors.qualities)}
+                  helperText={touched.qualities && errors.qualities}
+                />
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                   <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                     {!isEdit ? 'Create Bird' : 'Save Changes'}

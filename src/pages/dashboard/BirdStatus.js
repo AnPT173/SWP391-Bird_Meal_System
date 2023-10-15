@@ -59,7 +59,8 @@ export default function BirdStatus() {
   const handleChangeTab = (event, newValue) => {
     setCurrentTab(newValue);
   };
-
+  const [selectedSpecies, setSelectedSpecies] = useState(null);
+  const [selectedPeriod, setSelectedPeriod] = useState(null);
 
   return (
     <Page title="Food Plan">

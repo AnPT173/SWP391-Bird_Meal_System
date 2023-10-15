@@ -10,6 +10,10 @@ export const birdsData = [
     periodId: 'PER002',
     birdGender: 'Male',
     hatchingDate: '2020-05-15',
+    attitudes: 'Friendly',
+    featherColor: 'Black and White',
+    appearance: 'Small and agile',
+    qualities: 'Good singer'
   },
   {
     birdId: 'BIRD002',
@@ -22,6 +26,10 @@ export const birdsData = [
     periodId: 'PER001',
     birdGender: 'Female',
     hatchingDate: '2021-02-28',
+    attitudes: 'Shy',
+    featherColor: 'Gray and White',
+    appearance: 'Medium-sized',
+    qualities: 'Good foragers'
   },
   {
     birdId: 'BIRD003',
@@ -34,6 +42,10 @@ export const birdsData = [
     periodId: 'PER003',
     birdGender: 'Female',
     hatchingDate: '2019-11-10',
+    attitudes: 'Playful',
+    featherColor: 'Black and White',
+    appearance: 'Medium-sized',
+    qualities: 'Good foragers'
   },
   {
     birdId: 'BIRD004',
@@ -46,6 +58,10 @@ export const birdsData = [
     periodId: 'PER001',
     birdGender: 'Female',
     hatchingDate: '2021-08-03',
+    attitudes: 'Active',
+    featherColor: 'Red and Brown',
+    appearance: 'Small and colorful',
+    qualities: 'Excellent flyer'
   },
   {
     birdId: 'BIRD005',
@@ -58,6 +74,10 @@ export const birdsData = [
     periodId: 'PER003',
     birdGender: 'Male',
     hatchingDate: '2018-12-20',
+    attitudes: 'Sociable',
+    featherColor: 'Red and Brown',
+    appearance: 'Medium-sized and vocal',
+    qualities: 'Good singer'
   },
   {
     birdId: 'BIRD006',
@@ -70,7 +90,12 @@ export const birdsData = [
     periodId: 'PER001',
     birdGender: 'Female',
     hatchingDate: '2022-04-05',
+    attitudes: 'Curious',
+    featherColor: 'Red and Brown',
+    appearance: 'Small and colorful',
+    qualities: 'Active and vocal'
   },
+
   {
     birdId: 'BIRD007',
     birdName: 'Janet',
@@ -82,6 +107,10 @@ export const birdsData = [
     periodId: 'PER003',
     birdGender: 'Female',
     hatchingDate: '2019-09-15',
+    attitudes: 'Gentle',
+    featherColor: 'Gray and White',
+    appearance: 'Medium-sized and melodious',
+    qualities: 'Excellent singer'
   },
   {
     birdId: 'BIRD008',
@@ -94,6 +123,10 @@ export const birdsData = [
     periodId: 'PER002',
     birdGender: 'Male',
     hatchingDate: '2020-07-25',
+    attitudes: 'Energetic',
+    featherColor: 'Gray and White',
+    appearance: 'Medium-sized and vocal',
+    qualities: 'Good foragers'
   },
   {
     birdId: 'BIRD009',
@@ -106,6 +139,10 @@ export const birdsData = [
     periodId: 'PER001',
     birdGender: 'Female',
     hatchingDate: '2022-01-12',
+    attitudes: 'Friendly',
+    featherColor: 'Gray and White',
+    appearance: 'Small and melodious',
+    qualities: 'Good singer'
   },
   {
     birdId: 'BIRD010',
@@ -118,6 +155,10 @@ export const birdsData = [
     periodId: 'PER003',
     birdGender: 'Male',
     hatchingDate: '2019-05-30',
+    attitudes: 'Active',
+    featherColor: 'Gray and White',
+    appearance: 'Medium-sized and melodious',
+    qualities: 'Excellent flyer'
   },
   {
     birdId: 'BIRD011',
@@ -130,6 +171,10 @@ export const birdsData = [
     periodId: 'PER001',
     birdGender: 'Female',
     hatchingDate: '2021-11-18',
+    attitudes: 'Playful',
+    featherColor: 'Gray and White',
+    appearance: 'Small and vocal',
+    qualities: 'Good foragers'
   },
   {
     birdId: 'BIRD012',
@@ -142,6 +187,10 @@ export const birdsData = [
     periodId: 'PER002',
     birdGender: 'Female',
     hatchingDate: '2020-09-03',
+    attitudes: 'Sociable',
+    featherColor: 'Gray and White',
+    appearance: 'Medium-sized and melodious',
+    qualities: 'Excellent singer'
   },
   {
     birdId: 'BIRD013',
@@ -154,6 +203,10 @@ export const birdsData = [
     periodId: 'PER001',
     birdGender: 'Male',
     hatchingDate: '2022-03-10',
+    attitudes: 'Energetic',
+    featherColor: 'Gray and White',
+    appearance: 'Small and vocal',
+    qualities: 'Good singer'
   },
   {
     birdId: 'BIRD014',
@@ -166,7 +219,12 @@ export const birdsData = [
     periodId: 'PER003',
     birdGender: 'Female',
     hatchingDate: '2019-07-02',
+    attitudes: 'Curious',
+    featherColor: 'Gray and White',
+    appearance: 'Medium-sized and melodious',
+    qualities: 'Good foragers'
   },
+
   {
     birdId: 'BIRD015',
     birdName: 'Lucky',
@@ -178,5 +236,10 @@ export const birdsData = [
     periodId: 'PER001',
     birdGender: 'Male',
     hatchingDate: '2021-01-30',
-  },
+    attitudes: 'Active',
+    featherColor: 'Gray and White',
+    appearance: 'Medium-sized and vocal',
+    qualities: 'Sociable and good foragers'
+  }
+
 ];

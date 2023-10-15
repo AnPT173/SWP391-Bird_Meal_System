@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 // material
-import { Container, Grid, Skeleton, Stack, Tab, Tabs, Box } from '@material-ui/core';
+import { Container, Grid, Skeleton, Stack, Tab, Tabs, Box, Button } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUsers } from '../../redux/slices/user';
@@ -38,6 +39,10 @@ const LOCATION_TABS = [
   {
     value: 'Birth',
     component: <CageCard status="Birth" />
+  },
+  {
+    value: 'Exotic',
+    component: <CageCard status="Exotic"/>
   }
 ];
 
@@ -57,13 +62,32 @@ export default function CageCards() {
           heading="Cages"
           links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, { name: 'Cages' }]}
         />
+        <Button
+          variant="contained"
+          component={RouterLink}
+          to={`${PATH_DASHBOARD.cages.root}/create`}
+          sx={{
+            position: 'absolute',
+            top: 80,
+            right: 50,
+            mt: 2,
+            mr: 2,
+            bgcolor: 'primary.main',
+            color: 'white',
+            '&:hover': {
+              bgcolor: 'primary.dark',
+            },
+          }}
+        >
+          Create New Cage
+        </Button>
         <Stack spacing={5}>
           <Tabs value={currentTab} scrollButtons="auto" variant="scrollable" onChange={handleChangeTab}>
             {LOCATION_TABS.map((tab) => (
               <Tab disableRipple key={tab.value} label={tab.value} value={tab.value} />
             ))}
           </Tabs>
-          {LOCATION_TABS.map((tab)=>{
+          {LOCATION_TABS.map((tab) => {
             const isMatched = tab.value === currentTab;
             return isMatched && <Box key={tab.value}>{tab.component}</Box>
           })}

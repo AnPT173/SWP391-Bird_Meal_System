@@ -71,6 +71,16 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/cage/list'),
     createBird: path(ROOTS_DASHBOARD, '/cage/:cageId/birds/create')
   },
+//  areas: {
+ //   root: path(ROOTS_DASHBOARD, '/area'),
+ //   profile: path(ROOTS_DASHBOARD, '/area/:areaId/cage/:cageId/birds/:birdId/profile'),
+ //   cards: path(ROOTS_DASHBOARD, '/area/:areaId/cage/cards'),
+ //   birds: path(ROOTS_DASHBOARD, '/area/:areaId/cage/:cageId/birds'),
+ //   cageschedule: path(ROOTS_DASHBOARD, '/area/:areaId/cages/:cageId/schedule'),
+ //   schedule: path(ROOTS_DASHBOARD, '/area/areaId/schedule'),
+ //   list: path(ROOTS_DASHBOARD, '/area/:areaId/cage/list'),
+ //   createBird: path(ROOTS_DASHBOARD, '/area/:areaId/cage/:cageId/birds/create')
+ // },
   food: {
     root: path(ROOTS_DASHBOARD, '/foodPlan'),
     species: path(ROOTS_DASHBOARD, '/foodPlan/species'),

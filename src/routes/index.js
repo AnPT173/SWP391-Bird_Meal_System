@@ -15,6 +15,7 @@ import AuthGuard from '../guards/AuthGuard';
 import LoadingScreen from '../components/LoadingScreen';
 import PeriodCards from '../pages/dashboard/BirdPeriod';
 import CreateNewBirdForm from '../components/_dashboard/user/UserNewForm';
+import CageNew from '../pages/dashboard/CageNew';
 
 
 
@@ -126,24 +127,40 @@ export default function Router() {
           path: 'cage',
           children: [
             { path: '/', element: <Navigate to="/dashboard/user/profile" replace /> },
-            { path: '/:cageId/birds/:birdId/profile', element: <BirdProfile/> },
+            { path: '/:cageId/birds/:birdId/profile', element: <BirdProfile /> },
             { path: 'cards', element: <CageCards /> },
             { path: '/:cageId/birds', element: <BirdCards /> },
             { path: '/:cageId/schedule', element: <Calendar /> },
             { path: '/:cageId/birds/create', element: <BirdNew /> },
+            { path: 'create', element:<CageNew/>},
             { path: 'list', element: <UserList /> },
             { path: 'new', element: <UserCreate /> },
             { path: '/:name/edit', element: <UserCreate /> },
             { path: 'account', element: <UserAccount /> }
           ]
         },
+    //    {
+    //      path: 'area',
+    //      children: [
+   //         { path: '/', element: <Navigate to="/dashboard/user/profile" replace /> },
+  //         { path: ':/areaId/cages/:cageId/birds/:birdId/profile', element: <BirdProfile /> },
+     //       { path: 'cards', element: < /> },
+   //         { path: '/:cageId/birds', element: <BirdCards /> },
+    //        { path: '/:cageId/schedule', element: <Calendar /> },
+   //         { path: '/:cageId/birds/create', element: <BirdNew /> },
+    //        { path: 'list', element: <UserList /> },
+   //         { path: 'new', element: <UserCreate /> },
+  //          { path: '/:name/edit', element: <UserCreate /> },
+  //          { path: 'account', element: <UserAccount /> }
+  //        ]
+  //      },
         {
           path: 'foodPlan',
           children: [
             { path: '/', element: <Navigate to="/dashboard/foodPlan/species" replace /> },
             { path: '/species', element: <BirdSpeciesCard /> },
-            { path: '/species/:speciesId/period', element: <PeriodCards/> },
-            { path: '/species/:speciesId/period/:periodId/status', element: <BirdStatus/> },
+            { path: '/species/:speciesId/period', element: <PeriodCards /> },
+            { path: '/species/:speciesId/period/:periodId/status', element: <BirdStatus /> },
             { path: '/:cageId/schedule', element: <Calendar /> },
             { path: 'list', element: <UserList /> },
             { path: 'new', element: <UserCreate /> },

@@ -1,33 +1,18 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useCallback, useEffect, useState } from 'react';
+
+import { useCallback, useState } from 'react';
 import { useSnackbar } from 'notistack5';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
-// material
 import { DatePicker, LoadingButton } from '@material-ui/lab';
-import {
-  Box,
-  Card,
-  Grid,
-  Stack,
-  TextField,
-  Typography,
-  FormHelperText,
-  FormControlLabel,
-  MenuItem,
-} from '@material-ui/core';
+import { Box, Card, Grid, Stack, TextField, Typography, FormHelperText, FormControlLabel, MenuItem } from '@material-ui/core';
 import { fData } from '../../../utils/formatNumber';
 import { species } from '../../../utils/mock-data/species';
 import { cagesData } from '../../../utils/mock-data/cage';
 import fakeRequest from '../../../utils/fakeRequest';
-// routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
-
 import { UploadAvatar } from '../../upload';
-
-
-
 
 export default function CreateNewBirdForm() {
   const navigate = useNavigate();
@@ -39,10 +24,13 @@ export default function CreateNewBirdForm() {
     status: Yup.string().required('Status is required'),
     species: Yup.string().required('Species is required'),
     cageId: Yup.string().required('Cage is required'),
-    foodQuantity: Yup.number().required('Food Quantity is required'),
     avatarUrl: Yup.mixed().required('Avatar is required'),
     birdGender: Yup.string().required('Bird Gender is required'),
     hatchingDate: Yup.date().required('Hatching Date is required'),
+    attitudes: Yup.string().required('Attitudes is required'), // Add attitudes field
+    featherColor: Yup.string().required('Feather Color is required'), // Add featherColor field
+    appearance: Yup.string().required('Appearance is required'), // Add appearance field
+    qualities: Yup.string().required('Qualities is required'), // Add qualities field
   });
 
   const formik = useFormik({
@@ -52,10 +40,13 @@ export default function CreateNewBirdForm() {
       status: '',
       species: '',
       cageId,
-      foodQuantity: '',
       avatarUrl: null,
       birdGender: '',
       hatchingDate: null,
+      attitudes: '', // Add attitudes field
+      featherColor: '', // Add featherColor field
+      appearance: '', // Add appearance field
+      qualities: '', // Add qualities field
     },
     validationSchema: NewBirdSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
@@ -64,7 +55,7 @@ export default function CreateNewBirdForm() {
         resetForm();
         setSubmitting(false);
         enqueueSnackbar('Create success', { variant: 'success' });
-        navigate(PATH_DASHBOARD.user.list);
+        navigate(PATH_DASHBOARD.cages.birds);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -87,6 +78,7 @@ export default function CreateNewBirdForm() {
     },
     [setFieldValue]
   );
+  const [isExoticChecked, setExoticChecked] = useState(false);
 
   return (
     <FormikProvider value={formik}>
@@ -120,6 +112,16 @@ export default function CreateNewBirdForm() {
                 <FormHelperText error sx={{ px: 2, textAlign: 'center' }}>
                   {touched.avatarUrl && errors.avatarUrl}
                 </FormHelperText>
+                <FormControlLabel
+                  control={
+                    <input
+                      type="checkbox"
+                      checked={isExoticChecked}
+                      onChange={(e) => setExoticChecked(e.target.checked)}
+                    />
+                  }
+                  label="Exotic Rate"
+                />
               </Box>
             </Card>
           </Grid>
@@ -142,6 +144,17 @@ export default function CreateNewBirdForm() {
                     error={Boolean(touched.birdAge && errors.birdAge)}
                     helperText={touched.birdAge && errors.birdAge}
                   />
+                  {isExoticChecked && (
+                    <TextField
+                      fullWidth
+                      label="Exotic Rate (%)"
+                      type="number"
+                      {...getFieldProps('exoticRate')}
+                      error={Boolean(touched.exoticRate && errors.exoticRate)}
+                      helperText={touched.exoticRate && errors.exoticRate}
+                    />
+                  )
+                  }
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                   <TextField
@@ -190,14 +203,6 @@ export default function CreateNewBirdForm() {
                       </MenuItem>
                     ))}
                   </TextField>
-                  <TextField
-                    fullWidth
-                    label="Food Quantity"
-                    type="number"
-                    {...getFieldProps('foodQuantity')}
-                    error={Boolean(touched.foodQuantity && errors.foodQuantity)}
-                    helperText={touched.foodQuantity && errors.foodQuantity}
-                  />
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                   <TextField
@@ -222,13 +227,56 @@ export default function CreateNewBirdForm() {
                     label="Hatching Date"
                     value={formik.values.hatchingDate}
                     onChange={(date) => {
-                      formik.setFieldValue('hatchingDate', date); 
+                      formik.setFieldValue('hatchingDate', date);
                     }}
                     renderInput={(params) => <TextField {...params} />}
                     error={Boolean(touched.hatchingDate && errors.hatchingDate)}
                     helperText={touched.hatchingDate && errors.hatchingDate}
                   />
                 </Stack>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
+                  <TextField
+                    fullWidth
+                    label="Attitudes"
+                    {...getFieldProps('attitudes')}
+                    error={Boolean(touched.attitudes && errors.attitudes)}
+                    helperText={touched.attitudes && errors.attitudes}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Feather Color"
+                    {...getFieldProps('featherColor')}
+                    error={Boolean(touched.featherColor && errors.featherColor)}
+                    helperText={touched.featherColor && errors.featherColor}
+                  />
+                  <TextField
+                    select
+                    fullWidth
+                    label="Area"
+                    {...getFieldProps('area')}
+                    error={Boolean(touched.area && errors.area)}
+                    helperText={touched.area && errors.area}
+                  >
+                    <MenuItem value="Normal">Normal</MenuItem>
+                    <MenuItem value="Birth">Birth</MenuItem>
+                    <MenuItem value="Sick">Sick</MenuItem>
+                    <MenuItem value="Exotic">Exotic</MenuItem>
+                  </TextField>
+                </Stack>
+                <TextField
+                  fullWidth
+                  label="Appearance"
+                  {...getFieldProps('appearance')}
+                  error={Boolean(touched.appearance && errors.appearance)}
+                  helperText={touched.appearance && errors.appearance}
+                />
+                <TextField
+                  fullWidth
+                  label="Qualities"
+                  {...getFieldProps('qualities')}
+                  error={Boolean(touched.qualities && errors.qualities)}
+                  helperText={touched.qualities && errors.qualities}
+                />
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                   <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                     Create Bird

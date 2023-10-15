@@ -63,30 +63,6 @@ export default function BirdProfileWrapper() { // Rename the component to avoid 
     setCurrentTab(newValue);
   };
 
-
-  //  const PROFILE_TABS = [
-  //   {
-  //     value: 'profile',
-  //     icon: <Icon icon={roundAccountBox} width={20} height={20} />,
-  //     component: <BirdProfile myProfile={myProfile} posts={posts} /> // Use BirdProfile component here
-  //   },
-  //  {
-  //    value: 'followers',
-  //     icon: <Icon icon={heartFill} width={20} height={20} />,
-  //     component: <ProfileFollowers followers={followers} onToggleFollow={handleToggleFollow} />
-  //  },
-  // {
-  //     value: 'friends',
-  //    icon: <Icon icon={peopleFill} width={20} height={20} />,
-  //     component: <ProfileFriends friends={friends} findFriends={findFriends} onFindFriends={handleFindFriends} />
-  //   },
-  //   {
-  //    value: 'gallery',
-  //    icon: <Icon icon={roundPermMedia} width={20} height={20} />,
-  //     component: <ProfileGallery gallery={gallery} />
-  //   }
-  // ];
-
   return (
     <Page title="Bird Profile">
       <Container maxWidth={themeStretch ? false : 'lg'}>

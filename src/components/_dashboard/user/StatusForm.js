@@ -45,7 +45,6 @@ export default function StatusForm({ isEdit, currentPlan }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [products, setProducts] = useState([{ name: '', error: false }]);
-  const { speciesId, periodId } = useParams();
   const FoodPlanSchema = Yup.object().shape({
     products: Yup.array().of(
       Yup.object().shape({

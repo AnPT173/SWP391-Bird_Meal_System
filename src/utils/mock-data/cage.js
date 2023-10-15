@@ -51,5 +51,13 @@ export const cagesData = [
     cageType: 'Medium',
     status: 'Pending',
     type: 'Birth'
+  },
+  {
+    cageID: 'CA006',
+    numberOfBirds: 1,
+    species: 'Seychelles magpie-robin',
+    cageType: 'Medium',
+    status: 'Pending',
+    type: 'Exotic'
   }
 ];

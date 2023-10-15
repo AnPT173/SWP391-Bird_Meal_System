@@ -56,6 +56,7 @@
     "@material-ui/lab": "^5.0.0-alpha.42",
     "@material-ui/styles": "^5.0.0-beta.4",
     "@material-ui/utils": "^5.0.0-beta.4",
+    "@mui/material": "^5.14.13",
     "@react-pdf/renderer": "^2.0.19",
     "@reduxjs/toolkit": "^1.6.1",
     "@testing-library/jest-dom": "^5.14.1",
