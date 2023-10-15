@@ -13,7 +13,8 @@
   "plugins": [
     "prettier",
     "react",
-    "react-hooks"
+    "react-hooks",
+    "unused-imports"
   ],
   "parser": "@babel/eslint-parser",
   "parserOptions": {
