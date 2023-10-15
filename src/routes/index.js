@@ -88,8 +88,8 @@ export default function Router() {
         </AuthGuard>
       ),
       children: [
-        { path: '/', element: <Navigate to="/dashboard/app" replace /> },
-
+        { path: '/', element: <Navigate to="/dashboard/cage" replace /> },
+        { path: 'app', element: <GeneralApp /> },
 
         {
           path: 'user',
@@ -232,7 +232,7 @@ const Register = Loadable(lazy(() => import('../pages/authentication/Register'))
 const ResetPassword = Loadable(lazy(() => import('../pages/authentication/ResetPassword')));
 const VerifyCode = Loadable(lazy(() => import('../pages/authentication/VerifyCode')));
 // Dashboard
-
+const GeneralApp = Loadable(lazy(() => import('../pages/dashboard/GeneralApp')));
 const BirdProfile = Loadable(lazy(() => import('../pages/dashboard/BirdProfile')));
 const CageCards = Loadable(lazy(() => import('../pages/dashboard/CageCards')));
 const BirdCards = Loadable(lazy(() => import('../pages/dashboard/BirdCards')));
