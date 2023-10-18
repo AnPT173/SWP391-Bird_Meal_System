@@ -1,7 +1,7 @@
 export const birdCageAreas = [
     {
       areaId: 'AR001',
-      areaName: 'Species',
+      areaName: 'Normal',
     },
     {
       areaId: 'AR002',
