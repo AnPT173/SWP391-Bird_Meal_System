@@ -160,6 +160,16 @@ export const managerSidebar = [
         title: 'Report',
         path: PATH_DASHBOARD.kanban,
         icon: ICONS.setting
+      },
+      {
+        title: 'Storage',
+        path: PATH_DASHBOARD.user.list,
+        icons: ICONS.blog
+      },
+      {
+        title: 'Task',
+        path: PATH_DASHBOARD.chat.root,
+        icons: ICONS.mail
       }
     ]
   }
