@@ -4,7 +4,6 @@ import { useParams } from 'react-router';
 import { alpha, styled } from '@material-ui/core/styles';
 import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton, Link } from '@material-ui/core';
 import Label from '../../../Label';
-import { birdsData } from '../../../../utils/mock-data/bird';
 // utils
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { fShortenNumber } from '../../../../utils/formatNumber';
@@ -53,9 +52,8 @@ BirdCard.propTypes = {
   cageId: PropTypes.string.isRequired,
 };
 
-export default function BirdCard({ cageId }) {
-  const birdsInCage = birdsData.filter((bird) => bird.cageId === cageId);
-  return (
+export default function BirdCard({ cageId, birdData }) {
+  const birdsInCage = birdData.filter((bird) => bird.cageId === cageId);  return (
     <Grid container spacing={3}>
       {birdsInCage.map((bird, index) => {
         let statusColor = 'info'; 

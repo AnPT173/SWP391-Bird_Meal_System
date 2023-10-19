@@ -13,6 +13,7 @@ import Page from '../../components/Page';
 import CageCard from '../../components/_dashboard/user/cards/CageCard';
 
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import { getCageList } from '../../redux/slices/cage';
 
 // ----------------------------------------------------------------------
 
@@ -26,29 +27,34 @@ const SkeletonLoad = (
   </>
 );
 
-const LOCATION_TABS = [
-  {
-    value: 'Normal',
-    component: <CageCard status="Normal" />
-  },
-  {
-    value: 'Sick',
-    component: <CageCard status="Sick" />
-  },
-  {
-    value: 'Birth',
-    component: <CageCard status="Birth" />
-  }
-];
-
 export default function CageCards() {
   const { themeStretch } = useSettings();
   const [currentTab, setCurrentTab] = useState('Normal');
+  const dispatch = useDispatch();
+  const { cageList } = useSelector((state) => state.cage);
 
   const handleChangeTab = (event, newValue) => {
-    console.log(newValue)
+    console.log(newValue);
     setCurrentTab(newValue);
   };
+  useEffect(() => {
+    dispatch(getCageList());
+  }, []);
+
+  const LOCATION_TABS = [
+    {
+      value: 'Normal',
+      component: <CageCard status="Normal" cagesData={cageList} />
+    },
+    {
+      value: 'Sick',
+      component: <CageCard status="Sick" cagesData={cageList} />
+    },
+    {
+      value: 'Birth',
+      component: <CageCard status="Birth" cagesData={cageList} />
+    }
+  ];
 
   return (
     <Page title="Cages">
@@ -63,9 +69,9 @@ export default function CageCards() {
               <Tab disableRipple key={tab.value} label={tab.value} value={tab.value} />
             ))}
           </Tabs>
-          {LOCATION_TABS.map((tab)=>{
+          {LOCATION_TABS.map((tab) => {
             const isMatched = tab.value === currentTab;
-            return isMatched && <Box key={tab.value}>{tab.component}</Box>
+            return isMatched && <Box key={tab.value}>{tab.component}</Box>;
           })}
         </Stack>
       </Container>

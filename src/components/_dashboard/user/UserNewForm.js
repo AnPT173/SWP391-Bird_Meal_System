@@ -26,6 +26,19 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 
 import { UploadAvatar } from '../../upload';
 
+// +// {
+// +//   "name": "test",
+// +//   "age": "2023-01-01",
+// +//   "birdTypeID": {
+// +//     "id": "1",
+// +//     "name": "1",
+// +//     "specieID": {
+// +//       "id": "1",
+// +//       "name": "1"
+// +//     }
+// +//   },
+// +//   "cageID": "1"
+// +// }
 
 
 

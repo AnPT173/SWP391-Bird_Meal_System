@@ -10,13 +10,21 @@ import plusFill from '@iconify/icons-eva/plus-fill';
 import { useState, useRef, useEffect } from 'react';
 // material
 import { styled, useTheme } from '@material-ui/core/styles';
-import { Card, Button, Container, DialogTitle, useMediaQuery, Stack } from '@material-ui/core';
+import { Card, Button, Container, DialogTitle, useMediaQuery, Stack, Typography, Grid } from '@material-ui/core';
 import { useLocation, useParams } from 'react-router';
 import useAuth from '../../hooks/useAuth';
 import { scheduleData } from '../../utils/mock-data/schedule';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getEvents, openModal, closeModal, updateEvent, selectEvent, selectRange } from '../../redux/slices/calendar';
+import {
+  getEvents,
+  openModal,
+  closeModal,
+  updateEvent,
+  selectEvent,
+  selectRange,
+  openCalendarFormDialog
+} from '../../redux/slices/calendar';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -27,6 +35,7 @@ import { DialogAnimate } from '../../components/animate';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { CalendarForm, CalendarStyle, CalendarToolbar } from '../../components/_dashboard/calendar';
 import Label from '../../components/Label';
+import AssignTaskForm from '../../components/_dashboard/calendar/AssignTaskForm';
 
 // ----------------------------------------------------------------------
 
@@ -37,6 +46,37 @@ const selectedEventSelector = (state) => {
   }
   return null;
 };
+const cageLabelColor = ['red', 'green', 'blue', 'yellow'];
+const locationBackgroundColor = ['#c3b1b1', '#adcfb1', '#adc1cf', '#b0adcf'];
+
+function CageLabel({ title, onClick }) {
+  const color = cageLabelColor[Math.floor(Math.random() * 4)];
+  return (
+    <Typography
+      onClick={onClick}
+      variant="h6"
+      align="center"
+      style={{ backgroundColor: color, 'border-radius': '5px', 'margin-bottom': '5px' }}
+    >
+      {title}
+      <br />
+      65
+    </Typography>
+  );
+}
+
+function LocationScheduleMap(props) {
+  const color = locationBackgroundColor[Math.floor(Math.random() * 4)];
+  return (
+    <Grid container spacing={1} style={{ backgroundColor: color, margin: '5px 5px 10px 5px' }}>
+      {props.data.map((item, index) => (
+        <Grid item xs={4} key={index}>
+          <CageLabel title={item} onClick={props.onClick} />
+        </Grid>
+      ))}
+    </Grid>
+  );
+}
 
 export default function Calendar() {
   const { themeStretch } = useSettings();
@@ -45,10 +85,12 @@ export default function Calendar() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const calendarRef = useRef(null);
   const { enqueueSnackbar } = useSnackbar();
+  const [isOpenTaskDialog, setIsOpenTaskDialog] = useState(false);
+
   const [date, setDate] = useState(new Date());
   const [view, setView] = useState(isMobile ? 'listWeek' : 'dayGridMonth');
   const selectedEvent = useSelector(selectedEventSelector);
-  const { events, isOpenModal, selectedRange } = useSelector((state) => state.calendar);
+  const { events, isOpenModal, selectedRange, isOpenCalendarFormDialog } = useSelector((state) => state.calendar);
   const { user } = useAuth();
   const { cageId } = useParams();
   const isManager = !!user && user?.role === 'manager';
@@ -59,6 +101,7 @@ export default function Calendar() {
   const filterdScheduleData = cageId ? scheduleBaseOnCage : fullScheduleBaseOnRole;
 
   const cageIdTitle = cageId ? `    ||    CageId: ${cageId}` : '';
+  const simulateSchedule = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig'];
 
   useEffect(() => {
     dispatch(getEvents());
@@ -154,14 +197,14 @@ export default function Calendar() {
       console.error(error);
     }
   };
-  console.log('data', isManager);
+
 
   const handleAddEvent = () => {
-    dispatch(openModal());
+    dispatch(openCalendarFormDialog());
   };
 
   const handleCloseModal = () => {
-    dispatch(closeModal());
+    setIsOpenTaskDialog(false);
   };
   const getStatusColor = (status) => {
     switch (status) {
@@ -175,6 +218,11 @@ export default function Calendar() {
         return 'primary';
     }
   };
+  const onSelectTask = (event) => {
+    openCalendarFormDialog();
+  };
+
+  const handleCloseFrom = () => {};
   return (
     <Page title={`Calendar${cageIdTitle}`}>
       <Container maxWidth={themeStretch ? false : 'xl'}>
@@ -241,46 +289,21 @@ export default function Calendar() {
           </CalendarStyle>
         </Card>
 
-        {isManager && (
-          <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
-            <DialogTitle
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
-              {selectedEvent ? 'Edit Event' : 'Add Event'}
-              <Label
-                color={
-                  selectedEvent
-                    ? getStatusColor(selectedEvent.status)
-                    : 'primary'
-                }
-              >
-                {selectedEvent ? selectedEvent.status : 'Status'}
-              </Label>
-            </DialogTitle>
-            <CalendarForm event={selectedEvent} range={selectedRange} onCancel={handleCloseModal} />
-          </DialogAnimate>
-        )}
-        {!isManager && selectedEvent && (
-          <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
-            <DialogTitle
-              style=
-              {{
-                'display': 'flex',
-                'justify-content': 'space-between',
-              }}
-            >
-              Update Feeding Schedule
-              <Label color="primary">Completed</Label>
+        <DialogAnimate open={isOpenModal} maxwidth="md" onClose={handleCloseModal}>
+          <Stack direction="column" spacing={2}>
+            <DialogTitle>Event by Location</DialogTitle>
+            <Typography>Location zz</Typography>
+            <LocationScheduleMap data={simulateSchedule} onClick={onSelectTask} />
+            <p>Location xx0</p>
+            <LocationScheduleMap data={simulateSchedule} onClick={onSelectTask} />
+            <p>Location xx0</p>
+            <LocationScheduleMap data={simulateSchedule} onClick={onSelectTask} />
+          </Stack>
+        </DialogAnimate>
 
-            </DialogTitle>
-
-            <CalendarForm event={selectedEvent} range={selectedRange} onCancel={handleCloseModal} />
-          </DialogAnimate>
-        )}
+        <DialogAnimate open={isOpenCalendarFormDialog} onClose={handleCloseModal}>
+          <CalendarForm event={selectedEvent} range={selectedRange} onCancel={handleCloseModal} />
+        </DialogAnimate>
       </Container>
     </Page>
   );

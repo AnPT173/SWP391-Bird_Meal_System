@@ -45,6 +45,13 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/mail'),
     all: path(ROOTS_DASHBOARD, '/mail/all')
   },
+  task: {
+    root: path(ROOTS_DASHBOARD, '/task'),
+    list: path(ROOTS_DASHBOARD, '/user/list'),
+    newUser: path(ROOTS_DASHBOARD, '/user/new'),
+    editById: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
+    account: path(ROOTS_DASHBOARD, '/user/account')
+  },
   chat: {
     root: path(ROOTS_DASHBOARD, '/chat'),
     new: path(ROOTS_DASHBOARD, '/chat/new'),
@@ -76,6 +83,11 @@ export const PATH_DASHBOARD = {
     species: path(ROOTS_DASHBOARD, '/foodPlan/species'),
     period: path(ROOTS_DASHBOARD, '/foodPlan/species/:speciesId/period'),
     status: path(ROOTS_DASHBOARD, '/foodPlan/species/:speciesId/period/:periodId/status')
+  },
+  meal: {
+    root: path(ROOTS_DASHBOARD, '/meal'),
+    profile: path(ROOTS_DASHBOARD, '/cage/:cageID/birds/:birdID/profile'),
+    
   },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),

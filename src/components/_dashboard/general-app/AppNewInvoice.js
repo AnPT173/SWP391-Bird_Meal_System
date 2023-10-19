@@ -124,9 +124,10 @@ export default function AppNewInvoice() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Invoice ID</TableCell>
-                <TableCell>Category</TableCell>
-                <TableCell>Price</TableCell>
+              <TableCell>Location ID</TableCell>
+              <TableCell>Cage ID</TableCell>
+              <TableCell>Title</TableCell>
+              <TableCell>Time</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell />
               </TableRow>

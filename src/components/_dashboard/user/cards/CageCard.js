@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Grid, Typography, Divider, Link, styled } from '@material-ui/core';
 import Label from '../../../Label';
-import { cagesData } from '../../../../utils/mock-data/cage';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 
@@ -31,7 +30,7 @@ const CoverImgStyle = styled('img')({
   position: 'absolute',
 });
 
-function CageCard({status}) {
+function CageCard({status, cagesData}) {
   const filterdData = cagesData.filter(item => item.type === status)
   return (
     <Grid container spacing={3}>
