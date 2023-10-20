@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
+import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { useTheme } from '@material-ui/core/styles';
@@ -19,8 +20,11 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination
+  TablePagination,
+  DialogTitle,
+  TextField
 } from '@material-ui/core';
+import { Form, FormikProvider } from 'formik/dist';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUserList, deleteUser } from '../../redux/slices/user';
@@ -35,16 +39,16 @@ import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../components/_dashboard/user/list';
-
+import { DialogAnimate } from '../../components/animate';
+import Grid from '../../theme/overrides/Grid';
+import AssignTaskForm from '../../components/_dashboard/calendar/AssignTaskForm';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
+  { id: 'locationID', label: 'Location Id', alignRight: false },
+  { id: 'name', label: 'Staff Name', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
-  { id: '' }
+  { id: '', label: '', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -89,6 +93,7 @@ export default function UserList() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
     dispatch(getUserList());
@@ -157,16 +162,6 @@ export default function UserList() {
             { name: 'User', href: PATH_DASHBOARD.user.root },
             { name: 'List' }
           ]}
-          action={
-            <Button
-              variant="contained"
-              component={RouterLink}
-              to={PATH_DASHBOARD.user.newUser}
-              startIcon={<Icon icon={plusFill} />}
-            >
-              New User
-            </Button>
-          }
         />
 
         <Card>
@@ -176,8 +171,6 @@ export default function UserList() {
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <UserListHead
-                  order={order}
-                  orderBy={orderBy}
                   headLabel={TABLE_HEAD}
                   rowCount={userList.length}
                   numSelected={selected.length}
@@ -190,28 +183,15 @@ export default function UserList() {
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
-                      <TableRow
-                        hover
-                        key={id}
-                        tabIndex={-1}
-                        role="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
-                        </TableCell>
+                      <TableRow hover key={id} tabIndex={-1} selected={isItemSelected} aria-checked={isItemSelected}>
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
                           </Stack>
                         </TableCell>
                         <TableCell align="left">{company}</TableCell>
-                        <TableCell align="left">{role}</TableCell>
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
                         <TableCell align="left">
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
@@ -221,8 +201,15 @@ export default function UserList() {
                           </Label>
                         </TableCell>
 
-                        <TableCell align="right">
-                          <UserMoreMenu onDelete={() => handleDeleteUser(id)} userName={name} />
+                        <TableCell align="left">
+                          <Icon
+                            icon={editFill}
+                            width={24}
+                            height={24}
+                            onClick={() => {
+                              setIsEdit(true);
+                            }}
+                          />
                         </TableCell>
                       </TableRow>
                     );
@@ -256,6 +243,15 @@ export default function UserList() {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
+        <DialogAnimate
+          open={isEdit}
+          onClose={() => {
+            setIsEdit(false);
+          }}
+        >
+          <DialogTitle>Assign task</DialogTitle>
+          <AssignTaskForm />
+        </DialogAnimate>
       </Container>
     </Page>
   );

@@ -5,7 +5,6 @@ import { useParams } from 'react-router';
 import { alpha, styled } from '@material-ui/core/styles';
 import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton, Link } from '@material-ui/core';
 import Label from '../../../Label';
-
 // utils
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { fShortenNumber } from '../../../../utils/formatNumber';

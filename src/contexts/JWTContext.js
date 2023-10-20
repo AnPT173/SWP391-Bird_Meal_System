@@ -107,11 +107,49 @@ function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
-    const response = await axios.post('/api/account/login', {
-      email,
-      password
-    });
-    const { accessToken, user } = response.data;
+    // const response = await axios.post('/api/account/login', {
+    //   email,
+    //   password
+    // });
+    // const { accessToken, user } = response.data;
+    // console.log(accessToken, user);
+    const accessToken =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJNQU5BR0VSMDAxIiwiaWF0IjoxNjk3NzI5NzU5LCJleHAiOjE2OTgxNjE3NTl9.tWjeFOsAnS3Y__RdXFb8zyN5KwRdB4DT6uvgQ4mpl5o';
+    const manager = {
+      id: 'MANAGER001',
+      displayName: 'Jaydon Frankie',
+      email: 'manager',
+      password: 'demo1234',
+      photoURL: '/static/mock-images/avatars/avatar_default.jpg',
+      phoneNumber: '+40 777666555',
+      country: 'United States',
+      address: '90210 Broadway Blvd',
+      state: 'California',
+      city: 'San Francisco',
+      zipCode: '94116',
+      about: 'Praesent turpis. Phasellus viverra nulla ut metus varius laoreet. Phasellus tempus.',
+      role: 'manager',
+      isPublic: true
+    };
+
+    const staff = {
+      id: 'STA001',
+      displayName: 'Jaydon Frankie',
+      email: 'staff1',
+      password: 'demo1234',
+      photoURL: '/static/mock-images/avatars/avatar_default.jpg',
+      phoneNumber: '+40 777666555',
+      country: 'United States',
+      address: '90210 Broadway Blvd',
+      state: 'California',
+      city: 'San Francisco',
+      zipCode: '94116',
+      about: 'Praesent turpis. Phasellus viverra nulla ut metus varius laoreet. Phasellus tempus.',
+      role: 'staff',
+      isPublic: true
+    };
+
+    const user = email === 'manager' ? manager : staff;
 
     setSession(accessToken);
     dispatch({

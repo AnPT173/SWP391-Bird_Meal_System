@@ -12,7 +12,8 @@ const initialState = {
   isOpenModal: false,
   selectedEventId: null,
   selectedRange: null,
-  country: null
+  country: null,
+  isOpenCalendarFormDialog: false,
 };
 
 const slice = createSlice({
@@ -84,11 +85,16 @@ const slice = createSlice({
       state.isOpenModal = true;
     },
 
+    openCalendarFormDialog(state){
+      state.isOpenCalendarFormDialog = true;
+    },
+
     // CLOSE MODAL
     closeModal(state) {
       state.isOpenModal = false;
       state.selectedEventId = null;
       state.selectedRange = null;
+      state.isOpenCalendarFormDialog = false;
     }
   }
 });
@@ -97,8 +103,8 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { openModal, closeModal, selectEvent } = slice.actions;
-
+export const { openModal, closeModal, selectEvent, openCalendarFormDialog} = slice.actions;
+ 
 // ----------------------------------------------------------------------
 
 export function getEvents() {

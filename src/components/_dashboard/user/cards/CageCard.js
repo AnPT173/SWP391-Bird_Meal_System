@@ -2,7 +2,6 @@ import React, { useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { Card, Grid, Typography, Divider, Link, styled } from '@material-ui/core';
 import Label from '../../../Label';
-import { cagesData } from '../../../../utils/mock-data/cage';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { getCageData } from '../../../../utils/mock-data/localStorageUtil';
 

@@ -92,6 +92,16 @@ export default function Router() {
         { path: 'app', element: <GeneralApp /> },
 
         {
+          path: 'task',
+          children: [
+            { path: '/', element: <Navigate to="/dashboard/task/list" replace /> },
+            { path: 'list', element: <UserList /> },
+            { path: 'new', element: <UserCreate /> },
+            { path: '/:name/edit', element: <UserCreate /> },
+            { path: 'account', element: <UserAccount /> }
+          ]
+         },
+        {
           path: 'user',
           children: [
             { path: '/', element: <Navigate to="/dashboard/user/profile" replace /> },

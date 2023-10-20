@@ -19,8 +19,8 @@ import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { BirdCard } from '../../components/_dashboard/user/cards';
 
-
 import CreateNewBirdForm from '../../components/_dashboard/user/UserNewForm';
+import { getBirdList } from '../../redux/slices/bird';
 
 const SkeletonLoad = (
   <>
@@ -38,23 +38,22 @@ export default function BirdCards() {
   const { users } = useSelector((state) => state.user);
   const { cageId } = useParams();
   const [loading, setLoading] = useState(true);
+  const { birdList } = useSelector((state) => state.bird);
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
       dispatch(getUsers());
     }, 200);
+    dispatch(getBirdList());
   }, [dispatch]);
 
-  
   const [openCreateBirdDialog, setOpenCreateBirdDialog] = useState(false);
 
-  
   const handleOpenCreateBirdDialog = () => {
     setOpenCreateBirdDialog(true);
   };
 
-  
   const handleCloseCreateBirdDialog = () => {
     setOpenCreateBirdDialog(false);
   };
@@ -67,7 +66,7 @@ export default function BirdCards() {
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'Cages', href: PATH_DASHBOARD.cages.cards },
-            { name: 'Birds', href: PATH_DASHBOARD.cages.birds },
+            { name: 'Birds', href: PATH_DASHBOARD.cages.birds }
           ]}
           action={
             <>
@@ -91,11 +90,7 @@ export default function BirdCards() {
           }
         />
         <Grid container spacing={3}>
-          {loading ? (
-            SkeletonLoad
-          ) : (
-            <BirdCard cageId={cageId} />
-          )}
+          {loading ? SkeletonLoad : <BirdCard cageId={cageId} birdData={birdList} />}
         </Grid>
       </Container>
     </Page>
