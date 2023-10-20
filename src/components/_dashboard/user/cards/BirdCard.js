@@ -28,11 +28,8 @@ const CardMediaStyle = styled('div')(({ theme }) => ({
     width: '100%',
     height: '100%',
     position: 'absolute',
-    backdropFilter: 'blur(3px)',
-    WebkitBackdropFilter: 'blur(3px)', // Fix on Mobile
     borderTopLeftRadius: theme.shape.borderRadiusMd,
     borderTopRightRadius: theme.shape.borderRadiusMd,
-    backgroundColor: alpha(theme.palette.primary.darker, 0.72)
   }
 }));
 
@@ -72,34 +69,11 @@ export default function BirdCard({ cageId }) {
         <Grid item xs={12} sm={6} md={4} key={bird.birdId}>
           <Card key={bird.birdId}>
             <CardMediaStyle>
-              <SvgIconStyle
-                color="paper"
-                src="/static/icons/shape-avatar.svg"
-                sx={{
-                  width: 144,
-                  height: 62,
-                  zIndex: 10,
-                  bottom: -26,
-                  position: 'absolute',
-                }}
-              />
-              <Avatar
-                alt={bird.birdName}
-                src={`/static/mock-images/birds/bird_${index + 1}.jpg`}
-                sx={{
-                  width: 64,
-                  height: 64,
-                  zIndex: 11,
-                  position: 'absolute',
-                  transform: 'translateY(-50%)',
-                }}
-              />
               <CoverImgStyle
                 alt="cover"
-                src={`/static/mock-images/cages/cage_${index + 1}.jpg`}
+                src={`/static/mock-images/birds/bird_${index + 1}.jpg`}
               />
             </CardMediaStyle>
-
             <Link href={`${PATH_DASHBOARD.cages.root}/${bird.cageId}/birds/${bird.birdId}/profile`}>
               <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
                 {bird.birdName}
@@ -137,10 +111,10 @@ export default function BirdCard({ cageId }) {
                 </Grid>
               <Grid item xs={4}>
                 <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
-                  Quantity
+                  Hatch Date
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {bird.foodQuantity} gr
+                  {bird.hatchingDate} 
                 </Typography>
               </Grid>               
               </Grid>
