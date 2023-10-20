@@ -161,7 +161,7 @@ export default function UserList() {
             <Button
               variant="contained"
               component={RouterLink}
-              to={PATH_DASHBOARD.user.newUser}
+              to={PATH_DASHBOARD.food.root}
               startIcon={<Icon icon={plusFill} />}
             >
               New User

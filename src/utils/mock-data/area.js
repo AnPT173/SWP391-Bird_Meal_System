@@ -1,27 +1,19 @@
-export const birdCageAreas = [
+export const birdCageLocation = [
     {
-      areaId: 'AR001',
-      areaName: 'Species',
+      id: 1,
+      locationName: 'Normal',
     },
     {
-      areaId: 'AR002',
-      areaName: 'Sick',
+      id: 2,
+      locationName: 'Sick',
     },
     {
-      areaId: 'AR003',
-      areaName: 'Birth',
+      id: 3,
+      locationName: 'Birth',
     },
     {
-      areaId: 'AR004',
-      areaName: 'Offspring',
-    },
-    {
-      areaId: 'AR005',
-      areaName: 'Passerine',
-    },
-    {
-      areaId: 'AR006',
-      areaName: 'Exotic',
+      id: 4,
+      locationName: 'Exotic',
     },
   ];
   
