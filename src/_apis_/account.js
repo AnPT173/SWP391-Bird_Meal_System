@@ -146,6 +146,7 @@ mock.onPost('/api/account/login').reply(async (config) => {
       expiresIn: JWT_EXPIRES_IN
     });
 
+    console.log(accessToken)
     return [200, { accessToken, user }];
   } catch (error) {
     console.error(error);

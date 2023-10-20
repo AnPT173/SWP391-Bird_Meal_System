@@ -12,7 +12,7 @@ const COLOR_OPTIONS = [
 
 export const scheduleData = [
   {
-    id: '001',
+    id: '1',
     cageId: 'CA001',
     title: 'Feed Bird',
     description: 'Feeding for CA001',
@@ -23,10 +23,11 @@ export const scheduleData = [
     staffId: 'STA001',
     status: 'Feeded',
     textColor: COLOR_OPTIONS[2],
-    feedingRegimen: "None"
+    feedingRegimen: "None",
+    locationId: 1
   },
   {
-    id: '002',
+    id: '2',
     cageId: 'CA001',
     title: 'Feed Bird',
     description: 'Feeding for CA001',
@@ -37,10 +38,11 @@ export const scheduleData = [
     staffId: 'STA001',
     status: 'Feeded',
     textColor: COLOR_OPTIONS[1],
-    feedingRegimen: ""
+    feedingRegimen: "",
+    locationId: 1
   },
   {
-    id: '003',
+    id: '3',
     cageId: 'CA002',
     title: 'Feed Bird',
     description: 'Feeding for CA002',
@@ -51,10 +53,11 @@ export const scheduleData = [
     staffId: 'STA002',
     status: 'Pending',
     textColor: COLOR_OPTIONS[2],
-    feedingRegimen: "None"
+    feedingRegimen: "None",
+    locationId: 1
   },
   {
-    id: '004',
+    id: '4',
     cageId: 'CA002',
     title: 'Feed Bird',
     foodType: 'Product 3',
@@ -65,10 +68,11 @@ export const scheduleData = [
     staffId: 'STA002',
     status: 'Pending',
     textColor: COLOR_OPTIONS[1],
-    feedingRegimen: ""
+    feedingRegimen: "",
+    locationId: 1
   },
   {
-    id: '005',
+    id: '5',
     cageId: 'CA003',
     title: 'Feed Bird',
     description: 'Feeding for CA003',
@@ -79,10 +83,11 @@ export const scheduleData = [
     staffId: 'STA003',
     status: 'Late',
     textColor: COLOR_OPTIONS[2],
-    feedingRegimen: "None"
+    feedingRegimen: "None",
+    locationId: 1
   },
   {
-    id: '006',
+    id: '6',
     cageId: 'CA003',
     title: 'Feed Bird',
     description: 'Feeding for CA003',
@@ -93,10 +98,11 @@ export const scheduleData = [
     staffId: 'STA003',
     status: 'Late',
     textColor: COLOR_OPTIONS[1],
-    feedingRegimen: ""
+    feedingRegimen: "",
+    locationId: 1
   },
   {
-    id: '007',
+    id: '7',
     cageId: 'CA004',
     title: 'Feed Bird',
     description: 'Feeding for CA004',
@@ -107,10 +113,11 @@ export const scheduleData = [
     staffId: 'STA004',
     status: 'Feeded',
     textColor: COLOR_OPTIONS[2],
-    feedingRegimen: "None"
+    feedingRegimen: "None",
+    locationId: 2
   },
   {
-    id: '008',
+    id: '8',
     cageId: 'CA004',
     title: 'Feed Bird',
     description: 'Feeding for CA004',
@@ -121,10 +128,11 @@ export const scheduleData = [
     staffId: 'STA004',
     status: 'Feeded',
     textColor: COLOR_OPTIONS[1],
-    feedingRegimen: ""
+    feedingRegimen: "",
+    locationId: 2
   },
   {
-    id: '009',
+    id: '9',
     cageId: 'CA005',
     title: 'Feed Bird',
     description: 'Feeding for CA005',
@@ -135,10 +143,11 @@ export const scheduleData = [
     staffId: 'STA005',
     status: 'Pending',
     textColor: COLOR_OPTIONS[2],
-    feedingRegimen: "None"
+    feedingRegimen: "None",
+    locationId: 3
   },
   {
-    id: '010',
+    id: '10',
     cageId: 'CA005',
     title: 'Feed Bird',
     description: 'Feeding for CA005',
@@ -149,6 +158,7 @@ export const scheduleData = [
     staffId: 'STA005',
     status: 'Pending',
     textColor: COLOR_OPTIONS[1],
-    feedingRegimen: ""
+    feedingRegimen: "",
+    locationId: 3
   }
 ];

@@ -24,10 +24,18 @@ import fakeRequest from '../../../utils/fakeRequest';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 
 import { UploadAvatar } from '../../upload';
+import { getCageData, saveCageData } from '../../../utils/mock-data/localStorageUtil';
 
 export default function CreateNewCageForm() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const [ currentCageData, setCurrentCageData ]= useState([]);
+
+  useEffect(async ()=>{
+    const data = await getCageData();
+    setCurrentCageData(data);
+  },[])
+
   const NewCageSchema = Yup.object().shape({
     cageID: Yup.string().required('Cage ID is required'),
     species: Yup.string().required('Species is required'),
@@ -38,7 +46,9 @@ export default function CreateNewCageForm() {
   const createNewCage = async (values) => {
     try {
 
-      await fakeRequest(500);
+      // await fakeRequest(500);
+      await saveCageData([...currentCageData, values]);
+
       enqueueSnackbar('Create success', { variant: 'success' });
       navigate(PATH_DASHBOARD.cages.cards);
     } catch (error) {
@@ -52,6 +62,7 @@ export default function CreateNewCageForm() {
       species: '',
       cageType: '',
       status: '',
+      type: 'Normal',
     },
     validationSchema: NewCageSchema,
     onSubmit: (values, { setSubmitting }) => {
