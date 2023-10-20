@@ -2490,9 +2490,9 @@
     "reselect" "^4.0.0"
 
 "@material-ui/icons@^5.0.0-beta.4":
-  "integrity" "sha512-ZUDWn/vlHQPYWmvid7dz1E1Kiqz8rwDcsI46d9Ft9iphIvWJhESzLGIEQlu3TUN0dY1BRPVCxgQzLg1mfatA5w=="
-  "resolved" "https://registry.npmjs.org/@material-ui/icons/-/icons-5.0.0-beta.4.tgz"
-  "version" "5.0.0-beta.4"
+  version "5.0.0-beta.4"
+  resolved "https://registry.npmjs.org/@material-ui/icons/-/icons-5.0.0-beta.4.tgz"
+  integrity sha512-ZUDWn/vlHQPYWmvid7dz1E1Kiqz8rwDcsI46d9Ft9iphIvWJhESzLGIEQlu3TUN0dY1BRPVCxgQzLg1mfatA5w==
   dependencies:
     "@babel/runtime" "^7.14.8"
 

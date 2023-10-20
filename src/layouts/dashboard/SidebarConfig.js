@@ -158,8 +158,18 @@ export const managerSidebar = [
       { title: 'Food', path: PATH_DASHBOARD.food.root, icon: ICONS.cart },
       {
         title: 'Report',
-        path: PATH_DASHBOARD.kanban,
+        path: PATH_DASHBOARD.mail.root,
         icon: ICONS.setting
+      },
+      {
+        title: 'Storage',
+        path: PATH_DASHBOARD.user.list,
+        icons: ICONS.blog
+      },
+      {
+        title: 'Task',
+        path: PATH_DASHBOARD.chat.root,
+        icons: ICONS.mail
       }
     ]
   }

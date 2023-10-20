@@ -26,11 +26,8 @@ const CardMediaStyle = styled('div')(({ theme }) => ({
     width: '100%',
     height: '100%',
     position: 'absolute',
-    backdropFilter: 'blur(3px)',
-    WebkitBackdropFilter: 'blur(3px)', // Fix on Mobile
     borderTopLeftRadius: theme.shape.borderRadiusMd,
     borderTopRightRadius: theme.shape.borderRadiusMd,
-    backgroundColor: alpha(theme.palette.primary.darker, 0.72)
   }
 }));
 
@@ -73,63 +70,65 @@ export default function BirdCard({ cageId }) {
             statusColor = 'warning';
           }
 
-          return (
-            <Grid item xs={12} sm={6} md={4} key={bird.birdId}>
-              <Card key={bird.birdId}>
-                <CardMediaStyle>
-                  <CoverImgStyle alt="cover" src={`/static/mock-images/birds/bird_${index + 1}.jpg`} />
-                </CardMediaStyle>
-
-                <Link href={`${PATH_DASHBOARD.cages.root}/${bird.cageId}/birds/${bird.birdId}/profile`}>
-                  <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
-                    {bird.birdName}
-                  </Typography>
-                </Link>
-                <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
-                  {bird.species}
+        return (
+        <Grid item xs={12} sm={6} md={4} key={bird.birdId}>
+          <Card key={bird.birdId}>
+            <CardMediaStyle>
+              <CoverImgStyle
+                alt="cover"
+                src={`/static/mock-images/birds/bird_${index + 1}.jpg`}
+              />
+            </CardMediaStyle>
+            <Link href={`${PATH_DASHBOARD.cages.root}/${bird.cageId}/birds/${bird.birdId}/profile`}>
+              <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
+                {bird.birdName}
+              </Typography>
+            </Link>
+            <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
+              {bird.species}
+            </Typography>
+            <Divider />
+            <Grid container sx={{ py: 3, textAlign: 'center' }}>
+              <Grid item xs={4}>
+                <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
+                  Age
                 </Typography>
-                <Divider />
-                <Grid container sx={{ py: 3, textAlign: 'center' }}>
-                  <Grid item xs={4}>
-                    <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
-                      Age
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {bird.birdAge}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
-                      Status
-                    </Typography>
-                    <Label
-                      color={statusColor}
-                      sx={{
-                        textTransform: 'uppercase',
-                        position: 'absolute',
-                        bottom: 24,
-                        left: '50%',
-                        transform: 'translateX(-50%)'
-                      }}
-                    >
-                      {bird.status}
-                    </Label>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
-                      Quantity
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {bird.foodQuantity} gr
-                    </Typography>
-                  </Grid>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {bird.birdAge}
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
+                  Status
+                </Typography>
+                <Label
+                  color={statusColor} 
+                  sx={{
+                    textTransform: 'uppercase',
+                    position: 'absolute',
+                    bottom: 24, 
+                    left: '50%', 
+                    transform: 'translateX(-50%)', 
+                  }}
+                >
+                  {bird.status}
+                </Label>
                 </Grid>
-              </Card>
-            </Grid>
-          );
-        })}
-      </Grid>
-      {birdsInCage && birdsInCage?.length === 0 && (
+              <Grid item xs={4}>
+                <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
+                  Hatch Date
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {bird.hatchingDate} 
+                </Typography>
+              </Grid>               
+              </Grid>
+            </Card>
+          </Grid>
+        );
+      })}
+    </Grid>
+    {birdsInCage && birdsInCage?.length === 0 && (
         <Typography variant="body2" align="center">
           No bird for this cage
         </Typography>

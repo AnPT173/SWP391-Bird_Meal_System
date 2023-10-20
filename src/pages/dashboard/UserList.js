@@ -162,6 +162,16 @@ export default function UserList() {
             { name: 'User', href: PATH_DASHBOARD.user.root },
             { name: 'List' }
           ]}
+          action={
+            <Button
+              variant="contained"
+              component={RouterLink}
+              to={PATH_DASHBOARD.food.root}
+              startIcon={<Icon icon={plusFill} />}
+            >
+              New User
+            </Button>
+          }
         />
 
         <Card>

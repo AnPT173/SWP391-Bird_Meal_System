@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { DatePicker, LoadingButton } from '@material-ui/lab';
 import { Box, Card, Grid, Stack, TextField, Typography, FormHelperText, FormControlLabel, MenuItem } from '@material-ui/core';
+import { birdCageLocation } from '../../../utils/mock-data/area';
 import { fData } from '../../../utils/formatNumber';
 import { species } from '../../../utils/mock-data/species';
 import fakeRequest from '../../../utils/fakeRequest';
@@ -44,6 +45,7 @@ export default function CreateNewBirdForm() {
     setCagesData(data2);
   },[])
 
+  const { area, location } = useParams();
   const NewBirdSchema = Yup.object().shape({
     birdName: Yup.string().required('Bird Name is required'),
     birdAge: Yup.number().required('Bird Age is required'),
@@ -69,10 +71,11 @@ export default function CreateNewBirdForm() {
       avatarUrl: null,
       birdGender: '',
       hatchingDate: null,
-      attitudes: '', // Add attitudes field
-      featherColor: '', // Add featherColor field
-      appearance: '', // Add appearance field
-      qualities: '', // Add qualities field
+      attitudes: '', 
+      featherColor: '',
+      area: location, 
+      appearance: '', 
+      qualities: '',
     },
     validationSchema: NewBirdSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
@@ -281,14 +284,16 @@ export default function CreateNewBirdForm() {
                     select
                     fullWidth
                     label="Area"
+                    value={area}
                     {...getFieldProps('area')}
                     error={Boolean(touched.area && errors.area)}
                     helperText={touched.area && errors.area}
                   >
-                    <MenuItem value="Normal">Normal</MenuItem>
-                    <MenuItem value="Birth">Birth</MenuItem>
-                    <MenuItem value="Sick">Sick</MenuItem>
-                    <MenuItem value="Exotic">Exotic</MenuItem>
+                    {birdCageLocation.map((option) => (
+                      <MenuItem key={option.id} value={option.locationName}>
+                        {option.locationName}
+                      </MenuItem>
+                    ))}
                   </TextField>
                 </Stack>
                 <TextField
