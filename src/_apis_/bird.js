@@ -1,6 +1,7 @@
-import mock from './mock'
 import { birdsData } from 'src/utils/mock-data/bird';
-let BirdCard = birdsData
+import mock from './mock'
+
+const BirdCard = birdsData
 
 mock.onGet('api/cage/birds').reply(200, {BirdCard})
 
