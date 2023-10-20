@@ -9,11 +9,10 @@ import { DatePicker, LoadingButton } from '@material-ui/lab';
 import { Box, Card, Grid, Stack, TextField, Typography, FormHelperText, FormControlLabel, MenuItem } from '@material-ui/core';
 import { fData } from '../../../utils/formatNumber';
 import { species } from '../../../utils/mock-data/species';
-import { cagesData } from '../../../utils/mock-data/cage';
 import fakeRequest from '../../../utils/fakeRequest';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { UploadAvatar } from '../../upload';
-import { getBirdData, saveBirdData } from '../../../utils/mock-data/localStorageUtil';
+import { getBirdData, getCageData, saveBirdData } from '../../../utils/mock-data/localStorageUtil';
 
 // +// {
 // +//   "name": "test",
@@ -36,9 +35,13 @@ export default function CreateNewBirdForm() {
   const { enqueueSnackbar } = useSnackbar();
   const { cageId } = useParams();
   const [ birdData, setBirdData ] = useState([]);
+  const [cagesData, setCagesData ] = useState([]);
+  
   useEffect( async ()=>{
     const data = await getBirdData();
     setBirdData(data);
+    const data2 = await getCageData();
+    setCagesData(data2);
   },[])
 
   const NewBirdSchema = Yup.object().shape({
