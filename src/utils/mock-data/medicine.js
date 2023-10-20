@@ -3,7 +3,7 @@
       name: "AviCalm",
       brand: "Harrison's Bird Foods",
       description: "A natural herbal supplement to reduce stress and anxiety in birds.",
-      dosage: "1-2 drops per 1 oz of fresh fruit or 8 oz of drinking water",
+      dosage: "8 oz of drinking water",
       expirePeriod: "24 months",
     },
     {
