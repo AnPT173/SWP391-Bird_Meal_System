@@ -13,6 +13,7 @@ import { cagesData } from '../../../utils/mock-data/cage';
 import fakeRequest from '../../../utils/fakeRequest';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { UploadAvatar } from '../../upload';
+import { getBirdData, saveBirdData } from '../../../utils/mock-data/localStorageUtil';
 
 // +// {
 // +//   "name": "test",

@@ -13,7 +13,6 @@ import { styled, useTheme } from '@material-ui/core/styles';
 import { Card, Button, Container, DialogTitle, useMediaQuery, Stack, Typography, Grid } from '@material-ui/core';
 import { useLocation, useParams } from 'react-router';
 import useAuth from '../../hooks/useAuth';
-import { scheduleData } from '../../utils/mock-data/schedule';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import {
@@ -23,7 +22,9 @@ import {
   updateEvent,
   selectEvent,
   selectRange,
-  openCalendarFormDialog
+  openTaskDialog,
+  openLocationDialog,
+  closeTaskDialog
 } from '../../redux/slices/calendar';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
@@ -36,42 +37,106 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { CalendarForm, CalendarStyle, CalendarToolbar } from '../../components/_dashboard/calendar';
 import Label from '../../components/Label';
 import AssignTaskForm from '../../components/_dashboard/calendar/AssignTaskForm';
+import { getSchedule, getScheduleById, saveSchedule } from '../../utils/mock-data/localStorageUtil';
 
 // ----------------------------------------------------------------------
 
-const selectedEventSelector = (state) => {
-  const { events, selectedEventId } = state.calendar;
+const selectedEventSelector = async (state) => {
+  const { selectedEventId } = state.calendar;
+  const events = await getSchedule();
   if (selectedEventId) {
     return events.find((_event) => _event.id === selectedEventId);
   }
   return null;
 };
-const cageLabelColor = ['red', 'green', 'blue', 'yellow'];
-const locationBackgroundColor = ['#c3b1b1', '#adcfb1', '#adc1cf', '#b0adcf'];
 
-function CageLabel({ title, onClick }) {
-  const color = cageLabelColor[Math.floor(Math.random() * 4)];
+const getStatusColor = (status) => {
+  switch (status) {
+    case 'Feeded':
+      return '#94D82D';
+    case 'Pending':
+      return '#FFC107';
+    case 'Late':
+      return '#FF4842';
+    default:
+      return '#00AB55';
+  }
+};
+const cageLocation = [
+  {
+    id: 1,
+    value: 'Normal'
+  },
+  {
+    id: 2,
+    value: 'Sick'
+  },
+  {
+    id: 3,
+    value: 'Birth'
+  },
+  {
+    id: 4,
+    value: 'Etoxic'
+  }
+];
+const locationBackgroundColor = [
+  {
+    color1: '#80bbcd',
+    color2: '#35bb60'
+  },
+  {
+    color1: '#FBEAEB',
+    color2: '#2F3C7E'
+  },
+  {
+    color1: '#101820',
+    color2: '#FEE715'
+  },
+  {
+    color1: 'green',
+    color2: 'blue'
+  },
+  {
+    color1: '#4831D4',
+    color2: '#CCF381'
+  },
+  {
+    color1: '#E2D1F9',
+    color2: '#317773'
+  }
+];
+
+function CageLabel({ id, title, quantity, onClick, status }) {
+  const color = getStatusColor(status);
   return (
     <Typography
-      onClick={onClick}
+      onClick={() => onClick(id)}
       variant="h6"
       align="center"
       style={{ backgroundColor: color, 'border-radius': '5px', 'margin-bottom': '5px' }}
     >
       {title}
       <br />
-      65
+      {quantity}
     </Typography>
   );
 }
 
 function LocationScheduleMap(props) {
   const color = locationBackgroundColor[Math.floor(Math.random() * 4)];
+
   return (
-    <Grid container spacing={1} style={{ backgroundColor: color, margin: '5px 5px 10px 5px' }}>
+    <Grid container spacing={1} style={{ backgroundColor: color.color1, margin: '5px 5px 10px 5px' }}>
       {props.data.map((item, index) => (
         <Grid item xs={4} key={index}>
-          <CageLabel title={item} onClick={props.onClick} />
+          <CageLabel
+            id={item.id}
+            title={item.cageId}
+            quantity={item.foodQuantity}
+            onClick={props.onClick}
+            status={item.status}
+          />
         </Grid>
       ))}
     </Grid>
@@ -85,27 +150,28 @@ export default function Calendar() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const calendarRef = useRef(null);
   const { enqueueSnackbar } = useSnackbar();
-  const [isOpenTaskDialog, setIsOpenTaskDialog] = useState(false);
-
+  const [scheduleData, setScheduleData] = useState([]);
   const [date, setDate] = useState(new Date());
   const [view, setView] = useState(isMobile ? 'listWeek' : 'dayGridMonth');
-  const selectedEvent = useSelector(selectedEventSelector);
-  const { events, isOpenModal, selectedRange, isOpenCalendarFormDialog } = useSelector((state) => state.calendar);
+  const [selectedEvent, setSelectedEvent] = useState();
+  const { events, isOpenModal, selectedRange, isOpenTaskDialog, isOpenLocationDialog } = useSelector(
+    (state) => state.calendar
+  );
   const { user } = useAuth();
   const { cageId } = useParams();
   const isManager = !!user && user?.role === 'manager';
-  console.log(events);
+  const [isCreating, setIsCreating] = useState(false);
   const scheduleBaseOnCage = scheduleData.filter((data) => data.cageId === cageId);
   const fullScheduleBaseOnRole = isManager ? scheduleData : scheduleData.filter((data) => data.staffId === user.id);
 
   const filterdScheduleData = cageId ? scheduleBaseOnCage : fullScheduleBaseOnRole;
 
   const cageIdTitle = cageId ? `    ||    CageId: ${cageId}` : '';
-  const simulateSchedule = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig'];
 
-  useEffect(() => {
-    dispatch(getEvents());
-  }, [dispatch]);
+  useEffect(async () => {
+    const data = await getSchedule();
+    setScheduleData(data);
+  }, []);
 
   useEffect(() => {
     const calendarEl = calendarRef.current;
@@ -163,7 +229,8 @@ export default function Calendar() {
   };
 
   const handleSelectEvent = (arg) => {
-    dispatch(selectEvent(arg.event.id));
+    dispatch(openLocationDialog());
+    // dispatch(selectEvent(arg.event.id));
   };
 
   const handleResizeEvent = async ({ event }) => {
@@ -198,30 +265,27 @@ export default function Calendar() {
     }
   };
 
-
   const handleAddEvent = () => {
-    dispatch(openCalendarFormDialog());
+    setIsCreating(true);
+    dispatch(openTaskDialog());
   };
 
   const handleCloseModal = () => {
-    setIsOpenTaskDialog(false);
-  };
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'Feeded':
-        return 'success';
-      case 'Pending':
-        return 'warning';
-      case 'Late':
-        return 'error';
-      default:
-        return 'primary';
-    }
-  };
-  const onSelectTask = (event) => {
-    openCalendarFormDialog();
+    setIsCreating(false);
+    dispatch(closeModal());
   };
 
+  const onSelectTask = async (id) => {
+    const event = await getScheduleById(id);
+    setSelectedEvent(event);
+    dispatch(openTaskDialog());
+    setIsCreating(false);
+  };
+
+  const handleCloseTask = () => {
+    setIsCreating(false);
+    dispatch(closeTaskDialog());
+  };
   const handleCloseFrom = () => {};
   return (
     <Page title={`Calendar${cageIdTitle}`}>
@@ -289,20 +353,28 @@ export default function Calendar() {
           </CalendarStyle>
         </Card>
 
-        <DialogAnimate open={isOpenModal} maxwidth="md" onClose={handleCloseModal}>
+        <DialogAnimate open={isOpenLocationDialog} maxwidth="md" onClose={handleCloseModal}>
           <Stack direction="column" spacing={2}>
             <DialogTitle>Event by Location</DialogTitle>
-            <Typography>Location zz</Typography>
-            <LocationScheduleMap data={simulateSchedule} onClick={onSelectTask} />
-            <p>Location xx0</p>
-            <LocationScheduleMap data={simulateSchedule} onClick={onSelectTask} />
-            <p>Location xx0</p>
-            <LocationScheduleMap data={simulateSchedule} onClick={onSelectTask} />
+            {cageLocation.map((item) => {
+              const data = filterdScheduleData.filter((i) => i.locationId === item.id);
+              return (
+                <>
+                  {data && data.length > 0 && <Typography>{item.value}</Typography>}
+                  <LocationScheduleMap data={data} onClick={onSelectTask} />
+                </>
+              );
+            })}
           </Stack>
         </DialogAnimate>
 
-        <DialogAnimate open={isOpenCalendarFormDialog} onClose={handleCloseModal}>
-          <CalendarForm event={selectedEvent} range={selectedRange} onCancel={handleCloseModal} />
+        <DialogAnimate open={isOpenTaskDialog} onClose={handleCloseTask}>
+          <CalendarForm
+            event={selectedEvent}
+            isCreating={isCreating}
+            range={selectedRange}
+            onCancel={handleCloseTask}
+          />
         </DialogAnimate>
       </Container>
     </Page>
