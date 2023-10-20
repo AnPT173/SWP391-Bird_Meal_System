@@ -1,6 +1,6 @@
 export const birdsData = [
   {
-    birdId: 'BIRD001',
+    birdId: 'BIRD1',
     birdName: 'Charlie',
     birdAge: 3,
     status: 'Normal',
@@ -16,7 +16,7 @@ export const birdsData = [
     qualities: 'Good singer'
   },
   {
-    birdId: 'BIRD002',
+    birdId: 'BIRD2',
     birdName: 'Lucy',
     birdAge: 2,
     status: 'Sick',
@@ -32,7 +32,7 @@ export const birdsData = [
     qualities: 'Good foragers'
   },
   {
-    birdId: 'BIRD003',
+    birdId: 'BIRD3',
     birdName: 'Oscar',
     birdAge: 4,
     status: 'Birth',
@@ -48,7 +48,7 @@ export const birdsData = [
     qualities: 'Good foragers'
   },
   {
-    birdId: 'BIRD004',
+    birdId: 'BIRD4',
     birdName: 'Milo',
     birdAge: 2,
     status: 'Normal',
@@ -64,7 +64,7 @@ export const birdsData = [
     qualities: 'Excellent flyer'
   },
   {
-    birdId: 'BIRD005',
+    birdId: 'BIRD5',
     birdName: 'Buddy',
     birdAge: 5,
     status: 'Sick',
@@ -80,7 +80,7 @@ export const birdsData = [
     qualities: 'Good singer'
   },
   {
-    birdId: 'BIRD006',
+    birdId: 'BIRD6',
     birdName: 'Coco',
     birdAge: 1,
     status: 'Birth',
@@ -97,7 +97,7 @@ export const birdsData = [
   },
 
   {
-    birdId: 'BIRD007',
+    birdId: 'BIRD7',
     birdName: 'Janet',
     birdAge: 4,
     status: 'Birth',
@@ -113,7 +113,7 @@ export const birdsData = [
     qualities: 'Excellent singer'
   },
   {
-    birdId: 'BIRD008',
+    birdId: 'BIRD8',
     birdName: 'Max',
     birdAge: 3,
     status: 'Sick',
@@ -129,7 +129,7 @@ export const birdsData = [
     qualities: 'Good foragers'
   },
   {
-    birdId: 'BIRD009',
+    birdId: 'BIRD9',
     birdName: 'Laura',
     birdAge: 1,
     status: 'Normal',
@@ -145,7 +145,7 @@ export const birdsData = [
     qualities: 'Good singer'
   },
   {
-    birdId: 'BIRD010',
+    birdId: 'BIRD10',
     birdName: 'Rocky',
     birdAge: 4,
     status: 'Normal',
@@ -161,7 +161,7 @@ export const birdsData = [
     qualities: 'Excellent flyer'
   },
   {
-    birdId: 'BIRD011',
+    birdId: 'BIRD11',
     birdName: 'Luna',
     birdAge: 2,
     status: 'Sick',
@@ -177,7 +177,7 @@ export const birdsData = [
     qualities: 'Good foragers'
   },
   {
-    birdId: 'BIRD012',
+    birdId: 'BIRD12',
     birdName: 'Misty',
     birdAge: 3,
     status: 'Normal',
@@ -193,7 +193,7 @@ export const birdsData = [
     qualities: 'Excellent singer'
   },
   {
-    birdId: 'BIRD013',
+    birdId: 'BIRD13',
     birdName: 'Cooper',
     birdAge: 1,
     status: 'Birth',
@@ -209,7 +209,7 @@ export const birdsData = [
     qualities: 'Good singer'
   },
   {
-    birdId: 'BIRD014',
+    birdId: 'BIRD14',
     birdName: 'Zoe',
     birdAge: 4,
     status: 'Sick',
@@ -226,7 +226,7 @@ export const birdsData = [
   },
 
   {
-    birdId: 'BIRD015',
+    birdId: 'BIRD15',
     birdName: 'Lucky',
     birdAge: 2,
     status: 'Normal',

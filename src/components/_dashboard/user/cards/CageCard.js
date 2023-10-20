@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { Card, Grid, Typography, Divider, Link, styled } from '@material-ui/core';
 import Label from '../../../Label';
 import { cagesData } from '../../../../utils/mock-data/cage';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
+import { getCageData } from '../../../../utils/mock-data/localStorageUtil';
 
 
 const CardMediaStyle = styled('div')(({ theme }) => ({
@@ -32,8 +33,22 @@ const CoverImgStyle = styled('img')({
 });
 
 function CageCard({status}) {
-  const filterdData = cagesData.filter(item => item.type === status)
+
+  const [cagesData, setCagesData] = useState([]);
+
+  useEffect(async ()=>{
+
+    // saveCageData(cagesData);
+    const data = await getCageData();
+    setCagesData(data);
+    
+  },[])
+  const filterdData = cagesData?.filter(item => item.type === status)
+
+  console.log('filterd data', filterdData);
+
   return (
+    <>
     <Grid container spacing={3}>
       {filterdData.map((cage, index) => {
         let statusColor = 'info'; 
@@ -106,6 +121,10 @@ function CageCard({status}) {
         );
       })}
     </Grid>
+    {!filterdData && <Typography variant="body2" align="center">
+        No cage for this location
+      </Typography>}
+    </>
   );
 }
 
