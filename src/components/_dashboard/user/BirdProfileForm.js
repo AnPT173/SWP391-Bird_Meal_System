@@ -39,7 +39,7 @@ BirdProfileForm.propTypes = {
   currentBird: PropTypes.object,
 };
 
-export default function BirdProfileForm({ isEdit }) {
+export default function BirdProfileForm({ isEdit, currentBird }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { birdId } = useParams();
@@ -60,7 +60,7 @@ export default function BirdProfileForm({ isEdit }) {
     
   });
 
-  const currentBird = birdsData.find((bird) => bird.birdId === birdId);
+
 
   const formik = useFormik({
     enableReinitialize: true,

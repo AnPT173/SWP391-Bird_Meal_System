@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Stack,
@@ -20,6 +21,9 @@ import { birdCageLocation } from '../../utils/mock-data/area';
 import Page from '../../components/Page';
 import CageCard from '../../components/_dashboard/user/cards/CageCard';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import { getCageList } from '../../redux/slices/cage';
+import { saveSchedule } from '../../utils/mock-data/localStorageUtil';
+import { scheduleData } from '../../utils/mock-data/schedule';
 import { PATH_DASHBOARD } from '../../routes/paths';
 
 export default function CageCards() {
@@ -30,6 +34,8 @@ export default function CageCards() {
   const [isUpdateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [locationToUpdate, setLocationToUpdate] = useState(null);
   const [updatedLocations, setUpdatedLocations] = useState(birdCageLocation);
+  const dispatch = useDispatch();
+  const { cageList } = useSelector((state) => state.cage);
 
   const handleChangeTab = (event, newValue) => {
     setCurrentTab(newValue);
@@ -109,6 +115,24 @@ export default function CageCards() {
       setUpdateDialogOpen(false);
     }
   };
+  useEffect(() => {
+    dispatch(getCageList());
+  }, []);
+
+  const LOCATION_TABS = [
+    {
+      value: 'Normal',
+      component: <CageCard status="Normal" cagesData={cageList} />
+    },
+    {
+      value: 'Sick',
+      component: <CageCard status="Sick" cagesData={cageList} />
+    },
+    {
+      value: 'Birth',
+      component: <CageCard status="Birth" cagesData={cageList} />
+    }
+  ];
 
   return (
     <Page title="Cages">

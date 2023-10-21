@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
+import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { useTheme } from '@material-ui/core/styles';
@@ -19,9 +20,12 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination
+  TablePagination,
+  DialogTitle,
+  TextField
 } from '@material-ui/core';
 import { foodsData } from '../../utils/mock-data/food';
+import { Form, FormikProvider } from 'formik/dist';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUserList, deleteUser } from '../../redux/slices/user';
@@ -36,7 +40,9 @@ import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../components/_dashboard/user/list';
-
+import { DialogAnimate } from '../../components/animate';
+import Grid from '../../theme/overrides/Grid';
+import AssignTaskForm from '../../components/_dashboard/calendar/AssignTaskForm';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -88,6 +94,7 @@ export default function FoodList() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [isEdit, setIsEdit] = useState(false);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -179,8 +186,6 @@ export default function FoodList() {
             <TableContainer sx={{ minWidth: 800 }}>
             <Table data={filteredFoods}>
                 <UserListHead
-                  order={order}
-                  orderBy={orderBy}
                   headLabel={TABLE_HEAD}
                   rowCount={foodsData.length}
                   numSelected={selected.length}
@@ -249,6 +254,15 @@ export default function FoodList() {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
+        <DialogAnimate
+          open={isEdit}
+          onClose={() => {
+            setIsEdit(false);
+          }}
+        >
+          <DialogTitle>Assign task</DialogTitle>
+          <AssignTaskForm />
+        </DialogAnimate>
       </Container>
     </Page>
   )

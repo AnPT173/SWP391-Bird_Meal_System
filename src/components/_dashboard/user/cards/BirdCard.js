@@ -1,20 +1,18 @@
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 // material
 import { useParams } from 'react-router';
 import { alpha, styled } from '@material-ui/core/styles';
 import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton, Link } from '@material-ui/core';
 import Label from '../../../Label';
-import { birdsData } from '../../../../utils/mock-data/bird';
 // utils
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { fShortenNumber } from '../../../../utils/formatNumber';
 //
 import SvgIconStyle from '../../../SvgIconStyle';
-
+import { getBirdData, saveBirdData, saveCageData } from '../../../../utils/mock-data/localStorageUtil';
 
 // ----------------------------------------------------------------------
-
-
 
 const CardMediaStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -35,7 +33,6 @@ const CardMediaStyle = styled('div')(({ theme }) => ({
 
 const CoverImgStyle = styled('img')({
   top: 0,
-  zIndex: 8,
   width: '100%',
   height: '100%',
   objectFit: 'cover',
@@ -44,26 +41,34 @@ const CoverImgStyle = styled('img')({
 
 // ----------------------------------------------------------------------
 
-
-
 BirdCard.propTypes = {
-  cageId: PropTypes.string.isRequired,
+  cageId: PropTypes.string.isRequired
 };
 
 export default function BirdCard({ cageId }) {
-  const birdsInCage = birdsData.filter((bird) => bird.cageId === cageId);
-  return (
-    <Grid container spacing={3}>
-      {birdsInCage.map((bird, index) => {
-        let statusColor = 'info'; 
+  const [birdsData, setBirdData] = useState([]);
 
-        if (bird.status === 'Normal') {
-          statusColor = 'success'; 
-        } else if (bird.status === 'Sick') {
-          statusColor = 'error'; 
-        } else if (bird.status === 'Birth') {
-          statusColor = 'warning'; 
-        }
+  useEffect(async () => {
+    const data = await getBirdData();
+    setBirdData(data);
+  }, []);
+
+  const birdsInCage = birdsData?.filter((bird) => bird.cageId === cageId);
+
+  console.log('bird', birdsInCage);
+  return (
+    <>
+      <Grid container spacing={3}>
+        {birdsInCage.map((bird, index) => {
+          let statusColor = 'info';
+
+          if (bird.status === 'Normal') {
+            statusColor = 'success';
+          } else if (bird.status === 'Sick') {
+            statusColor = 'error';
+          } else if (bird.status === 'Birth') {
+            statusColor = 'warning';
+          }
 
         return (
         <Grid item xs={12} sm={6} md={4} key={bird.birdId}>
@@ -123,5 +128,11 @@ export default function BirdCard({ cageId }) {
         );
       })}
     </Grid>
+    {birdsInCage && birdsInCage?.length === 0 && (
+        <Typography variant="body2" align="center">
+          No bird for this cage
+        </Typography>
+      )}
+    </>
   );
 }

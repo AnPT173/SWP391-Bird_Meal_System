@@ -154,7 +154,7 @@ export const managerSidebar = [
         icon: ICONS.mail,
       },
       { title: 'Schedule', path: PATH_DASHBOARD.calendar, icon: ICONS.calendar },
-
+      { title: 'Task', path: PATH_DASHBOARD.task.root, icon: ICONS.cart },
       { title: 'Food', path: PATH_DASHBOARD.food.root, icon: ICONS.cart },
       {
         title: 'Report',

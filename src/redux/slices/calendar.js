@@ -2,6 +2,7 @@ import { map, filter } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
+import { getSchedule, saveSchedule } from '../../utils/mock-data/localStorageUtil';
 
 // ----------------------------------------------------------------------
 
@@ -12,7 +13,9 @@ const initialState = {
   isOpenModal: false,
   selectedEventId: null,
   selectedRange: null,
-  country: null
+  country: null,
+  isOpenLocationDialog: false,
+  isOpenTaskDialog: false,
 };
 
 const slice = createSlice({
@@ -68,7 +71,8 @@ const slice = createSlice({
     // SELECT EVENT
     selectEvent(state, action) {
       const eventId = action.payload;
-      state.isOpenModal = true;
+     
+      state.isOpenCalendarFormDialog = true;
       state.selectedEventId = eventId;
     },
 
@@ -84,11 +88,27 @@ const slice = createSlice({
       state.isOpenModal = true;
     },
 
+
+
+    openLocationDialog(state){
+      state.isOpenLocationDialog = true;
+    },
+
+    openTaskDialog(state){
+      state.isOpenTaskDialog = true;
+    },
+
     // CLOSE MODAL
     closeModal(state) {
       state.isOpenModal = false;
       state.selectedEventId = null;
       state.selectedRange = null;
+      state.isOpenLocationDialog = false;
+      
+    },
+
+    closeTaskDialog(state){
+      state.isOpenTaskDialog = false;
     }
   }
 });
@@ -97,8 +117,8 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { openModal, closeModal, selectEvent } = slice.actions;
-
+export const { openModal, closeModal, selectEvent, openLocationDialog, openTaskDialog, closeTaskDialog} = slice.actions;
+ 
 // ----------------------------------------------------------------------
 
 export function getEvents() {
@@ -151,7 +171,6 @@ export function deleteEvent(eventId) {
     dispatch(slice.actions.startLoading());
     try {
       await axios.post('/api/calendar/events/delete', { eventId });
-      dispatch(slice.actions.deleteEventSuccess({ eventId }));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

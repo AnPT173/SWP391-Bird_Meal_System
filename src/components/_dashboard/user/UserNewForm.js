@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack5';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
@@ -10,16 +10,41 @@ import { Box, Card, Grid, Stack, TextField, Typography, FormHelperText, FormCont
 import { birdCageLocation } from '../../../utils/mock-data/area';
 import { fData } from '../../../utils/formatNumber';
 import { species } from '../../../utils/mock-data/species';
-import { cagesData } from '../../../utils/mock-data/cage';
 import fakeRequest from '../../../utils/fakeRequest';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { UploadAvatar } from '../../upload';
+import { getBirdData, getCageData, saveBirdData } from '../../../utils/mock-data/localStorageUtil';
+
+// +// {
+// +//   "name": "test",
+// +//   "age": "2023-01-01",
+// +//   "birdTypeID": {
+// +//     "id": "1",
+// +//     "name": "1",
+// +//     "specieID": {
+// +//       "id": "1",
+// +//       "name": "1"
+// +//     }
+// +//   },
+// +//   "cageID": "1"
+// +// }
+
 
 
 export default function CreateNewBirdForm() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { cageId } = useParams();
+  const [ birdData, setBirdData ] = useState([]);
+  const [cagesData, setCagesData ] = useState([]);
+  
+  useEffect( async ()=>{
+    const data = await getBirdData();
+    setBirdData(data);
+    const data2 = await getCageData();
+    setCagesData(data2);
+  },[])
+
   const { area, location } = useParams();
   const NewBirdSchema = Yup.object().shape({
     birdName: Yup.string().required('Bird Name is required'),
@@ -55,11 +80,13 @@ export default function CreateNewBirdForm() {
     validationSchema: NewBirdSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
+        const birdId = `BIRD${birdData.length}`;
         await fakeRequest(500);
+        await saveBirdData([...birdData, {...values, birdId}])
         resetForm();
         setSubmitting(false);
         enqueueSnackbar('Create success', { variant: 'success' });
-        navigate(PATH_DASHBOARD.cages.birds);
+        navigate(`${PATH_DASHBOARD.cages.root}/${cageId}/birds`);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
