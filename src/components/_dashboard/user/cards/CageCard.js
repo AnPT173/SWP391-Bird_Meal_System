@@ -109,8 +109,5 @@ function CageCard({status}) {
   );
 }
 
-CageCard.propTypes = {
-  cageId: PropTypes.string.isRequired,
-};
 
 export default CageCard;

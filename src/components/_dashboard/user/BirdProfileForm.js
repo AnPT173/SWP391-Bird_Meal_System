@@ -57,7 +57,7 @@ export default function BirdProfileForm({ isEdit }) {
     featherColor: Yup.string().required('Feather Color is required'),
     appearance: Yup.string().required('Appearance is required'),
     qualities: Yup.string().required('Qualities are required'),
-    area: Yup.string().required('Area is required'),
+    
   });
 
   const currentBird = birdsData.find((bird) => bird.birdId === birdId);
@@ -78,7 +78,7 @@ export default function BirdProfileForm({ isEdit }) {
       featherColor: currentBird ? currentBird.featherColor : '',
       appearance: currentBird ? currentBird.appearance : '',
       qualities: currentBird ? currentBird.qualities : '',
-      area: currentBird ? currentBird.qualities : '',
+      
     },
     validationSchema: NewBirdSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
@@ -285,20 +285,6 @@ export default function BirdProfileForm({ isEdit }) {
                   >
                     <MenuItem value="Male">Male</MenuItem>
                     <MenuItem value="Female">Female</MenuItem>
-                  </TextField>
-                  <TextField
-                    select
-                    fullWidth
-                    label="Area"
-                    value={formik.values.area}
-                    {...getFieldProps('area')}
-                    error={Boolean(touched.area && errors.area)}
-                    helperText={touched.area && errors.area}
-                  >
-                    <MenuItem value="Normal">Normal</MenuItem>
-                    <MenuItem value="Birth">Birth</MenuItem>
-                    <MenuItem value="Sick">Sick</MenuItem>
-                    <MenuItem value="Exotic">Exotic</MenuItem>
                   </TextField>
                   <TextField
                     fullWidth

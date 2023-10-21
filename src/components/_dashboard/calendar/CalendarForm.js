@@ -20,6 +20,8 @@ import {
   FormControlLabel
 } from '@material-ui/core';
 import { LoadingButton, MobileDateTimePicker } from '@material-ui/lab';
+import { Typography } from '@mui/material';
+import { title } from '../../../utils/mock-data/text';
 // redux
 import useAuth from '../../../hooks/useAuth';
 import { useDispatch } from '../../../redux/store';
@@ -31,13 +33,9 @@ import ColorSinglePicker from '../../ColorSinglePicker';
 // ----------------------------------------------------------------------
 
 const COLOR_OPTIONS = [
-  '#00AB55', // theme.palette.primary.main,
-  '#1890FF', // theme.palette.info.main,
-  '#94D82D', // theme.palette.success.main,
-  '#FFC107', // theme.palette.warning.main,
-  '#FF4842', // theme.palette.error.main
-  '#04297A', // theme.palette.info.darker
-  '#7A0C2E' // theme.palette.error.darker
+  { color: '#94D82D', title: 'Feeded' },
+  { color: '#FFC107', title: 'Pending' },
+  { color: '#FF4842', title: 'Feeding Late' }
 ];
 
 const STAFFS = [
@@ -118,11 +116,12 @@ export default function CalendarForm({ event, range, onCancel }) {
     feedingRegimen: Yup.string(),
     end: Yup.date().when(
       'start',
-      (start, schema) => start && schema.min(start, 'End date must be later than start date')
+      (start, schema) => start && schema.min(start, 'End date must be later than the start date')
     ),
     start: Yup.date(),
     feedingTime: Yup.date()
   });
+
   const formik = useFormik({
     initialValues: getInitialValues(event, range),
     validationSchema: EventSchema,
@@ -162,23 +161,22 @@ export default function CalendarForm({ event, range, onCancel }) {
   });
 
   const { values, errors, touched, handleSubmit, isSubmitting, getFieldProps, setFieldValue } = formik;
-  console.log('values', values);
 
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3} sx={{ p: 3 }}>
           <TextField
-           select
-           fullWidth
-           label="Status"
-           value={values.status}
-           {...getFieldProps('status')}
-           error={Boolean(touched.status && errors.status)}
-           helperText={touched.status && errors.status}
-           SelectProps={{native: true}}
+            select
+            fullWidth
+            label="Status"
+            value={values.status}
+            {...getFieldProps('status')}
+            error={Boolean(touched.status && errors.status)}
+            helperText={touched.status && errors.status}
+            SelectProps={{ native: true }}
           >
-           {STATUS.map((s) => (
+            {STATUS.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.value}
               </option>
@@ -188,7 +186,7 @@ export default function CalendarForm({ event, range, onCancel }) {
             fullWidth
             label="Title"
             {...getFieldProps('title')}
-            disabled={!isManager || values?.status === 'completed'}
+            disabled={!isManager || values.status === 'completed'}
             error={Boolean(touched.title && errors.title)}
             helperText={touched.title && errors.title}
           />
@@ -205,11 +203,11 @@ export default function CalendarForm({ event, range, onCancel }) {
           <Stack direction="row" spacing={1.0}>
             <TextField
               select
-              {...getFieldProps('foodType')}
+              {...getFieldProps('foodtype')}
               value={values.foodtype}
               fullWidth
               label="Food Type"
-              disabled={!isManager || values?.status === 'completed'}
+              disabled={!isManager || values.status === 'completed'}
               error={Boolean(touched.foodtype && errors.foodtype)}
               helperText={touched.foodtype && errors.foodtype}
               SelectProps={{ native: true }}
@@ -223,11 +221,11 @@ export default function CalendarForm({ event, range, onCancel }) {
 
             <TextField
               select
-              {...getFieldProps('cageId')}
+              {...getFieldProps('cageID')}
               value={values.cageID}
               fullWidth
               label="Cage ID"
-              disabled={!isManager || values?.status === 'completed'}
+              disabled={!isManager || values.status === 'completed'}
               error={Boolean(touched.cageID && errors.cageID)}
               helperText={touched.cageID && errors.cageID}
               SelectProps={{ native: true }}
@@ -242,12 +240,12 @@ export default function CalendarForm({ event, range, onCancel }) {
             <TextField
               select
               {...getFieldProps('staffId')}
-              value={values.cageID}
+              value={values.staffId}
               fullWidth
               label="Staff ID"
-              disabled={!isManager || values?.status === 'completed'}
-              error={Boolean(touched.cageID && errors.cageID)}
-              helperText={touched.cageID && errors.cageID}
+              disabled={!isManager || values.status === 'completed'}
+              error={Boolean(touched.staffId && errors.staffId)}
+              helperText={touched.staffId && errors.staffId}
               SelectProps={{ native: true }}
             >
               {STAFFS.map((s) => (
@@ -261,7 +259,7 @@ export default function CalendarForm({ event, range, onCancel }) {
           <Stack direction="row" spacing={1.0}>
             <TextField
               select
-              {...getFieldProps('feedingRegimen')}
+              {...getFieldProps('feedingregimen')}
               value={values.feedingregimen}
               fullWidth
               label="Feeding Regimen"
@@ -304,31 +302,50 @@ export default function CalendarForm({ event, range, onCancel }) {
               renderInput={(params) => <TextField {...params} fullWidth />}
             />
           )}
-          <Stack direction="row" spacing={1.0}>
-            {isCreating && (
-              <MobileDateTimePicker
-                label="End date"
-                value={values.end}
-                inputFormat="dd/MM/yyyy hh:mm a"
-                onChange={(date) => setFieldValue('end', date)}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    fullWidth
-                    error={Boolean(touched.end && errors.end)}
-                    helperText={touched.end && errors.end}
-                    sx={{ mb: 3 }}
-                  />
-                )}
-              />
-            )}
-          </Stack>
 
-          {isCreating}<ColorSinglePicker {...getFieldProps('textColor')} colors={COLOR_OPTIONS} />
+          {isCreating && (
+            <MobileDateTimePicker
+              label="End date"
+              value={values.end}
+              inputFormat="dd/MM/yyyy hh:mm a"
+              onChange={(date) => setFieldValue('end', date)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  error={Boolean(touched.end && errors.end)}
+                  helperText={touched.end && errors.end}
+                  sx={{ mb: 3 }}
+                />
+              )}
+            />
+          )}
+
+          <Stack direction="column" spacing={1.0}>
+            {COLOR_OPTIONS.map((colorOption) => (
+              <Stack key={colorOption.color} direction="row" alignItems="center">
+                <div
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    backgroundColor: colorOption.color,
+                    marginRight: '8px',
+                    border: '1px solid #d4d4d4',
+                  }}
+                />
+                <Typography variant="body2" color="textSecondary">
+                  {colorOption.title}
+                </Typography>
+              </Stack>
+            ))}
+            <ColorSinglePicker
+              {...getFieldProps('textColor')}
+              colors={COLOR_OPTIONS.map((colorOption) => colorOption.color)}
+            />
+          </Stack>
         </Stack>
 
         <DialogActions>
-          can the staff/manger/addmin update task with Complete status?
           <Box sx={{ flexGrow: 1 }} />
           <Button type="button" variant="outlined" color="inherit" onClick={onCancel}>
             Cancel
