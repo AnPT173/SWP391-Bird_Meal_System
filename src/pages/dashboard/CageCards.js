@@ -17,28 +17,32 @@ import {
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Link as RouterLink } from 'react-router-dom';
-import { birdCageLocation } from '../../utils/mock-data/area';
 import Page from '../../components/Page';
 import CageCard from '../../components/_dashboard/user/cards/CageCard';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { getCageList } from '../../redux/slices/cage';
-import { saveSchedule } from '../../utils/mock-data/localStorageUtil';
-import { scheduleData } from '../../utils/mock-data/schedule';
+import { buildCurrentLocationCageList, getCageList } from '../../redux/slices/cage';
 import { PATH_DASHBOARD } from '../../routes/paths';
+import { createLocation, getLocationList } from '../../redux/slices/location';
+import { saveCurrentLocation } from '../../utils/mock-data/localStorageUtil';
+import { getBirdInCageList } from '../../redux/slices/bird';
 
 export default function CageCards() {
-  const [currentTab, setCurrentTab] = useState(birdCageLocation[0].locationName);
-  const [isCreateLocationDialogOpen, setCreateLocationDialogOpen] = useState(false);
-  const [newLocationName, setNewLocationName] = useState('');
-  const [isDialogOpen, setDialogOpen] = useState(false);
-  const [isUpdateDialogOpen, setUpdateDialogOpen] = useState(false);
-  const [locationToUpdate, setLocationToUpdate] = useState(null);
-  const [updatedLocations, setUpdatedLocations] = useState(birdCageLocation);
   const dispatch = useDispatch();
   const { cageList } = useSelector((state) => state.cage);
+  const { birdInCage } = useSelector((state) => state.bird);
+  const { locationList } = useSelector(state => state.location);
+  const [currentTab, setCurrentTab] = useState("L01");
+
+  const [isCreateLocationDialogOpen, setCreateLocationDialogOpen] = useState(false);
+  const [newLocationName, setNewLocationName] = useState('');
+  const [isUpdateDialogOpen, setUpdateDialogOpen] = useState(false);
+  const [locationToUpdate, setLocationToUpdate] = useState(null);
+
 
   const handleChangeTab = (event, newValue) => {
     setCurrentTab(newValue);
+    const currentLocation = locationList.find(item => item.name === newValue);
+    saveCurrentLocation(currentLocation)
   };
 
   const handleOpenCreateLocationDialog = () => {
@@ -55,35 +59,30 @@ export default function CageCards() {
     }
 
     const newLocation = {
-      id: birdCageLocation.length + 1,
-      locationName: newLocationName,
+      name: newLocationName,
     };
 
-    setUpdatedLocations((prevLocations) => [...prevLocations, newLocation]);
+    dispatch(createLocation(newLocation));
+    // setUpdatedLocations((prevLocations) => [...prevLocations, newLocation]);
     setNewLocationName('');
     handleCloseCreateLocationDialog();
   };
 
+
   const handleDeleteLocation = (locationId) => {
     const updatedLocations = updatedLocations.filter((location) => location.id !== locationId);
-    setUpdatedLocations(updatedLocations);
+    // call DELETE api
+
+    // setUpdatedLocations(updatedLocations);
 
     // Automatically switch to the first location if the current one is deleted
-    if (currentTab === updatedLocations.find((location) => location.id === locationId).locationName) {
-      setCurrentTab(updatedLocations[0].locationName);
+    if (currentTab === updatedLocations.find((location) => location.id === locationId).name) {
+      setCurrentTab(updatedLocations[0].name);
     }
   };
 
-  const handleOpenDialog = () => {
-    setDialogOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
-  };
-
   const handleUpdateLocation = (locationId) => {
-    const location = updatedLocations.find((loc) => loc.id === locationId);
+    const location = locationList.find((loc) => loc.id === locationId);
 
     if (!location) {
       return;
@@ -101,38 +100,29 @@ export default function CageCards() {
     if (locationToUpdate) {
       setLocationToUpdate({
         ...locationToUpdate,
-        locationName: event.target.value,
+        name: event.target.value,
       });
     }
   };
 
   const handleUpdateLocationConfirm = () => {
-    if (locationToUpdate) {
-      const updatedLocations = birdCageLocation.map((location) =>
-        location.id === locationToUpdate.id ? locationToUpdate : location
-      );
-      setUpdatedLocations(updatedLocations);
-      setUpdateDialogOpen(false);
-    }
+    // if (locationToUpdate) {
+    //   const updatedLocations = locationList.map((location) =>
+    //     location.id === locationToUpdate.id ? locationToUpdate : location
+    //   );
+    //   // setUpdatedLocations(updatedLocations);
+    //   setUpdateDialogOpen(false);
+    // }
   };
   useEffect(() => {
+    saveCurrentLocation({
+      id: 1,
+      name: "L01"
+    })
     dispatch(getCageList());
+    dispatch(getLocationList());
+    dispatch(getBirdInCageList());
   }, []);
-
-  const LOCATION_TABS = [
-    {
-      value: 'Normal',
-      component: <CageCard status="Normal" cagesData={cageList} />
-    },
-    {
-      value: 'Sick',
-      component: <CageCard status="Sick" cagesData={cageList} />
-    },
-    {
-      value: 'Birth',
-      component: <CageCard status="Birth" cagesData={cageList} />
-    }
-  ];
 
   return (
     <Page title="Cages">
@@ -181,20 +171,21 @@ export default function CageCards() {
 
         <Stack spacing={5}>
           <Tabs value={currentTab} scrollButtons="auto" variant="scrollable" onChange={handleChangeTab}>
-            {updatedLocations.map((location) => (
+            {locationList.map((location) => (
               <Tab
                 disableRipple
                 key={location.id}
-                label={location.locationName}
-                value={location.locationName}
+                label={location.name}
+                value={location.name}
               />
             ))}
           </Tabs>
-          {updatedLocations.map((location) => {
-            const isMatched = location.locationName === currentTab;
+          {locationList.map((location) => {
+            const isMatched = location.name === currentTab;
+            const cages = buildCurrentLocationCageList(location.id, cageList, birdInCage);
             return isMatched && (
               <Box key={location.id}>
-                <CageCard status={location.locationName} />
+                <CageCard cageList={cages}/>
                 <IconButton
                   onClick={() => handleUpdateLocation(location.id)}
                   sx={{ color: 'primary.main' }}
@@ -238,7 +229,7 @@ export default function CageCards() {
               fullWidth
               label="New Location Name"
               variant="outlined"
-              value={locationToUpdate ? locationToUpdate.locationName : ''}
+              value={locationToUpdate ? locationToUpdate.name : ''}
               onChange={handleLocationNameChange}
             />
           </DialogContent>

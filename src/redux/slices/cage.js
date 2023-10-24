@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
+import { getNumberOfBirdInCage } from './bird';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +28,12 @@ const slice = createSlice({
     getCageListSuccess(state, action) {
       state.isLoading = false;
       state.cageList = action.payload;
+    },
+
+    afterCreateCageSuccess(state, action) {
+      state.isLoading = false;
+      const cages = state.cageList;
+      state.cageList = [...cages, action.payload];
     }
   }
 });
@@ -40,10 +47,12 @@ export default slice.reducer;
 // ----------------------------------------------------------------------
 
 export function createCage(payload) {
+  console.log('payload', payload)
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post('/manager/cage/create');
+      const response = await axios.post('/manager/cage/create', payload);
+      dispatch(slice.actions.afterCreateCageSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -53,15 +62,22 @@ export function createCage(payload) {
 export function getCageList() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
-    console.log('get cage');
     try {
       const response = await axios.get('/manager/cage/');
-      console.log('res',response)
-      // dispatch set bird to redux
       dispatch(slice.actions.getCageListSuccess(response.data));
     } catch (error) {
-      console.log('error',error);
+      console.log('error', error);
       dispatch(slice.actions.hasError(error));
     }
   };
 }
+
+export function buildCurrentLocationCageList(locationId, cageList, birdInCageList){
+  const cageInLocation = cageList.filter(item =>item?.location?.id === locationId);
+  return cageInLocation.map((item)=>{
+    const numberOfBirdInCage = getNumberOfBirdInCage(item.id, birdInCageList);
+    return { ...item, numberOfBirdInCage};
+  })
+}
+
+

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack5';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
 // material
 import {
   Box,
@@ -24,30 +25,26 @@ import fakeRequest from '../../../utils/fakeRequest';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 
 import { UploadAvatar } from '../../upload';
-import { getCageData, saveCageData } from '../../../utils/mock-data/localStorageUtil';
+import { getCageData, getCurrentLocation, saveCageData } from '../../../utils/mock-data/localStorageUtil';
+import { createCage } from '../../../redux/slices/cage';
 
 export default function CreateNewCageForm() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const [ currentCageData, setCurrentCageData ]= useState([]);
-
-  useEffect(async ()=>{
-    const data = await getCageData();
-    setCurrentCageData(data);
-  },[])
+  
 
   const NewCageSchema = Yup.object().shape({
-    cageID: Yup.string().required('Cage ID is required'),
     species: Yup.string().required('Species is required'),
     cageType: Yup.string().required('Cage Type is required'),
-    status: Yup.string().required('Status is required'),
   });
 
   const createNewCage = async (values) => {
     try {
 
-      // await fakeRequest(500);
-      await saveCageData([...currentCageData, values]);
+      const location = await getCurrentLocation();
+      // POST API
+      dispatch(createCage({...values, location}))
 
       enqueueSnackbar('Create success', { variant: 'success' });
       navigate(PATH_DASHBOARD.cages.cards);
@@ -58,11 +55,11 @@ export default function CreateNewCageForm() {
 
   const formik = useFormik({
     initialValues: {
-      cageID: '',
       species: '',
       cageType: '',
-      status: '',
       type: 'Normal',
+      max:10,
+      quantity:10,
     },
     validationSchema: NewCageSchema,
     onSubmit: (values, { setSubmitting }) => {
@@ -82,13 +79,6 @@ export default function CreateNewCageForm() {
               <Stack spacing={3}>
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                   <TextField
-                    fullWidth
-                    label="Cage ID"
-                    {...getFieldProps('cageID')}
-                    error={Boolean(touched.cageID && errors.cageID)}
-                    helperText={touched.cageID && errors.cageID}
-                  />
-                  <TextField
                     select
                     fullWidth
                     label="Species"
@@ -105,8 +95,6 @@ export default function CreateNewCageForm() {
                       </MenuItem>
                     ))}
                   </TextField>
-                </Stack>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                   <TextField
                     select
                     fullWidth
@@ -123,22 +111,6 @@ export default function CreateNewCageForm() {
                         {type}
                       </MenuItem>
                     ))}
-                  </TextField>
-                  <TextField
-                    select
-                    fullWidth
-                    label="Status"
-                    {...getFieldProps('status')}
-                    error={Boolean(touched.status && errors.status)}
-                    helperText={touched.status && errors.status}
-                  >
-                    <MenuItem value="" disabled>
-                      Select Area
-                    </MenuItem>
-                    <MenuItem value="Normal">Normal</MenuItem>
-                    <MenuItem value="Sick">Sick</MenuItem>
-                    <MenuItem value="Birth">Birth</MenuItem>
-                    <MenuItem value="Exotic">Exotic</MenuItem>
                   </TextField>
                 </Stack>
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>

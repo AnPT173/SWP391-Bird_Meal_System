@@ -1,9 +1,6 @@
-import React, { useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
-import { Card, Grid, Typography, Divider, Link, styled } from '@material-ui/core';
-import Label from '../../../Label';
+import { Card, Divider, Grid, Link, Typography, styled } from '@material-ui/core';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-import { getCageData } from '../../../../utils/mock-data/localStorageUtil';
+import Label from '../../../Label';
 
 
 const CardMediaStyle = styled('div')(({ theme }) => ({
@@ -31,25 +28,12 @@ const CoverImgStyle = styled('img')({
   position: 'absolute',
 });
 
-function CageCard({status}) {
-
-  const [cagesData, setCagesData] = useState([]);
-
-  useEffect(async ()=>{
-
-    // saveCageData(cagesData);
-    const data = await getCageData();
-    setCagesData(data);
-    
-  },[])
-  const filterdData = cagesData?.filter(item => item.type === status)
-
-  console.log('filterd data', filterdData);
+function CageCard({cageList}) {
 
   return (
     <>
     <Grid container spacing={3}>
-      {filterdData.map((cage, index) => {
+      {cageList.map((cage, index) => {
         let statusColor = 'info'; 
 
         if (cage.status === 'Feeded') {
@@ -69,9 +53,9 @@ function CageCard({status}) {
                   src={`/static/mock-images/cages/cage_${index + 1}.jpg`}
                 />
               </CardMediaStyle>
-              <Link href={`${PATH_DASHBOARD.cages.root}/${cage.cageID}/birds`}>
+              <Link href={`${PATH_DASHBOARD.cages.root}/${cage.id}/birds`}>
                 <Typography variant="subtitle1" align="center" sx={{ mt: 2, fontWeight: 'bold' }}>
-                  Cage ID: {cage.cageID}
+                  Cage ID: CA{cage.id}
                 </Typography>
               </Link>
               <Typography variant="body2" align="center" sx={{ color: 'text.secondary', marginTop: 1 }}>
@@ -84,7 +68,7 @@ function CageCard({status}) {
                     Birds
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {cage.numberOfBirds}
+                    {cage.numberOfBirdInCage}
                   </Typography>
                 </Grid>
                 <Grid item xs={4}>
@@ -120,7 +104,7 @@ function CageCard({status}) {
         );
       })}
     </Grid>
-    {!filterdData && <Typography variant="body2" align="center">
+    {!cageList && <Typography variant="body2" align="center">
         No cage for this location
       </Typography>}
     </>
