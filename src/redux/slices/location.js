@@ -27,15 +27,20 @@ const slice = createSlice({
     getLocationListSuccess(state, action) {
       state.isLoading = false;
       state.locationList = action.payload;
+    },
+
+    afterCreateLocationSuccess(state, action) {
+      const newLocationList = [...state.locationList, action.payload];
+      state.isLoading = false;
+      state.locationList = newLocationList;
     }
-  }
-});
+}});
 
 // Reducer
 export default slice.reducer;
 
 // Actions
-// export const { onToggleFollow, deleteUser } = slice.actions;
+// export const { } = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +49,7 @@ export function createLocation(payload) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.post('/location/create', payload);
+      dispatch(slice.actions.afterCreateLocationSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

@@ -21,6 +21,10 @@ export async function saveSchedule(data) {
   localStorage.setItem('schedule', JSON.stringify(data));
 }
 
+export async function saveCurrentLocation(data) {
+  localStorage.setItem('currentLocation', JSON.stringify(data));
+}
+
 
 // --------- GET ---------------------
 export async function getLocationData() {
@@ -56,3 +60,7 @@ export async function getScheduleById(id) {
   return data.find(item => item.id === id);
 }
 
+export async function getCurrentLocation(){
+  const data = JSON.parse(localStorage.getItem('currentLocation'));
+  return data;
+}
