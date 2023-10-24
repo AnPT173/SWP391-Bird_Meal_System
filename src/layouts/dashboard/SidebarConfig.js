@@ -165,11 +165,6 @@ export const managerSidebar = [
         title: 'Storage',
         path: PATH_DASHBOARD.user.list,
         icons: ICONS.blog
-      },
-      {
-        title: 'Task',
-        path: PATH_DASHBOARD.chat.root,
-        icons: ICONS.mail
       }
     ]
   }
