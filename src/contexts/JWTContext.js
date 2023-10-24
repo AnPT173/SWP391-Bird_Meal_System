@@ -2,9 +2,12 @@ import { createContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 // utils
 import axios from '../utils/axios';
-import { isValidToken, setSession } from '../utils/jwt';
+import { isValidToken, setSession, sign } from '../utils/jwt';
 
 // ----------------------------------------------------------------------
+
+const JWT_SECRET = 'birdfarm-secret-key';
+const JWT_EXPIRES_IN = '5 days';
 
 const initialState = {
   isAuthenticated: false,
@@ -72,9 +75,25 @@ function AuthProvider({ children }) {
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
 
-          const response = await axios.get('/api/account/my-account');
-          const { user } = response.data;
+          // const response = await axios.get('/api/account/my-account');
+          // const { user } = response.data;
 
+          const user = {
+            id: 'MANAGER001',
+            displayName: 'Jaydon Frankie',
+            email: 'manager',
+            password: 'demo1234',
+            photoURL: '/static/mock-images/avatars/avatar_default.jpg',
+            phoneNumber: '+40 777666555',
+            country: 'United States',
+            address: '90210 Broadway Blvd',
+            state: 'California',
+            city: 'San Francisco',
+            zipCode: '94116',
+            about: 'Praesent turpis. Phasellus viverra nulla ut metus varius laoreet. Phasellus tempus.',
+            role: 'manager',
+            isPublic: true
+          }
           dispatch({
             type: 'INITIALIZE',
             payload: {
@@ -113,8 +132,6 @@ function AuthProvider({ children }) {
     // });
     // const { accessToken, user } = response.data;
     // console.log(accessToken, user);
-    const accessToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJNQU5BR0VSMDAxIiwiaWF0IjoxNjk3NzI5NzU5LCJleHAiOjE2OTgxNjE3NTl9.tWjeFOsAnS3Y__RdXFb8zyN5KwRdB4DT6uvgQ4mpl5o';
     const manager = {
       id: 'MANAGER001',
       displayName: 'Jaydon Frankie',
@@ -151,6 +168,10 @@ function AuthProvider({ children }) {
 
     const user = email === 'manager' ? manager : staff;
 
+    const accessToken = sign({ userId: user.id }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRES_IN
+    });
+
     setSession(accessToken);
     dispatch({
       type: 'LOGIN',
@@ -183,9 +204,9 @@ function AuthProvider({ children }) {
     dispatch({ type: 'LOGOUT' });
   };
 
-  const resetPassword = () => {};
+  const resetPassword = () => { };
 
-  const updateProfile = () => {};
+  const updateProfile = () => { };
 
   return (
     <AuthContext.Provider
