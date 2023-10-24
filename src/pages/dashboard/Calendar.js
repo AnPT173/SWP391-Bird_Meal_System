@@ -169,8 +169,7 @@ export default function Calendar() {
   const cageIdTitle = cageId ? `    ||    CageId: ${cageId}` : '';
 
   useEffect(async () => {
-    const data = await getSchedule();
-    setScheduleData(data);
+    dispatch(getEvents());
   }, []);
 
   useEffect(() => {

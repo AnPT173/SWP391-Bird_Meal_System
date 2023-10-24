@@ -125,8 +125,8 @@ export function getEvents() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/calendar/events');
-      dispatch(slice.actions.getEventsSuccess(response.data.events));
+      const response = await axios.get('/manager/schedule/getall');
+      dispatch(slice.actions.getEventsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -136,11 +136,13 @@ export function getEvents() {
 // ----------------------------------------------------------------------
 
 export function createEvent(newEvent) {
+  console.log("new event", newEvent);
+  const requestBody = buildCreateTaskRequestBody(newEvent)
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post('/api/calendar/events/new', newEvent);
-      dispatch(slice.actions.createEventSuccess(response.data.event));
+      const response = await axios.post('/manager/schedule/create', requestBody);
+      dispatch(slice.actions.createEventSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -188,4 +190,26 @@ export function selectRange(start, end) {
       })
     );
   };
+}
+
+function buildCreateTaskRequestBody(payload){
+  return {
+    color: payload.textColor,
+    title: payload.title,
+    description: payload.description,
+    birdDTOList: [
+      {
+        birdID: 1,
+        foodTypeID: payload.foodType,
+        schedules : [formatDate(payload.start)],
+        quantity: 10,
+      }
+    ]
+  }
+}
+
+function formatDate(input){
+  const date = new Date(input);
+  const isoDate = date.toISOString().substring(0, 16).replace('T', ' ');
+  return isoDate;
 }

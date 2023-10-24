@@ -1,16 +1,13 @@
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 // material
-import { useParams } from 'react-router';
-import { alpha, styled } from '@material-ui/core/styles';
-import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton, Link } from '@material-ui/core';
+import { Card, Divider, Grid, Link, Typography } from '@material-ui/core';
+import { styled } from '@material-ui/core/styles';
 import Label from '../../../Label';
 // utils
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-import { fShortenNumber } from '../../../../utils/formatNumber';
+import { buildCurrentBirdInfo, getBirdAge } from '../../../../redux/slices/bird';
 //
-import SvgIconStyle from '../../../SvgIconStyle';
-import { getBirdData, saveBirdData, saveCageData } from '../../../../utils/mock-data/localStorageUtil';
 
 // ----------------------------------------------------------------------
 
@@ -42,93 +39,98 @@ const CoverImgStyle = styled('img')({
 // ----------------------------------------------------------------------
 
 BirdCard.propTypes = {
-  cageId: PropTypes.string.isRequired
+  cageId: PropTypes.number,
+  birdList: PropTypes.array,
+  birdInCage: PropTypes.array
 };
 
-export default function BirdCard({ cageId }) {
-  const [birdsData, setBirdData] = useState([]);
+export default function BirdCard({ cageId, birdList, birdInCage }) {
 
-  useEffect(async () => {
-    const data = await getBirdData();
-    setBirdData(data);
-  }, []);
+  console.log('bird in cage', birdInCage);
 
-  const birdsInCage = birdsData?.filter((bird) => bird.cageId === cageId);
+  let filteredBirdInCage = [];
+  filteredBirdInCage = birdInCage?.filter(item => item?.cageID?.id === +cageId)
 
-  console.log('bird', birdsInCage);
+  console.log('bird in cage', filteredBirdInCage);
+
   return (
     <>
       <Grid container spacing={3}>
-        {birdsInCage.map((bird, index) => {
+        {filteredBirdInCage && filteredBirdInCage?.map((bird, index) => {
+          const currentBird = buildCurrentBirdInfo(cageId, bird?.birdID?.id, birdList, filteredBirdInCage);
+          console.log('current bird', currentBird);
           let statusColor = 'info';
+          const birdImageUrl = currentBird?.image ?? `/static/mock-images/birds/bird_${index + 1}.jpg`;
 
-          if (bird.status === 'Normal') {
+          if (bird?.status === 'Normal') {
             statusColor = 'success';
-          } else if (bird.status === 'Sick') {
+          } else if (bird?.status === 'Sick') {
             statusColor = 'error';
-          } else if (bird.status === 'Birth') {
+          } else if (bird?.status === 'Birth') {
             statusColor = 'warning';
+          } else {
+            statusColor = 'success';
           }
 
-        return (
-        <Grid item xs={12} sm={6} md={4} key={bird.birdId}>
-          <Card key={bird.birdId}>
-            <CardMediaStyle>
-              <CoverImgStyle
-                alt="cover"
-                src={`/static/mock-images/birds/bird_${index + 1}.jpg`}
-              />
-            </CardMediaStyle>
-            <Link href={`${PATH_DASHBOARD.cages.root}/${bird.cageId}/birds/${bird.birdId}/profile`}>
-              <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
-                {bird.birdName}
-              </Typography>
-            </Link>
-            <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
-              {bird.species}
-            </Typography>
-            <Divider />
-            <Grid container sx={{ py: 3, textAlign: 'center' }}>
-              <Grid item xs={4}>
-                <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
-                  Age
+          return (
+            <Grid item xs={12} sm={6} md={4} key={bird.id}>
+              <Card key={currentBird.id}>
+                <CardMediaStyle>
+                  <CoverImgStyle
+                    alt="cover"
+                    src={birdImageUrl}
+                  />
+                </CardMediaStyle>
+                <Link href={`${PATH_DASHBOARD.cages.root}/${currentBird?.cageID?.id}/birds/${currentBird.id}/profile`}>
+                  <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
+                    {currentBird.name}
+                  </Typography>
+                </Link>
+                <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
+                  {currentBird?.birdTypeID?.specieID?.name}
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {bird.birdAge}
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
-                  Status
-                </Typography>
-                <Label
-                  color={statusColor} 
-                  sx={{
-                    textTransform: 'uppercase',
-                    position: 'absolute',
-                    bottom: 24, 
-                    left: '50%', 
-                    transform: 'translateX(-50%)', 
-                  }}
-                >
-                  {bird.status}
-                </Label>
+                <Divider />
+                <Grid container sx={{ py: 3, textAlign: 'center' }}>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
+                      Age
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                      {getBirdAge(currentBird.age)}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
+                      Status
+                    </Typography>
+                    <Label
+                      color={statusColor}
+                      sx={{
+                        textTransform: 'uppercase',
+                        position: 'absolute',
+                        bottom: 24,
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                      }}
+                    >
+                      {currentBird?.status}
+                    </Label>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
+                      Hatch Date
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                      {currentBird?.hatchingDate}
+                    </Typography>
+                  </Grid>
                 </Grid>
-              <Grid item xs={4}>
-                <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
-                  Hatch Date
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {bird.hatchingDate} 
-                </Typography>
-              </Grid>               
-              </Grid>
-            </Card>
-          </Grid>
-        );
-      })}
-    </Grid>
-    {birdsInCage && birdsInCage?.length === 0 && (
+              </Card>
+            </Grid>
+          );
+        })}
+      </Grid>
+      {birdList && birdList?.length === 0 && (
         <Typography variant="body2" align="center">
           No bird for this cage
         </Typography>

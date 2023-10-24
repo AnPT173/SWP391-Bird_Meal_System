@@ -55,10 +55,10 @@ const CAGES = [
 ];
 const FOODS = [
   { id: '-1', value: '' },
-  { id: 'FO001', value: 'Food 1' },
-  { id: 'FO002', value: 'Food 2' },
-  { id: 'FO003', value: 'Food 3' },
-  { id: 'FO004', value: 'Food 4' }
+  { id: '1', value: 'Food 1' },
+  { id: '2', value: 'Food 2' },
+  { id: '3', value: 'Food 3' },
+  { id: '4', value: 'Food 4' }
 ];
 
 const FEEDING_NOTE = [
@@ -104,10 +104,11 @@ CalendarForm.propTypes = {
 };
 
 export default function CalendarForm({ event, isCreating, range, onCancel }) {
-  console.log('event', getInitialValues(event, range),);
+  
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const [currentEvent, setCurrentEvent] = useState([]);
+  const dispatch = useDispatch();
   useEffect(async () => {
     const data = await getSchedule();
     setCurrentEvent(data);
@@ -149,9 +150,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
           feedingTime: values.feedingTime ?? ''
         };
         if (isCreating) {
-          const id = currentEvent.length;
-          const locationId = 1;
-          await saveSchedule([...currentEvent, { ...values, id, locationId }]);
+          dispatch(createEvent(values));
           enqueueSnackbar('Create event success', { variant: 'success' });
         } else {
           await saveSchedule([...currentEvent, values]);
@@ -188,7 +187,7 @@ console.log("vvv",values)
                 {s.value}
               </option>
             ))}
-          </TextField>}
+          </TextField>
           <TextField
             fullWidth
             label="Title"
@@ -285,7 +284,7 @@ console.log("vvv",values)
               <MobileDateTimePicker
                 label="Feeding time"
                 value={values.end}
-                inputFormat="dd/MM/yyyy hh:mm a"
+                inputFormat="yyyy-mm-dd hh:mm"
                 onChange={(date) => setFieldValue('feedingTime', date)}
                 renderInput={(params) => (
                   <TextField

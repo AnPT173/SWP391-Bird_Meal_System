@@ -83,7 +83,7 @@ export default function BirdProfileForm({ isEdit, currentBird }) {
     validationSchema: NewBirdSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        await fakeRequest(500);
+        // calling api
         resetForm();
         setSubmitting(false);
         enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
