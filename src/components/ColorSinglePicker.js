@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 // material
 import { Box, Radio, RadioGroup } from '@material-ui/core';
+import { FormControlLabel } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -42,49 +43,52 @@ ColorSinglePicker.propTypes = {
 export default function ColorSinglePicker({ colors, ...other }) {
   return (
     <RadioGroup row {...other}>
-      {colors.map((color) => {
+      {colors.map(({ color, title }) => {
         const isWhite = color === '#FFFFFF' || color === 'white';
 
         return (
-          <Radio
-            key={color}
-            value={color}
-            color="default"
-            icon={
-              <IconColor
+          <FormControlLabel value={color} label={title}
+            control={
+              <Radio
+                key={color}
+                value={color}
+                color="default"
+                icon={
+                  <IconColor
+                    sx={{
+                      ...(isWhite && {
+                        border: (theme) => `solid 1px ${theme.palette.divider}`
+                      })
+                    }}
+                  />
+                }
+                checkedIcon={
+                  <IconColor
+                    sx={{
+                      transform: 'scale(1.4)',
+                      '&:before': {
+                        opacity: 0.48,
+                        width: '100%',
+                        content: "''",
+                        height: '100%',
+                        borderRadius: '50%',
+                        position: 'absolute',
+                        boxShadow: '4px 4px 8px 0 currentColor'
+                      },
+                      '& svg': { width: 12, height: 12, color: 'common.white' },
+                      ...(isWhite && {
+                        border: (theme) => `solid 1px ${theme.palette.divider}`,
+                        boxShadow: (theme) => `4px 4px 8px 0 ${theme.palette.grey[500_24]}`,
+                        '& svg': { width: 12, height: 12, color: 'common.black' }
+                      })
+                    }}
+                  />
+                }
                 sx={{
-                  ...(isWhite && {
-                    border: (theme) => `solid 1px ${theme.palette.divider}`
-                  })
+                  color,
+                  '&:hover': { opacity: 0.72 }
                 }}
-              />
-            }
-            checkedIcon={
-              <IconColor
-                sx={{
-                  transform: 'scale(1.4)',
-                  '&:before': {
-                    opacity: 0.48,
-                    width: '100%',
-                    content: "''",
-                    height: '100%',
-                    borderRadius: '50%',
-                    position: 'absolute',
-                    boxShadow: '4px 4px 8px 0 currentColor'
-                  },
-                  '& svg': { width: 12, height: 12, color: 'common.white' },
-                  ...(isWhite && {
-                    border: (theme) => `solid 1px ${theme.palette.divider}`,
-                    boxShadow: (theme) => `4px 4px 8px 0 ${theme.palette.grey[500_24]}`,
-                    '& svg': { width: 12, height: 12, color: 'common.black' }
-                  })
-                }}
-              />
-            }
-            sx={{
-              color,
-              '&:hover': { opacity: 0.72 }
-            }}
+              />}
           />
         );
       })}
