@@ -104,7 +104,7 @@ CalendarForm.propTypes = {
 };
 
 export default function CalendarForm({ event, isCreating, range, onCancel }) {
-  
+
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const [currentEvent, setCurrentEvent] = useState([]);
@@ -167,27 +167,11 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
 
   const { values, errors, touched, handleSubmit, isSubmitting, getFieldProps, setFieldValue } = formik;
 
-console.log("vvv",values)
+  console.log("vvv", values)
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3} sx={{ p: 3 }}>
-          <TextField
-            select
-            fullWidth
-            label="Status"
-            value={values.status}
-            {...getFieldProps('status')}
-            error={Boolean(touched.status && errors.status)}
-            helperText={touched.status && errors.status}
-            SelectProps={{ native: true }}
-          >
-            {STATUS.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.value}
-              </option>
-            ))}
-          </TextField>
           <TextField
             fullWidth
             label="Title"
@@ -310,28 +294,11 @@ console.log("vvv",values)
           )}
 
 
-          <Stack direction="column" spacing={1.0}>
-            {COLOR_OPTIONS.map((colorOption) => (
-              <Stack key={colorOption.color} direction="row" alignItems="center">
-                <div
-                  style={{
-                    width: '24px',
-                    height: '24px',
-                    backgroundColor: colorOption.color,
-                    marginRight: '8px',
-                    border: '1px solid #d4d4d4',
-                  }}
-                />
-                <Typography variant="body2" color="textSecondary">
-                  {colorOption.title}
-                </Typography>
-              </Stack>
-            ))}
-            <ColorSinglePicker
-              {...getFieldProps('textColor')}
-              colors={COLOR_OPTIONS.map((colorOption) => colorOption.color)}
-            />
-          </Stack>
+          <ColorSinglePicker
+            {...getFieldProps('textColor')}
+            colors={COLOR_OPTIONS}
+          />
+
         </Stack>
 
         <DialogActions>

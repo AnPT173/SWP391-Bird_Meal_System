@@ -61,8 +61,6 @@ export function getLocationList() {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get('/location/');
-      console.log('res',response)
-      // dispatch set bird to redux
       dispatch(slice.actions.getLocationListSuccess(response.data));
     } catch (error) {
       console.log('error',error);

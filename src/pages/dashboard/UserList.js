@@ -154,7 +154,7 @@ export default function FoodList() {
     }
   };
   return (
-    <Page title="Food List | Minimal-UI">
+    <Page title="Food List">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Food List"

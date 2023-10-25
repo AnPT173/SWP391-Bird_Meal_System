@@ -7,6 +7,7 @@ import Label from '../../../Label';
 // utils
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { buildCurrentBirdInfo, getBirdAge } from '../../../../redux/slices/bird';
+import SearchNotFound from '../../../SearchNotFound';
 //
 
 // ----------------------------------------------------------------------
@@ -131,9 +132,7 @@ export default function BirdCard({ cageId, birdList, birdInCage }) {
         })}
       </Grid>
       {birdList && birdList?.length === 0 && (
-        <Typography variant="body2" align="center">
-          No bird for this cage
-        </Typography>
+        <SearchNotFound searchQuery='No bird for this cage'/>
       )}
     </>
   );

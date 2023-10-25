@@ -34,7 +34,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function DialogComponent() {
   return (
-    <RootStyle title="Components: Dialog | Minimal-UI">
+    <RootStyle title="Components: Dialog">
       <Box
         sx={{
           pt: 6,

@@ -77,7 +77,7 @@ export default function Upload() {
   };
 
   return (
-    <RootStyle title="Components: Upload | Minimal-UI">
+    <RootStyle title="Components: Upload">
       <Box
         sx={{
           pt: 6,

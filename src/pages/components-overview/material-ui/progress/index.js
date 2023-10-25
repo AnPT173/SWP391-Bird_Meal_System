@@ -68,7 +68,7 @@ export default function ProgressComponent() {
   }, []);
 
   return (
-    <RootStyle title="Components: Progress | Minimal-UI">
+    <RootStyle title="Components: Progress">
       <Box
         sx={{
           pt: 6,

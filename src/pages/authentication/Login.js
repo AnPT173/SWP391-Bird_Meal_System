@@ -56,7 +56,7 @@ export default function Login() {
   };
 
   return (
-    <RootStyle title="Login | Minimal-UI">
+    <RootStyle title="Login">
       <AuthLayout>
         Don’t have an account? &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to={PATH_AUTH.register}>
@@ -78,22 +78,14 @@ export default function Login() {
           <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
             <Box sx={{ flexGrow: 1 }}>
               <Typography variant="h4" gutterBottom>
-                Sign in to Minimal
+                Sign in to your account
               </Typography>
               <Typography sx={{ color: 'text.secondary' }}>Enter your details below.</Typography>
             </Box>
 
-            <Tooltip title={capitalCase(method)}>
-              <Box component="img" src={`/static/auth/ic_${method}.png`} sx={{ width: 32, height: 32 }} />
-            </Tooltip>
           </Stack>
 
           {method === 'firebase' && <AuthFirebaseSocials />}
-
-          <Alert severity="info" sx={{ mb: 3 }}>
-            Use email : <strong>demo@minimals.cc</strong> / password :<strong>&nbsp;demo1234</strong>
-          </Alert>
-
           {method !== 'auth0' ? (
             <LoginForm />
           ) : (

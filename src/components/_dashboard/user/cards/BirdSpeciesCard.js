@@ -1,17 +1,12 @@
-import PropTypes from 'prop-types';
 // material
-import { useParams } from 'react-router';
-import { alpha, styled } from '@material-ui/core/styles';
-import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton, Link } from '@material-ui/core';
+import { Card, Divider, Grid, Link, Typography } from '@material-ui/core';
+import { styled } from '@material-ui/core/styles';
 import { species } from '../../../../utils/mock-data/species';
-import { birdsData } from '../../../../utils/mock-data/bird';
 
 
 // utils
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-import { fShortenNumber } from '../../../../utils/formatNumber';
 //
-import SvgIconStyle from '../../../SvgIconStyle';
 
 
 // ----------------------------------------------------------------------

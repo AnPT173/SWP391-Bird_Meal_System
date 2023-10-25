@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // material
+import { Box, TableCell, TableHead, TableRow, TableSortLabel } from '@material-ui/core';
 import { visuallyHidden } from '@material-ui/utils';
-import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
 
