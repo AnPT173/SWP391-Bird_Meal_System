@@ -4,7 +4,6 @@ export async function saveLocationData(data) {
 }
 
 export async function saveCageData(data) {
-  console.log('data', data);
   localStorage.setItem('cagesData', JSON.stringify(data));
 }
 
@@ -17,7 +16,6 @@ export async function saveFoodType(data) {
 }
 
 export async function saveSchedule(data) {
-  console.log('data', data);
   localStorage.setItem('schedule', JSON.stringify(data));
 }
 
@@ -34,13 +32,11 @@ export async function getLocationData() {
 
 export async function getCageData() {
   const data = JSON.parse(localStorage.getItem('cagesData'));
-  console.log('cage data', data);
   return data;
 }
 
 export async function getBirdData() {
   const data = JSON.parse(localStorage.getItem('birdData'));
-  console.log('bird data', data);
   return data;
 }
 
@@ -51,7 +47,6 @@ export async function getFoodType() {
 
 export async function getSchedule() {
   const data = JSON.parse(localStorage.getItem('schedule'));
-  console.log('data', data);
   return data;
 }
 

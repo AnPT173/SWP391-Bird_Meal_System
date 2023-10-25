@@ -66,6 +66,23 @@ mock.onGet('/api/user/manage-users').reply(() => {
   return [200, { users }];
 });
 
+export const tempUser = [...Array(24)].map((_, index) => ({
+  id: mockData.id(index),
+  avatarUrl: mockData.image.avatar(index),
+  name: mockData.name.fullName(index),
+  email: mockData.email(index),
+  phoneNumber: mockData.phoneNumber(index),
+  address: '908 Jack Locks',
+  country: mockData.address.country(index),
+  state: 'Virginia',
+  city: 'Rancho Cordova',
+  zipCode: '85807',
+  company: mockData.company(index),
+  isVerified: mockData.boolean(index),
+  status: sample(['active', 'banned']) || 'active',
+  role: mockData.role(index)
+}));
+
 mock.onGet('/api/bird/profile').reply(() => {
   const birdProfile = {
     birdId: mockData.bird,

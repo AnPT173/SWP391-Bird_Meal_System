@@ -38,14 +38,17 @@ import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { TaskListHead, UserListHead, UserListToolbar, UserMoreMenu } from '../../components/_dashboard/user/list';
+import { UserListHead, UserListToolbar, UserMoreMenu } from '../../components/_dashboard/user/list';
 import { DialogAnimate } from '../../components/animate';
 import Grid from '../../theme/overrides/Grid';
 import AssignTaskForm from '../../components/_dashboard/calendar/AssignTaskForm';
+import TaskListHead from '../../components/_dashboard/user/list/TaskListHead';
+import { tempUser } from '../../_apis_/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'locationID', label: 'Location Id', alignRight: false },
+  { id: 'id', label: 'Staff ID', alignRight: false },
   { id: 'name', label: 'Staff Name', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '', label: '', alignRight: false }
@@ -86,7 +89,7 @@ export default function TaskList() {
   const { themeStretch } = useSettings();
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { userList } = useSelector((state) => state.user);
+  const userList = tempUser;
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -153,20 +156,18 @@ export default function TaskList() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Task: List | Minimal-UI">
+    <Page title="Task: List">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Task"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Task', href: PATH_DASHBOARD.user.root },
+            { name: 'Task', href: PATH_DASHBOARD.task.root },
             { name: 'List' }
           ]}
         />
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
-
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
@@ -224,7 +225,7 @@ export default function TaskList() {
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
+                        <SearchNotFound searchQuery='No task available' />
                       </TableCell>
                     </TableRow>
                   </TableBody>
