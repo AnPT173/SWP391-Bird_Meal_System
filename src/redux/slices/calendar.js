@@ -1,8 +1,7 @@
-import { map, filter } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
+import { filter, map } from 'lodash';
 // utils
 import axios from '../../utils/axios';
-import { getSchedule, saveSchedule } from '../../utils/mock-data/localStorageUtil';
 
 // ----------------------------------------------------------------------
 
@@ -16,6 +15,7 @@ const initialState = {
   country: null,
   isOpenLocationDialog: false,
   isOpenTaskDialog: false,
+  isOpenCreateMultipleTaskDialog: false
 };
 
 const slice = createSlice({
@@ -71,7 +71,6 @@ const slice = createSlice({
     // SELECT EVENT
     selectEvent(state, action) {
       const eventId = action.payload;
-     
       state.isOpenCalendarFormDialog = true;
       state.selectedEventId = eventId;
     },
@@ -81,6 +80,7 @@ const slice = createSlice({
       const { start, end } = action.payload;
       state.isOpenModal = true;
       state.selectedRange = { start, end };
+      state.isOpenCalendarFormDialog = true;
     },
 
     // OPEN MODAL
@@ -88,14 +88,16 @@ const slice = createSlice({
       state.isOpenModal = true;
     },
 
-
-
-    openLocationDialog(state){
+    openLocationDialog(state) {
       state.isOpenLocationDialog = true;
     },
 
-    openTaskDialog(state){
+    openTaskDialog(state) {
       state.isOpenTaskDialog = true;
+    },
+
+    openCreateMultipleTaskDialog(state) {
+      state.isOpenCreateMultipleTaskDialog = !state.isOpenCreateMultipleTaskDialog;
     },
 
     // CLOSE MODAL
@@ -104,10 +106,10 @@ const slice = createSlice({
       state.selectedEventId = null;
       state.selectedRange = null;
       state.isOpenLocationDialog = false;
-      
+
     },
 
-    closeTaskDialog(state){
+    closeTaskDialog(state) {
       state.isOpenTaskDialog = false;
     }
   }
@@ -117,8 +119,8 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { openModal, closeModal, selectEvent, openLocationDialog, openTaskDialog, closeTaskDialog} = slice.actions;
- 
+export const { openModal, closeModal, selectEvent, openLocationDialog, openTaskDialog, closeTaskDialog, openCreateMultipleTaskDialog } = slice.actions;
+
 // ----------------------------------------------------------------------
 
 export function getEvents() {
@@ -192,7 +194,7 @@ export function selectRange(start, end) {
   };
 }
 
-function buildCreateTaskRequestBody(payload){
+function buildCreateTaskRequestBody(payload) {
   return {
     color: payload.textColor,
     title: payload.title,
@@ -201,14 +203,14 @@ function buildCreateTaskRequestBody(payload){
       {
         birdID: 1,
         foodTypeID: payload.foodType,
-        schedules : [formatDate(payload.start)],
+        schedules: [formatDate(payload.start)],
         quantity: 10,
       }
     ]
   }
 }
 
-function formatDate(input){
+function formatDate(input) {
   const date = new Date(input);
   const isoDate = date.toISOString().substring(0, 16).replace('T', ' ');
   return isoDate;
