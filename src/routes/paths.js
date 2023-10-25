@@ -76,7 +76,8 @@ export const PATH_DASHBOARD = {
     birds: path(ROOTS_DASHBOARD, '/cage/:cageId/birds'),
     schedule: path(ROOTS_DASHBOARD, '/cages/:cageId/schedule'),
     list: path(ROOTS_DASHBOARD, '/cage/list'),
-    createBird: path(ROOTS_DASHBOARD, '/cage/:cageId/birds/create')
+    createBird: path(ROOTS_DASHBOARD, '/cage/:cageId/birds/create'),
+    createCage: path(ROOTS_DASHBOARD, '/cage/create')
   },
 //  areas: {
  //   root: path(ROOTS_DASHBOARD, '/area'),
