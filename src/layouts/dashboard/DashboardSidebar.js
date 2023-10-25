@@ -2,22 +2,21 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
+import { Box, CardActionArea, Drawer, Link, Stack, Tooltip, Typography } from '@material-ui/core';
 import { alpha, styled } from '@material-ui/core/styles';
-import { Box, Link, Stack, Button, Drawer, Tooltip, Typography, CardActionArea } from '@material-ui/core';
 // hooks
 import useAuth from '../../hooks/useAuth';
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 // routes
-import { PATH_DASHBOARD, PATH_DOCS } from '../../routes/paths';
+import { PATH_DASHBOARD } from '../../routes/paths';
 // components
+import { MHidden } from '../../components/@material-extend';
 import Logo from '../../components/Logo';
 import MyAvatar from '../../components/MyAvatar';
-import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
-import { MHidden } from '../../components/@material-extend';
+import Scrollbar from '../../components/Scrollbar';
 
-import { DocIllustration } from '../../assets';
-import { managerSidebar, sidebarConfig, staffSidebar } from './SidebarConfig';
+import { managerSidebar, staffSidebar } from './SidebarConfig';
 
 // ----------------------------------------------------------------------
 
