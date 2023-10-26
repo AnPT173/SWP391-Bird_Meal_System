@@ -31,7 +31,7 @@ export default function CageCards() {
   const { cageList } = useSelector((state) => state.cage);
   const { birdInCage } = useSelector((state) => state.bird);
   const { locationList } = useSelector(state => state.location);
-  const [currentTab, setCurrentTab] = useState("L01");
+  const [currentTab, setCurrentTab] = useState("");
 
   const [isCreateLocationDialogOpen, setCreateLocationDialogOpen] = useState(false);
   const [newLocationName, setNewLocationName] = useState('');
@@ -115,15 +115,16 @@ export default function CageCards() {
     // }
   };
   useEffect(() => {
-    saveCurrentLocation({
-      id: 1,
-      name: "L01"
-    })
     dispatch(getCageList());
     dispatch(getLocationList());
     dispatch(getBirdInCageList());
   }, []);
 
+  useEffect(()=>{
+    if (!currentTab && locationList.length > 0){
+      setCurrentTab(locationList[0]?.name);
+    }
+  },[locationList])
   return (
     <Page title="Cages">
       <Container>

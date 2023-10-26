@@ -1,39 +1,29 @@
-import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import * as Yup from 'yup';
 
-import { useCallback, useEffect, useState } from 'react';
-import { useSnackbar } from 'notistack5';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Form, FormikProvider, useFormik } from 'formik';
+import { Box, Card, FormControlLabel, FormHelperText, Grid, MenuItem, Stack, TextField, Typography } from '@material-ui/core';
 import { DatePicker, LoadingButton } from '@material-ui/lab';
-import { Box, Card, Grid, Stack, TextField, Typography, FormHelperText, FormControlLabel, MenuItem } from '@material-ui/core';
-import { birdCageLocation } from '../../../utils/mock-data/area';
-import { fData } from '../../../utils/formatNumber';
-import { species } from '../../../utils/mock-data/species';
-import fakeRequest from '../../../utils/fakeRequest';
-import { PATH_DASHBOARD } from '../../../routes/paths';
-import { UploadAvatar } from '../../upload';
-import { getBirdData, getCageData, saveBirdData } from '../../../utils/mock-data/localStorageUtil';
+import { Form, FormikProvider, useFormik } from 'formik';
+import { useSnackbar } from 'notistack5';
+import { useCallback, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { createBird } from '../../../redux/slices/bird';
+import { PATH_DASHBOARD } from '../../../routes/paths';
+import { fData } from '../../../utils/formatNumber';
+import { birdCageLocation } from '../../../utils/mock-data/area';
+import { species } from '../../../utils/mock-data/species';
+import { UploadAvatar } from '../../upload';
 
 
 export default function CreateNewBirdForm({ cageId }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const [birdData, setBirdData] = useState([]);
   const [cagesData, setCagesData] = useState([]);
   const [birdImage, setBirdImage] = useState();
 
-  useEffect(async () => {
-    const data = await getBirdData();
-    setBirdData(data);
-    const data2 = await getCageData();
-    setCagesData(data2);
-  }, [])
-
   const { area, location } = useParams();
+  
   const NewBirdSchema = Yup.object().shape({
     birdName: Yup.string(),
     birdAge: Yup.number(),

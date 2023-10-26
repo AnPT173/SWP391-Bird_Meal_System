@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 // material
 import { Box, Card, Container } from '@material-ui/core';
 import CreateNewCageForm from '../../components/_dashboard/user/NewCageForm';
@@ -8,10 +9,17 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import Page from '../../components/Page';
+import { getCurrentLocation } from '../../utils/mock-data/localStorageUtil';
 
 
 
 export default function CageNew() {
+
+  const [currentLocation, setCurrentLocation] = useState('');
+  useEffect(async ()=>{
+    const location = await getCurrentLocation();
+    setCurrentLocation(location);
+  },[])
 
   return (
     <Page title="Create Cage">
@@ -26,7 +34,7 @@ export default function CageNew() {
         />
         <Card sx={{ mb: 3 }}>
           <Box sx={{ p: 3 }}>
-            <CreateNewCageForm />
+            <CreateNewCageForm location={currentLocation}/>
           </Box>
         </Card>
       </Container>
