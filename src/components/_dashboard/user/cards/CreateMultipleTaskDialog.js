@@ -1,6 +1,6 @@
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useSnackbar } from 'notistack5';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 // material
 import {
@@ -13,8 +13,8 @@ import {
 } from '@material-ui/core';
 import { LoadingButton, MobileDateTimePicker } from '@material-ui/lab';
 // redux
-import { createEvent, openCreateMultipleTaskDialog } from '../../../redux/slices/calendar';
-import { useDispatch } from '../../../redux/store';
+import { createEvent, openCreateMultipleTaskDialog } from '../../../../redux/slices/calendar';
+
 //
 
 // ----------------------------------------------------------------------

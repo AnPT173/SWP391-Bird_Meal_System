@@ -20,10 +20,11 @@ import useSettings from '../../hooks/useSettings';
 // components
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import Page from '../../components/Page';
-import { CalendarForm, CalendarStyle, CalendarToolbar, CreateMultipleTaskDialog } from '../../components/_dashboard/calendar';
+import { CalendarForm, CalendarStyle, CalendarToolbar } from '../../components/_dashboard/calendar';
 import { DialogAnimate } from '../../components/animate';
 import { useCalendar } from '../../hooks/useCalendar';
 import { openCreateMultipleTaskDialog } from '../../redux/slices/calendar';
+import CreateMultipleTaskDialog from '../../components/_dashboard/user/cards/CreateMultipleTaskDialog';
 
 // ----------------------------------------------------------------------
 
