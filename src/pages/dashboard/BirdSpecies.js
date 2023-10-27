@@ -34,7 +34,7 @@ export default function SpeciesCards() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-      dispatch(getUsers());
+   
     }, 20);
   }, [dispatch]);
 

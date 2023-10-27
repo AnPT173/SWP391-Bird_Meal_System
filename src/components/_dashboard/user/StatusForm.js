@@ -18,13 +18,13 @@ import {
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useDispatch, useSelector } from 'react-redux';
-import { LoadingButton } from '@material-ui/lab';
+import { LoadingButton, MobileTimePicker, TimePicker } from '@material-ui/lab';
 // utils
 import { birdMedicines } from '../../../utils/mock-data/medicine';
 // routes
 //
-import { createFood } from '../../../redux/slices/food';
-import { getBirdType } from '../../../redux/slices/bird';
+import { createFood, getFoodTypeList, getMedicineList } from '../../../redux/slices/food';
+import { getBirdType, getSpecieList } from '../../../redux/slices/bird';
 
 
 
@@ -43,10 +43,15 @@ export default function StatusForm({ isEdit, currentPlan }) {
   const [showMedicineFields, setShowMedicineFields] = useState(false);
   const [isCustomNumberOfFeedings, setIsCustomNumberOfFeedings] = useState(false);
   const { birdTypeList, species } = useSelector(state => state.bird);
+  const { foodTypeList, medicineList } = useSelector(state => state.food);
 
   useEffect(() => {
     dispatch(getBirdType());
-  })
+    dispatch(getSpecieList());
+    dispatch(getFoodTypeList());
+    dispatch(getMedicineList());
+
+  }, [])
 
 
   const { speciesId, periodId } = useParams();
@@ -77,6 +82,8 @@ export default function StatusForm({ isEdit, currentPlan }) {
         otherwise: Yup.number().default(1),
       }),
     note: Yup.string().required('Note is required'),
+    duration: Yup.number(),
+    start: Yup.mixed(),
   });
 
   const formik = useFormik({
@@ -84,26 +91,27 @@ export default function StatusForm({ isEdit, currentPlan }) {
     initialValues: {
       products: currentPlan?.products || [{ product: '', quantity: '', error: false }],
       medicines: currentPlan?.medicines || [{ medicine: '', dosage: '', error: false }],
-      water: currentPlan?.water || '',
+      water: currentPlan ? 10 : '',
       numberOfFeedings: currentPlan?.numberOfFeedings || 1,
       note: currentPlan?.note || '',
       isCustomNumberOfFeedings: false,
+      duration: currentPlan?.duration || '',
+      start: currentPlan?.start || ''
     },
     validationSchema: FoodPlanSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        const newProducts = values.products.map((product) => product.product.trim());
-        if (newProducts.some((product) => !product)) {
-          const updatedProducts = values.products.map((product) => ({
-            ...product,
-            error: product.product.trim() === '',
-          }));
-          formik.setFieldValue('products', updatedProducts);
-          setSubmitting(false);
-          return;
-        }
 
-        dispatch(createFood({ ...values }, birdTypeList, species ,speciesId, periodId));
+        // const newProducts = values.products.map((product) => product.product.trim());
+        // if (newProducts.some((product) => !product)) {
+        //   const updatedProducts = values.products.map((product) => ({
+        //     ...product,
+        //     error: product.product.trim() === '',
+        //   }));
+        //   formik.setFieldValue('products', updatedProducts);
+        // }
+
+        dispatch(createFood({ ...values, birdTypeList, species, foodTypeList, medicineList, speciesId, periodId }));
         // resetForm();
         // setSubmitting(false);
         // enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
@@ -116,7 +124,8 @@ export default function StatusForm({ isEdit, currentPlan }) {
     },
   });
 
-  const { errors, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
+  const { values, errors, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
+
 
   const handleDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -210,14 +219,24 @@ export default function StatusForm({ isEdit, currentPlan }) {
                     <Stack key={index} direction="row" spacing={2}>
                       <TextField
                         fullWidth
+                        select
                         label={`Product ${index + 1}`}
                         {...getFieldProps(`products.${index}.product`)}
                         error={product.error}
                         helperText={product.error ? 'Product is required' : ''}
-                      />
+                      >
+                        {
+                          foodTypeList.map(option => (
+                            <MenuItem key={option.id} value={option.id}>
+                              {option.name}
+                            </MenuItem>
+                          ))
+                        }
+                      </TextField>
                       <TextField
                         fullWidth
                         label="Quantity"
+                        disabled={false}
                         {...getFieldProps(`products.${index}.quantity`)}
                         error={product.error && !product.quantity}
                         helperText={product.error && !product.quantity ? 'Quantity is required' : ''}
@@ -286,13 +305,24 @@ export default function StatusForm({ isEdit, currentPlan }) {
                     disabled={!isCustomNumberOfFeedings}
                   />
                 </Stack>
-                <TextField
-                  fullWidth
-                  label="Note"
-                  {...getFieldProps('note')}
-                  error={Boolean(touched.note && errors.note)}
-                  helperText={touched.note && errors.note}
-                />
+                <Stack direction="row" spacing={2}>
+                  <TextField
+                    fullWidth
+                    label="Duration"
+                    type="number"
+                    disabled={false}
+                    {...getFieldProps('duration')}
+                    error={Boolean(touched.duration && errors.duration)}
+                    helperText={touched.duration && errors.duration}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Note"
+                    {...getFieldProps('note')}
+                    error={Boolean(touched.note && errors.note)}
+                    helperText={touched.note && errors.note}
+                  />
+                </Stack>
 
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                   <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
