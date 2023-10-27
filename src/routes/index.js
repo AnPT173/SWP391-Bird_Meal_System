@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, useRoutes, useLocation } from 'react-router-dom';
+import FoodPlanCards from '../pages/dashboard/FoodPlanCards';
 import FoodEditPage from '../pages/dashboard/FoodEdit';
 import FoodEditForm from '../components/_dashboard/user/FoodEditForm';
 import BirdNew from '../pages/dashboard/BirdNew';
@@ -19,6 +20,7 @@ import LoadingScreen from '../components/LoadingScreen';
 import PeriodCards from '../pages/dashboard/BirdPeriod';
 import CreateNewBirdForm from '../components/_dashboard/user/UserNewForm';
 import CageNew from '../pages/dashboard/CageNew';
+
 
 
 
@@ -145,8 +147,8 @@ export default function Router() {
             { path: '/species/:speciesId/period', element: <PeriodCards /> },
             { path: '/species/:speciesId/period/:periodId/status', element: <BirdStatus /> },
             { path: '/:cageId/schedule', element: <Calendar /> },
-            { path: 'list', element: <UserList /> },
-            { path: '/:name/edit', element: <FoodEditForm /> },
+            { path: '/cards', element: <FoodPlanCards /> },
+            { path: '/cards/:name/edit', element: <BirdStatus /> },
             { path: 'account', element: <UserAccount /> }
           ]
         },

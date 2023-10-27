@@ -52,12 +52,14 @@ function CageCard({status}) {
       {filterdData.map((cage, index) => {
         let statusColor = 'info'; 
 
-        if (cage.status === 'Feeded') {
+        if (cage.type === 'Normal') {
           statusColor = 'success'; 
-        } else if (cage.status === 'Pending') {
+        } else if (cage.type === 'Birth') {
           statusColor = 'warning'; 
-        } else if (cage.status === 'Late') {
+        } else if (cage.type === 'Sick') {
           statusColor = 'error'; 
+        } else if (cage.type === 'Exotic'){
+          statusColor = 'secondary';
         }
 
         return (
@@ -89,9 +91,9 @@ function CageCard({status}) {
                 </Grid>
                 <Grid item xs={4}>
                   <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
-                    Status
+                    Feeding Regimen
                   </Typography>
-                  {cage.status && (
+                  {cage.type && (
                 <Label
                   color={statusColor} 
                   sx={{
@@ -102,7 +104,7 @@ function CageCard({status}) {
                     transform: 'translateX(-50%)', 
                   }}
                 >
-                  {cage.status}
+                  {cage.type}
                 </Label>
                 )}
                 </Grid>

@@ -21,8 +21,8 @@ import useSettings from '../../hooks/useSettings';
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 
+
 import BirdProfile from '../../components/_dashboard/user/BirdProfileForm';
-import { getBirdData } from '../../utils/mock-data/localStorageUtil';
 // ----------------------------------------------------------------------
 
 const TabsWrapperStyle = styled('div')(({ theme }) => ({
@@ -43,21 +43,18 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function BirdProfileWrapper() {
-  // Rename the component to avoid conflicts
+export default function BirdProfileWrapper() { // Rename the component to avoid conflicts
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
+  const { birdProfile } = useSelector((state) => state.user);
+  const { user } = useAuth();
+  const [currentTab, setCurrentTab] = useState('profile');
   const { cageId, birdId } = useParams();
 
-  const [currentBird, setCurrentBird] = useState();
-  useEffect(async() => {
 
-    const data = await getBirdData();
-    const bird = data.find(item => item.birdId === birdId);
-    setCurrentBird(bird);
-  }, [dispatch]);
-
-
+  const handleChangeTab = (event, newValue) => {
+    setCurrentTab(newValue);
+  };
 
   return (
     <Page title="Bird Profile">
@@ -73,10 +70,13 @@ export default function BirdProfileWrapper() {
         />
         <Card
           sx={{
-            mb: 3
+            mb: 3,
           }}
         >
-          <BirdProfile isEdit currentBird={currentBird} />
+          <BirdProfile
+            isEdit
+            currentBird={birdProfile}
+          />
         </Card>
       </Container>
     </Page>

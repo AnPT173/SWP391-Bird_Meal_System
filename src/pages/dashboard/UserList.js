@@ -24,8 +24,9 @@ import {
   DialogTitle,
   TextField
 } from '@material-ui/core';
-import { foodsData } from '../../utils/mock-data/food';
 import { Form, FormikProvider } from 'formik/dist';
+import { foodsData } from '../../utils/mock-data/food';
+
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUserList, deleteUser } from '../../redux/slices/user';
@@ -145,7 +146,7 @@ export default function FoodList() {
 
   const isFoodNotFound = filteredFoods.length === 0;
   const handleDeleteFood = (foodId) => {
-    const updatedFoodsData = [...foodsData]; // Create a copy of the original data
+    const updatedFoodsData = [...foodsData]; 
 
     const indexToDelete = updatedFoodsData.findIndex((food) => food.id === foodId);
 

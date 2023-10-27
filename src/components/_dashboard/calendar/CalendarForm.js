@@ -188,12 +188,13 @@ console.log("vvv",values)
                 {s.value}
               </option>
             ))}
-          </TextField>}
+          </TextField>
           <TextField
+
             fullWidth
             label="Title"
             {...getFieldProps('title')}
-            disabled={!isManager || values.status === 'completed'}
+            disabled={!isManager || values?.status === 'completed'}
             error={Boolean(touched.title && errors.title)}
             helperText={touched.title && errors.title}
           />
@@ -243,7 +244,15 @@ console.log("vvv",values)
                 </option>
               ))}
             </TextField>
-
+            <TextField
+            fullWidth
+            multiline
+            maxRows={4}
+            label="Total Food Quantity"
+            {...getFieldProps('foodQuantity')}
+            error={Boolean(touched.foodQuantity && errors.foodQuantity)}
+            helperText={touched.foodQuantity && errors.foodQuantity}
+          />
             <TextField
               select
               {...getFieldProps('staffId')}

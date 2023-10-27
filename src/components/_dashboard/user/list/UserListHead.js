@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
-// material
 import { visuallyHidden } from '@material-ui/utils';
 import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@material-ui/core';
-
-// ----------------------------------------------------------------------
 
 UserListHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
@@ -31,6 +28,7 @@ export default function UserListHead({
   return (
     <TableHead>
       <TableRow>
+        <TableCell key="empty-cell" /> {/* Add an empty TableCell */}
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}

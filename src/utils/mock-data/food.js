@@ -27,7 +27,7 @@ export const foodsData = [
       price: 3.99,
       category: "Suet",
       expirePeriod: "6 months",
-      quantity: "6 cakes"
+      quantity: "600g"
     },
     {
       id: 4,
@@ -57,7 +57,7 @@ export const foodsData = [
       price: 2.49,
       category: "Fruit",
       expirePeriod: "7 days",
-      quantity: "3 pieces"
+      quantity: "300g"
     },
     {
       id: 7,
@@ -67,7 +67,7 @@ export const foodsData = [
       price: 3.99,
       category: "Fruit",
       expirePeriod: "7 days",
-      quantity: "5 pieces"
+      quantity: "500g"
     },
     {
       id: 8,

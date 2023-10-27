@@ -64,7 +64,7 @@ export default function PeriodCard() {
               />
             </CardMediaStyle>
 
-            <Link href={`${PATH_DASHBOARD.food.species}/${speciesID}/period/${period.periodId}/status`}>
+            <Link href={`${PATH_DASHBOARD.food.species}/${species.speciesID}/period/${period.periodId}/status`}>
             <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
               {period.period}
             </Typography>

@@ -76,8 +76,7 @@ export const PATH_DASHBOARD = {
     birds: path(ROOTS_DASHBOARD, '/cage/:cageId/birds'),
     schedule: path(ROOTS_DASHBOARD, '/cages/:cageId/schedule'),
     list: path(ROOTS_DASHBOARD, '/cage/list'),
-    createBird: path(ROOTS_DASHBOARD, '/cage/:cageId/birds/create'),
-    createCage: path(ROOTS_DASHBOARD, '/cage/create')
+    createBird: path(ROOTS_DASHBOARD, '/cage/:cageId/birds/create')
   },
 //  areas: {
  //   root: path(ROOTS_DASHBOARD, '/area'),
@@ -93,12 +92,9 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/foodPlan'),
     species: path(ROOTS_DASHBOARD, '/foodPlan/species'),
     period: path(ROOTS_DASHBOARD, '/foodPlan/species/:speciesId/period'),
-    status: path(ROOTS_DASHBOARD, '/foodPlan/species/:speciesId/period/:periodId/status')
-  },
-  meal: {
-    root: path(ROOTS_DASHBOARD, '/meal'),
-    profile: path(ROOTS_DASHBOARD, '/cage/:cageID/birds/:birdID/profile'),
-    
+    status: path(ROOTS_DASHBOARD, '/foodPlan/species/:speciesId/period/:periodId/status'),
+    card: path(ROOTS_DASHBOARD,'/foodPlan/cards'),
+    edit: path(ROOTS_DASHBOARD, '/foodPlan/cards/:name/edit')
   },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),

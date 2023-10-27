@@ -155,10 +155,10 @@ export const managerSidebar = [
       },
       { title: 'Schedule', path: PATH_DASHBOARD.calendar, icon: ICONS.calendar },
       { title: 'Task', path: PATH_DASHBOARD.task.root, icon: ICONS.cart },
-      { title: 'Food', path: PATH_DASHBOARD.food.root, icon: ICONS.cart },
+      { title: 'Food', path: PATH_DASHBOARD.food.card, icon: ICONS.cart },
       {
         title: 'Report',
-        path: PATH_DASHBOARD.mail.root,
+        path: PATH_DASHBOARD.blog.root,
         icon: ICONS.setting
       },
       {
@@ -166,11 +166,6 @@ export const managerSidebar = [
         path: PATH_DASHBOARD.user.list,
         icons: ICONS.blog
       },
-      {
-        title: 'Task',
-        path: PATH_DASHBOARD.chat.root,
-        icons: ICONS.mail
-      }
     ]
   }
 ];

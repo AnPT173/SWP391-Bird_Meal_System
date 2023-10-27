@@ -23,6 +23,9 @@ import {
   IconButton
 } from '@material-ui/core';
 // utils
+import { species } from '../../../utils/mock-data/species';
+import { periodData } from '../../../utils/mock-data/period';
+import { status } from '../../../utils/mock-data/status';
 import { birdMedicines } from '../../../utils/mock-data/medicine';
 import { foodsData } from '../../../utils/mock-data/food';
 import { fData } from '../../../utils/formatNumber';
@@ -33,7 +36,6 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import Label from '../../Label';
 import { UploadAvatar } from '../../upload';
 import countries from './countries';
-
 
 
 // ----------------------------------------------------------------------
@@ -51,6 +53,10 @@ export default function StatusForm({ isEdit, currentPlan }) {
   const [isCustomNumberOfFeedings, setIsCustomNumberOfFeedings] = useState(false);
 
   const FoodPlanSchema = Yup.object().shape({
+    name: Yup.string().required('Name is required'),
+    species: Yup.string().required('Species is required'),
+    period: Yup.string().required('Period is required'),
+    status: Yup.string().required('Status is required'),
     products: Yup.array().of(
       Yup.object().shape({
         product: Yup.string().required('Product is required'),
@@ -69,10 +75,11 @@ export default function StatusForm({ isEdit, currentPlan }) {
       .positive('Number of Feedings must be positive')
       .integer('Number of Feedings must be an integer')
       .max(100, 'Number of Feedings must not exceed 100')
-      .when('isCustomNumberOfFeedings', {
-        is: true,
+      .when(['isCustomNumberOfFeedings', 'showMedicineFields'], {
+        is: (isCustomNumberOfFeedings, showMedicineFields) =>
+          isCustomNumberOfFeedings || showMedicineFields,
         then: Yup.number()
-          .required('Number of Feedings is required when custom')
+          .required('Number of Feedings is required when custom or for sick birds')
           .min(1, 'Number of Feedings must be at least 1'),
         otherwise: Yup.number().default(1),
       }),
@@ -82,6 +89,10 @@ export default function StatusForm({ isEdit, currentPlan }) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
+      name: currentPlan ? currentPlan.name : '',
+      species: currentPlan ? currentPlan.species : '',
+      period: currentPlan ? currentPlan.period : '',
+      status: currentPlan ? currentPlan.status : '',
       products: currentPlan?.products || [{ product: '', quantity: '', error: false }],
       medicines: currentPlan?.medicines || [{ medicine: '', dosage: '', error: false }],
       water: currentPlan?.water || '',
@@ -92,17 +103,6 @@ export default function StatusForm({ isEdit, currentPlan }) {
     validationSchema: FoodPlanSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        const newProducts = values.products.map((product) => product.product.trim());
-        if (newProducts.some((product) => !product)) {
-          const updatedProducts = values.products.map((product) => ({
-            ...product,
-            error: product.product.trim() === '',
-          }));
-          formik.setFieldValue('products', updatedProducts);
-          setSubmitting(false);
-          return;
-        }
-
         await fakeRequest(500);
         resetForm();
         setSubmitting(false);
@@ -114,7 +114,7 @@ export default function StatusForm({ isEdit, currentPlan }) {
         setErrors(error);
       }
     },
-  });
+  })
 
   const { errors, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
 
@@ -131,7 +131,7 @@ export default function StatusForm({ isEdit, currentPlan }) {
   const handleAddProductLine = () => {
     const newProduct = { product: '', quantity: '', error: false };
     formik.setFieldValue('products', [...formik.values.products, newProduct]);
-  };
+  }
 
   const handleProductChange = (e, index) => {
     const { value } = e.target;
@@ -151,12 +151,12 @@ export default function StatusForm({ isEdit, currentPlan }) {
     const newProducts = [...formik.values.products];
     newProducts.splice(index, 1);
     formik.setFieldValue('products', newProducts);
-  };
+  }
 
   const handleAddMedicineLine = () => {
     const newMedicine = { medicine: '', dosage: '', error: false };
     formik.setFieldValue('medicines', [...formik.values.medicines, newMedicine]);
-  };
+  }
 
   const handleMedicineChange = (e, index) => {
     const { value } = e.target;
@@ -165,13 +165,13 @@ export default function StatusForm({ isEdit, currentPlan }) {
     const newMedicines = [...formik.values.medicines];
     newMedicines[index] = { ...newMedicines[index], medicine: value, dosage, error: false };
     formik.setFieldValue('medicines', newMedicines);
-  };
+  }
 
   const handleDeleteMedicine = (index) => {
     const newMedicines = [...formik.values.medicines];
     newMedicines.splice(index, 1);
     formik.setFieldValue('medicines', newMedicines);
-  };
+  }
 
   return (
     <FormikProvider value={formik}>
@@ -181,6 +181,58 @@ export default function StatusForm({ isEdit, currentPlan }) {
             <Card sx={{ p: 3 }}>
               <Stack spacing={3}>
                 <Stack direction="column" spacing={2}>
+
+                  <TextField
+                    fullWidth
+                    label="Name"
+                    value={formik.values.name}
+                    {...getFieldProps('name')}
+                    error={Boolean(touched.name && errors.name)}
+                    helperText={touched.name && errors.name}
+                  />
+                  <TextField
+                    select
+                    fullWidth
+                    label="Species"
+                    {...getFieldProps('species')}
+                    error={Boolean(touched.species && errors.species)}
+                    helperText={touched.species && errors.species}
+                  >{species.map((option) => (
+                    <MenuItem key={option.speciesID} value={option.specie}>
+                      {option.specie}
+                    </MenuItem>
+                  ))}</TextField>
+
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
+                    <TextField
+                      select
+                      fullWidth
+                      label="Period"
+                      {...getFieldProps('period')}
+                      error={Boolean(touched.period && errors.period)}
+                      helperText={touched.period && errors.period}
+                    >
+                      {periodData.map((option) => (
+                        <MenuItem key={option.periodId} value={option.period}>
+                          {option.period}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                    <TextField
+                      select
+                      fullWidth
+                      label="Status"
+                      {...getFieldProps('status')}
+                      error={Boolean(touched.status && errors.status)}
+                      helperText={touched.status && errors.status}
+                    >
+                      {status.map((option) => (
+                        <MenuItem key={option.statusId} value={option.status}>
+                          {option.status}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Stack>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <FormControlLabel
                       control={
@@ -209,18 +261,27 @@ export default function StatusForm({ isEdit, currentPlan }) {
                   {formik.values.products.map((product, index) => (
                     <Stack key={index} direction="row" spacing={2}>
                       <TextField
+                        select
                         fullWidth
                         label={`Product ${index + 1}`}
                         {...getFieldProps(`products.${index}.product`)}
                         error={product.error}
                         helperText={product.error ? 'Product is required' : ''}
-                      />
+                        onChange={(e) => handleProductChange(e, index)}
+                      >
+                        {foodsData.map((option) => (
+                          <MenuItem key={option.id} value={option.name}>
+                            {option.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
                       <TextField
                         fullWidth
                         label="Quantity"
                         {...getFieldProps(`products.${index}.quantity`)}
                         error={product.error && !product.quantity}
                         helperText={product.error && !product.quantity ? 'Quantity is required' : ''}
+                        onChange={(e) => handleQuantityChange(e, index)}
                       />
                       <IconButton onClick={() => handleDeleteProduct(index)} color="error">
                         <DeleteIcon />
@@ -283,7 +344,7 @@ export default function StatusForm({ isEdit, currentPlan }) {
                     {...getFieldProps('numberOfFeedings')}
                     error={Boolean(touched.numberOfFeedings && errors.numberOfFeedings)}
                     helperText={touched.numberOfFeedings && errors.numberOfFeedings}
-                    disabled={!isCustomNumberOfFeedings}
+                    disabled={!isCustomNumberOfFeedings && !showMedicineFields}
                   />
                 </Stack>
                 <TextField
@@ -307,4 +368,3 @@ export default function StatusForm({ isEdit, currentPlan }) {
     </FormikProvider>
   );
 }
-

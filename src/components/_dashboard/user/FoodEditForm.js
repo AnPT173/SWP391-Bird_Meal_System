@@ -29,13 +29,13 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 //
 import Label from '../../Label';
 
-ProductEditForm.propTypes = {
+FoodEditForm.propTypes = {
   isEdit: PropTypes.bool,
   currentProduct: PropTypes.object,
   onFormSubmit: PropTypes.func,
 };
 
-export default function ProductEditForm({ isEdit, currentProduct, onFormSubmit }) {
+export default function FoodEditForm({ isEdit, currentProduct, onFormSubmit }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { productId } = useParams();
@@ -90,47 +90,6 @@ export default function ProductEditForm({ isEdit, currentProduct, onFormSubmit }
     <FormikProvider value={formik}>
       <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={4}>
-            <Card sx={{ py: 10, px: 3 }}>
-              {isEdit && (
-                <Label
-                  color="success"
-                  sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
-                >
-                  {currentProduct && currentProduct.status}
-                </Label>
-              )}
-
-              <Box sx={{ mb: 5 }}>
-                <UploadAvatar
-                  accept="image/*"
-                  file={formik.values.image}
-                  maxSize={3145728}
-                  onDrop={handleDrop}
-                  error={Boolean(touched.image && errors.image)}
-                  caption={
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        mt: 2,
-                        mx: 'auto',
-                        display: 'block',
-                        textAlign: 'center',
-                        color: 'text.secondary',
-                      }}
-                    >
-                      Allowed *.jpeg, *.jpg, *.png, *.gif
-                      <br /> max size of {fData(3145728)}
-                    </Typography>
-                  }
-                />
-
-                <FormHelperText error sx={{ px: 2, textAlign: 'center' }}>
-                  {touched.image && errors.image}
-                </FormHelperText>
-              </Box>
-            </Card>
-          </Grid>
           <Grid item xs={12} md={8}>
             <Card sx={{ p: 3 }}>
               <Stack spacing={3}>
