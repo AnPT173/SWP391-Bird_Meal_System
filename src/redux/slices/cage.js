@@ -48,8 +48,6 @@ export default slice.reducer;
 
 export function createCage(payload) {
   const formData = buildCreateCageRequestBody(payload);
-  console.log('payload', payload);
-  console.log('formData', formData);
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
@@ -88,7 +86,7 @@ export function buildCurrentLocationCageList(locationId, cageList, birdInCageLis
 }
 
 function buildCreateCageRequestBody(payload) {
-  const requestBody = new FormData();
+  const data = new FormData();
   const cage = {
     max: payload.quantity,
     quantity: payload.quantity,
@@ -96,11 +94,14 @@ function buildCreateCageRequestBody(payload) {
     locationID: payload.location.id
   };
 
-  const { file } = payload.file;
+  console.log('cage,', payload)
+  const { file } = payload;
 
-  requestBody.append('cage', cage);
-  requestBody.append('file', file);
-  return requestBody;
+  data.append('cage', JSON.stringify(cage));
+  data.append('file', file);
+  console.log('data', data)
+  
+  return data
 }
 
 // {

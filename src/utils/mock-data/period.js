@@ -1,16 +1,16 @@
 export const periodData = [
   {
-    periodId: 'PER001',
+    id: 'PER001',
     period: 'Altricial',
     birdAge: '1 - 2'
   },
   {
-    periodId: 'PER002',
+    id: 'PER002',
     period: 'Passerine',
     birdAge: '3'
   },
   {
-    periodId: 'PER003',
+    id: 'PER003',
     period: 'Adult',
     birdAge: '4 - 5'
   }

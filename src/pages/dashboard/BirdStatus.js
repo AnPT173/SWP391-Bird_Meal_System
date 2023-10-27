@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 // material
 import { Container, Tab, Box, Tabs, Stack, Grid, Skeleton } from '@material-ui/core';
 // redux
@@ -59,6 +60,9 @@ export default function BirdStatus() {
   const handleChangeTab = (event, newValue) => {
     setCurrentTab(newValue);
   };
+
+  const {speciesId, periodId} = useParams();
+
   const [selectedSpecies, setSelectedSpecies] = useState(null);
   const [selectedPeriod, setSelectedPeriod] = useState(null);
 

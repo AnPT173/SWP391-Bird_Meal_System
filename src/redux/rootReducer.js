@@ -12,6 +12,7 @@ import kanbanReducer from './slices/kanban';
 import cageReducer from './slices/cage';
 import birdReducer from './slices/bird';
 import locationReducer from './slices/location';
+import foodReducer from './slices/food';
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
   cage: cageReducer,
   bird: birdReducer,
   location: locationReducer,
+  food: foodReducer,
   product: persistReducer(productPersistConfig, productReducer)
 });
 

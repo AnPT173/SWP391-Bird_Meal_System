@@ -1,38 +1,30 @@
-import * as Yup from 'yup';
-import PropTypes from 'prop-types';
-import { useCallback, useState } from 'react';
-import { useSnackbar } from 'notistack5';
-import { useNavigate, useParams } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
+import { useSnackbar } from 'notistack5';
+import PropTypes from 'prop-types';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 // material
-import { LoadingButton } from '@material-ui/lab';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
 import {
   Box,
   Card,
+  FormControlLabel,
   Grid,
+  IconButton,
+  MenuItem,
   Stack,
   Switch,
-  TextField,
-  Typography,
-  FormHelperText,
-  FormControlLabel,
-  Menu,
-  MenuItem,
-  IconButton
+  TextField
 } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { useDispatch, useSelector } from 'react-redux';
+import { LoadingButton } from '@material-ui/lab';
 // utils
 import { birdMedicines } from '../../../utils/mock-data/medicine';
-import { foodsData } from '../../../utils/mock-data/food';
-import { fData } from '../../../utils/formatNumber';
-import fakeRequest from '../../../utils/fakeRequest';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
 //
-import Label from '../../Label';
-import { UploadAvatar } from '../../upload';
-import countries from './countries';
+import { createFood } from '../../../redux/slices/food';
+import { getBirdType } from '../../../redux/slices/bird';
 
 
 
@@ -45,11 +37,19 @@ StatusForm.propTypes = {
 
 export default function StatusForm({ isEdit, currentPlan }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [products, setProducts] = useState([{ product: '', quantity: '', error: false }]);
   const [showMedicineFields, setShowMedicineFields] = useState(false);
   const [isCustomNumberOfFeedings, setIsCustomNumberOfFeedings] = useState(false);
+  const { birdTypeList, species } = useSelector(state => state.bird);
 
+  useEffect(() => {
+    dispatch(getBirdType());
+  })
+
+
+  const { speciesId, periodId } = useParams();
   const FoodPlanSchema = Yup.object().shape({
     products: Yup.array().of(
       Yup.object().shape({
@@ -59,8 +59,8 @@ export default function StatusForm({ isEdit, currentPlan }) {
     ),
     medicines: Yup.array().of(
       Yup.object().shape({
-        medicine: Yup.string().required('Medicine is required'),
-        dosage: Yup.string().required('Dosage is required'),
+        medicine: Yup.string(),
+        dosage: Yup.string(),
       })
     ),
     water: Yup.string().required('Water Amount is required'),
@@ -103,11 +103,11 @@ export default function StatusForm({ isEdit, currentPlan }) {
           return;
         }
 
-        await fakeRequest(500);
-        resetForm();
-        setSubmitting(false);
-        enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
-        navigate(PATH_DASHBOARD.user.list);
+        dispatch(createFood({ ...values }, birdTypeList, species ,speciesId, periodId));
+        // resetForm();
+        // setSubmitting(false);
+        // enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
+        // navigate(PATH_DASHBOARD.user.list);
       } catch (error) {
         console.error(error);
         setSubmitting(false);

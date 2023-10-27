@@ -38,6 +38,8 @@ export default function PeriodCards() {
     }, 20);
   }, [dispatch]);
 
+
+
   return (
     <Page title="Periods">
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -51,7 +53,7 @@ export default function PeriodCards() {
           {loading ? (
             SkeletonLoad
           ) : (      
-            <PeriodCard />
+            <PeriodCard/>
           )
           }
       </Container>

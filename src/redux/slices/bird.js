@@ -8,7 +8,9 @@ const initialState = {
   isLoading: false,
   error: false,
   birdList: [],
-  birdInCage: []
+  birdInCage: [],
+  birdTypeList: [],
+  species:[]
 };
 
 const slice = createSlice({
@@ -40,6 +42,16 @@ const slice = createSlice({
     getBirdInCageSuccess(state, action) {
       state.isLoading = false;
       state.birdInCage = action.payload;
+    },
+
+    getBirdTypeSuccess(state, action) {
+      state.isLoading = false;
+      state.birdTypeList = action.payload;
+    },
+
+    getSpecieListSuccess(state, action){
+      state.isLoading = false;
+      state.species = action.payload
     }
 
   }
@@ -124,15 +136,48 @@ export function getBirdAge(dateInString) {
 
 }
 
+export function getBirdType() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/manager/birdtype/');
+
+      dispatch(slice.actions.getBirdTypeSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getSpecieList() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('manager/species/');
+
+      dispatch(slice.actions.getSpecieListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
 function buildBirdCreateRequestBody(payload) {
   const data = new FormData();
   const bird = {
     name: payload.birdName,
-    age: '2021-01-01',
+    age: "2021-01-02",
     birdTypeID: 1,
-    cageID: 1,
-    statusID: 1,
-    gender: 1
+    cageID: payload.cageId,
+    statusID: +payload.status,
+    gender: payload.gender === '1',
+    attituteds: payload.attitudes,
+    qualities: payload.qualities,
+    appearance: payload.appearance,
+    color: payload.featherColor,
+    exotic: true,
+    exoticrate: 1
+
   }
   const { file } = payload;
 

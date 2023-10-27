@@ -21,6 +21,7 @@ export default function CreateNewBirdForm({ cageId }) {
   const { enqueueSnackbar } = useSnackbar();
   const [cagesData, setCagesData] = useState([]);
   const [birdImage, setBirdImage] = useState();
+  const [isExoticChecked, setExoticChecked] = useState(false);
 
   const { area, location } = useParams();
   
@@ -38,20 +39,6 @@ export default function CreateNewBirdForm({ cageId }) {
     appearance: Yup.string(),
     qualities: Yup.string(),
   });
-  // const NewBirdSchema = Yup.object().shape({
-  //   birdName: Yup.string().required('Bird Name is required'),
-  //   birdAge: Yup.number().required('Bird Age is required'),
-  //   status: Yup.string().required('Status is required'),
-  //   species: Yup.string().required('Species is required'),
-  //   cageId: Yup.string().required('Cage is required'),
-  //   avatarUrl: Yup.mixed().required('Avatar is required'),
-  //   birdGender: Yup.string().required('Bird Gender is required'),
-  //   hatchingDate: Yup.date().required('Hatching Date is required'),
-  //   attitudes: Yup.string().required('Attitudes is required'), // Add attitudes field
-  //   featherColor: Yup.string().required('Feather Color is required'), // Add featherColor field
-  //   appearance: Yup.string().required('Appearance is required'), // Add appearance field
-  //   qualities: Yup.string().required('Qualities is required'), // Add qualities field
-  // });
 
   const formik = useFormik({
     initialValues: {
@@ -101,7 +88,7 @@ export default function CreateNewBirdForm({ cageId }) {
     },
     [setFieldValue]
   );
-  const [isExoticChecked, setExoticChecked] = useState(false);
+
 
   return (
     <FormikProvider value={formik}>
@@ -191,9 +178,9 @@ export default function CreateNewBirdForm({ cageId }) {
                     <MenuItem value="" disabled>
                       Select Status
                     </MenuItem>
-                    <MenuItem value="Normal">Normal</MenuItem>
-                    <MenuItem value="Sick">Sick</MenuItem>
-                    <MenuItem value="Birth">Birth</MenuItem>
+                    <MenuItem value="1">Normal</MenuItem>
+                    <MenuItem value="2">Sick</MenuItem>
+                    <MenuItem value="3">Birth</MenuItem>
                   </TextField>
                   <TextField
                     select
