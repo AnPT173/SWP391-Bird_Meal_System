@@ -34,9 +34,11 @@ export default function PeriodCards() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-      dispatch(getUsers());
+     
     }, 20);
   }, [dispatch]);
+
+
 
   return (
     <Page title="Periods">
@@ -51,7 +53,7 @@ export default function PeriodCards() {
           {loading ? (
             SkeletonLoad
           ) : (      
-            <PeriodCard />
+            <PeriodCard/>
           )
           }
       </Container>

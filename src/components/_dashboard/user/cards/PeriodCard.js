@@ -55,6 +55,9 @@ PeriodCard.propTypes = {
 
 
 export default function PeriodCard() {
+  
+  const {speciesId} = useParams();
+
   return (
     <Grid container spacing={3}>
       {periodData.map((period, index) => (
@@ -86,7 +89,7 @@ export default function PeriodCard() {
               <CoverImgStyle alt="cover" src={`/static/mock-images/cages/cage_${index + 1}.jpg`} />
             </CardMediaStyle>
 
-            <Link href={`${PATH_DASHBOARD.food.species}/${species.speciesID}/period/${period.id}/status`}>
+            <Link href={`${PATH_DASHBOARD.food.species}/${speciesId}/period/${period.id}/status`}>
               <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
                 Period: {period.period}
               </Typography>          

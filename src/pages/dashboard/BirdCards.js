@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import { Icon } from '@iconify/react';
 import listTask from '@iconify/icons-bi/list-task';
-import { Button, Container, Grid, Skeleton, Dialog, DialogContent } from '@material-ui/core';
+import { Icon } from '@iconify/react';
+import { Button, Container, Grid, Skeleton } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
 // Redux
-import { useDispatch, useSelector } from '../../redux/store';
 import { getUsers } from '../../redux/slices/user';
+import { useDispatch, useSelector } from '../../redux/store';
 
 // Routes
 import { PATH_DASHBOARD } from '../../routes/paths';
@@ -15,12 +15,11 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 import useSettings from '../../hooks/useSettings';
 
 // Components
-import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import Page from '../../components/Page';
 import { BirdCard } from '../../components/_dashboard/user/cards';
 
-import CreateNewBirdForm from '../../components/_dashboard/user/UserNewForm';
-import { getBirdList } from '../../redux/slices/bird';
+import { getBirdInCageList, getBirdList } from '../../redux/slices/bird';
 
 const SkeletonLoad = (
   <>
@@ -35,29 +34,15 @@ const SkeletonLoad = (
 export default function BirdCards() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.user);
   const { cageId } = useParams();
-  const [loading, setLoading] = useState(true);
-  const { birdList } = useSelector((state) => state.bird);
+  console.log("cage id", cageId)
+  const { birdList, birdInCage } = useSelector((state) => state.bird);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-      dispatch(getUsers());
-    }, 200);
     dispatch(getBirdList());
-  }, [dispatch]);
-
-  const [openCreateBirdDialog, setOpenCreateBirdDialog] = useState(false);
-
-  const handleOpenCreateBirdDialog = () => {
-    setOpenCreateBirdDialog(true);
-  };
-
-  const handleCloseCreateBirdDialog = () => {
-    setOpenCreateBirdDialog(false);
-  };
-
+    dispatch(getBirdInCageList());
+  }, []);
+  
   return (
     <Page title="Birds">
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -90,7 +75,7 @@ export default function BirdCards() {
           }
         />
         <Grid container spacing={3}>
-          {loading ? SkeletonLoad : <BirdCard cageId={cageId} birdData={birdList} />}
+          <BirdCard cageId={cageId} birdList={birdList} birdInCage={birdInCage} />
         </Grid>
       </Container>
     </Page>

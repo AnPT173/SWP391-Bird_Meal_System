@@ -1,88 +1,66 @@
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 
-import { useCallback, useEffect, useState } from 'react';
-import { useSnackbar } from 'notistack5';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Form, FormikProvider, useFormik } from 'formik';
+import { Box, Card, FormControlLabel, FormHelperText, Grid, MenuItem, Stack, TextField, Typography } from '@material-ui/core';
 import { DatePicker, LoadingButton } from '@material-ui/lab';
-import { Box, Card, Grid, Stack, TextField, Typography, FormHelperText, FormControlLabel, MenuItem } from '@material-ui/core';
-import { birdCageLocation } from '../../../utils/mock-data/area';
-import { fData } from '../../../utils/formatNumber';
-import { species } from '../../../utils/mock-data/species';
-import fakeRequest from '../../../utils/fakeRequest';
+import { Form, FormikProvider, useFormik } from 'formik';
+import { useSnackbar } from 'notistack5';
+import { useCallback, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { createBird } from '../../../redux/slices/bird';
 import { PATH_DASHBOARD } from '../../../routes/paths';
+import { fData } from '../../../utils/formatNumber';
+import { birdCageLocation } from '../../../utils/mock-data/area';
+import { species } from '../../../utils/mock-data/species';
 import { UploadAvatar } from '../../upload';
-import { getBirdData, getCageData, saveBirdData } from '../../../utils/mock-data/localStorageUtil';
-
-// +// {
-// +//   "name": "test",
-// +//   "age": "2023-01-01",
-// +//   "birdTypeID": {
-// +//     "id": "1",
-// +//     "name": "1",
-// +//     "specieID": {
-// +//       "id": "1",
-// +//       "name": "1"
-// +//     }
-// +//   },
-// +//   "cageID": "1"
-// +// }
 
 
-
-export default function CreateNewBirdForm() {
+export default function CreateNewBirdForm({ cageId }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const { cageId } = useParams();
-  const [ birdData, setBirdData ] = useState([]);
-  const [cagesData, setCagesData ] = useState([]);
-  
-  useEffect( async ()=>{
-    const data = await getBirdData();
-    setBirdData(data);
-    const data2 = await getCageData();
-    setCagesData(data2);
-  },[])
+  const [cagesData, setCagesData] = useState([]);
+  const [birdImage, setBirdImage] = useState();
+  const [isExoticChecked, setExoticChecked] = useState(false);
 
   const { area, location } = useParams();
+  
   const NewBirdSchema = Yup.object().shape({
-    birdName: Yup.string().required('Bird Name is required'),
-    birdAge: Yup.number().required('Bird Age is required'),
-    status: Yup.string().required('Status is required'),
-    species: Yup.string().required('Species is required'),
-    cageId: Yup.string().required('Cage is required'),
-    avatarUrl: Yup.mixed().required('Avatar is required'),
-    birdGender: Yup.string().required('Bird Gender is required'),
-    hatchingDate: Yup.date().required('Hatching Date is required'),
-    attitudes: Yup.string().required('Attitudes is required'), // Add attitudes field
-    featherColor: Yup.string().required('Feather Color is required'), // Add featherColor field
-    appearance: Yup.string().required('Appearance is required'), // Add appearance field
-    qualities: Yup.string().required('Qualities is required'), // Add qualities field
+    birdName: Yup.string(),
+    birdAge: Yup.number(),
+    status: Yup.string(),
+    species: Yup.string(),
+    cageId: Yup.string(),
+    avatarUrl: Yup.mixed(),
+    birdGender: Yup.string(),
+    hatchingDate: Yup.string(),
+    attitudes: Yup.string(),
+    featherColor: Yup.string(),
+    appearance: Yup.string(),
+    qualities: Yup.string(),
   });
 
   const formik = useFormik({
     initialValues: {
-      birdName: '',
-      birdAge: '',
-      status: '',
-      species: '',
-      cageId,
+      birdName: 'B02',
+      birdAge: '1',
+      status: '1',
+      species: '1',
+      cageId: '1',
       avatarUrl: null,
-      birdGender: '',
-      hatchingDate: null,
-      attitudes: '', 
-      featherColor: '',
-      area: location, 
-      appearance: '', 
-      qualities: '',
+      birdGender: '1',
+      hatchingDate: '2023-01-01',
+      attitudes: '1',
+      featherColor: '1',
+      area: location,
+      appearance: '1',
+      qualities: '1',
     },
     validationSchema: NewBirdSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        const birdId = `BIRD${birdData.length}`;
-        await fakeRequest(500);
-        await saveBirdData([...birdData, {...values, birdId}])
+
+        dispatch(createBird({ ...values, file: birdImage }));
         resetForm();
         setSubmitting(false);
         enqueueSnackbar('Create success', { variant: 'success' });
@@ -101,6 +79,7 @@ export default function CreateNewBirdForm() {
     (acceptedFiles) => {
       const file = acceptedFiles[0];
       if (file) {
+        setBirdImage(file);
         setFieldValue('avatarUrl', {
           ...file,
           preview: URL.createObjectURL(file),
@@ -109,7 +88,7 @@ export default function CreateNewBirdForm() {
     },
     [setFieldValue]
   );
-  const [isExoticChecked, setExoticChecked] = useState(false);
+
 
   return (
     <FormikProvider value={formik}>
@@ -199,9 +178,9 @@ export default function CreateNewBirdForm() {
                     <MenuItem value="" disabled>
                       Select Status
                     </MenuItem>
-                    <MenuItem value="Normal">Normal</MenuItem>
-                    <MenuItem value="Sick">Sick</MenuItem>
-                    <MenuItem value="Birth">Birth</MenuItem>
+                    <MenuItem value="1">Normal</MenuItem>
+                    <MenuItem value="2">Sick</MenuItem>
+                    <MenuItem value="3">Birth</MenuItem>
                   </TextField>
                   <TextField
                     select

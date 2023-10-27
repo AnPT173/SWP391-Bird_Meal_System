@@ -20,6 +20,7 @@ import {
   FormControlLabel
 } from '@material-ui/core';
 import { LoadingButton, MobileDateTimePicker } from '@material-ui/lab';
+import { useSelector } from 'react-redux';
 import { Typography } from '@mui/material';
 import { title } from '../../../utils/mock-data/text';
 // redux
@@ -29,6 +30,8 @@ import { createEvent, updateEvent, deleteEvent } from '../../../redux/slices/cal
 //
 import ColorSinglePicker from '../../ColorSinglePicker';
 import { getSchedule, saveSchedule } from '../../../utils/mock-data/localStorageUtil';
+import { getCageList } from '../../../redux/slices/cage';
+import { getFoodList } from '../../../redux/slices/food';
 
 // ----------------------------------------------------------------------
 
@@ -40,26 +43,12 @@ const COLOR_OPTIONS = [
 
 const STAFFS = [
   { id: '-1', value: '' },
-  { id: 'STA001', value: 'Staff 001' },
-  { id: 'STA002', value: 'Staff 002' },
-  { id: 'STA003', value: 'Staff 003' },
-  { id: 'STA004', value: 'Staff 004' }
+  { id: '1', value: 'Staff 001' },
+  { id: '2', value: 'Staff 002' },
+  { id: '3', value: 'Staff 003' },
+  { id: '4', value: 'Staff 004' }
 ];
-const CAGES = [
-  { id: '-1', value: '' },
-  { id: 'CA001', value: 'Cage 001' },
-  { id: 'CA002', value: 'Cage 002' },
-  { id: 'CA003', value: 'Cage 003' },
-  { id: 'CA004', value: 'Cage 004' },
-  { id: 'CA005', value: 'Cage 005' }
-];
-const FOODS = [
-  { id: '-1', value: '' },
-  { id: 'FO001', value: 'Food 1' },
-  { id: 'FO002', value: 'Food 2' },
-  { id: 'FO003', value: 'Food 3' },
-  { id: 'FO004', value: 'Food 4' }
-];
+
 
 const FEEDING_NOTE = [
   { id: '-1', value: '' },
@@ -104,13 +93,17 @@ CalendarForm.propTypes = {
 };
 
 export default function CalendarForm({ event, isCreating, range, onCancel }) {
-  console.log('event', getInitialValues(event, range),);
+
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const [currentEvent, setCurrentEvent] = useState([]);
+  const { cageList } = useSelector(state => state.cage);
+  const { foodList } = useSelector(state => state.food);
+  const dispatch = useDispatch();
+
   useEffect(async () => {
-    const data = await getSchedule();
-    setCurrentEvent(data);
+    dispatch(getCageList());
+    dispatch(getFoodList());
   }, []);
 
   const isManager = user?.role === 'manager';
@@ -149,9 +142,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
           feedingTime: values.feedingTime ?? ''
         };
         if (isCreating) {
-          const id = currentEvent.length;
-          const locationId = 1;
-          await saveSchedule([...currentEvent, { ...values, id, locationId }]);
+          dispatch(createEvent(values));
           enqueueSnackbar('Create event success', { variant: 'success' });
         } else {
           await saveSchedule([...currentEvent, values]);
@@ -168,33 +159,16 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
 
   const { values, errors, touched, handleSubmit, isSubmitting, getFieldProps, setFieldValue } = formik;
 
-console.log("vvv",values)
+  console.log("vvv", values)
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3} sx={{ p: 3 }}>
           <TextField
-            select
-            fullWidth
-            label="Status"
-            value={values.status}
-            {...getFieldProps('status')}
-            error={Boolean(touched.status && errors.status)}
-            helperText={touched.status && errors.status}
-            SelectProps={{ native: true }}
-          >
-            {STATUS.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.value}
-              </option>
-            ))}
-          </TextField>
-          <TextField
-
             fullWidth
             label="Title"
             {...getFieldProps('title')}
-            disabled={!isManager || values?.status === 'completed'}
+            disabled={!isManager || values.status === 'completed'}
             error={Boolean(touched.title && errors.title)}
             helperText={touched.title && errors.title}
           />
@@ -220,9 +194,9 @@ console.log("vvv",values)
               helperText={touched.foodType && errors.foodType}
               SelectProps={{ native: true }}
             >
-              {FOODS.map((f) => (
+              {foodList.map((f) => (
                 <option key={f.id} value={f.id}>
-                  {f.value}
+                  {`Food Norm ${f.id}`}
                 </option>
               ))}
             </TextField>
@@ -238,21 +212,13 @@ console.log("vvv",values)
               helperText={touched.cageId && errors.cageId}
               SelectProps={{ native: true }}
             >
-              {CAGES.map((c) => (
+              {cageList.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.value}
+                  {`Cage ${c.id}`}
                 </option>
               ))}
             </TextField>
-            <TextField
-            fullWidth
-            multiline
-            maxRows={4}
-            label="Total Food Quantity"
-            {...getFieldProps('foodQuantity')}
-            error={Boolean(touched.foodQuantity && errors.foodQuantity)}
-            helperText={touched.foodQuantity && errors.foodQuantity}
-          />
+
             <TextField
               select
               {...getFieldProps('staffId')}
@@ -294,7 +260,7 @@ console.log("vvv",values)
               <MobileDateTimePicker
                 label="Feeding time"
                 value={values.end}
-                inputFormat="dd/MM/yyyy hh:mm a"
+                inputFormat="yyyy-mm-dd hh:mm"
                 onChange={(date) => setFieldValue('feedingTime', date)}
                 renderInput={(params) => (
                   <TextField
@@ -320,28 +286,11 @@ console.log("vvv",values)
           )}
 
 
-          <Stack direction="column" spacing={1.0}>
-            {COLOR_OPTIONS.map((colorOption) => (
-              <Stack key={colorOption.color} direction="row" alignItems="center">
-                <div
-                  style={{
-                    width: '24px',
-                    height: '24px',
-                    backgroundColor: colorOption.color,
-                    marginRight: '8px',
-                    border: '1px solid #d4d4d4',
-                  }}
-                />
-                <Typography variant="body2" color="textSecondary">
-                  {colorOption.title}
-                </Typography>
-              </Stack>
-            ))}
-            <ColorSinglePicker
-              {...getFieldProps('textColor')}
-              colors={COLOR_OPTIONS.map((colorOption) => colorOption.color)}
-            />
-          </Stack>
+          <ColorSinglePicker
+            {...getFieldProps('textColor')}
+            colors={COLOR_OPTIONS}
+          />
+
         </Stack>
 
         <DialogActions>

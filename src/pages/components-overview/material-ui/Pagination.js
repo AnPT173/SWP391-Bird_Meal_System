@@ -41,7 +41,7 @@ export default function PaginationComponent() {
   };
 
   return (
-    <RootStyle title="Components: Pagination | Minimal-UI">
+    <RootStyle title="Components: Pagination">
       <Box
         sx={{
           pt: 6,

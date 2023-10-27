@@ -23,6 +23,8 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 
 
 import BirdProfile from '../../components/_dashboard/user/BirdProfileForm';
+import { getBirdData } from '../../utils/mock-data/localStorageUtil';
+import { getBirdList } from '../../redux/slices/bird';
 // ----------------------------------------------------------------------
 
 const TabsWrapperStyle = styled('div')(({ theme }) => ({
@@ -51,10 +53,19 @@ export default function BirdProfileWrapper() { // Rename the component to avoid 
   const [currentTab, setCurrentTab] = useState('profile');
   const { cageId, birdId } = useParams();
 
+  const [currentBird, setCurrentBird] = useState();
 
-  const handleChangeTab = (event, newValue) => {
-    setCurrentTab(newValue);
-  };
+  const { birdList } = useSelector(state => state.bird);
+
+  useEffect(async() => {
+    dispatch(getBirdList());
+  }, []);
+
+  useEffect(()=>{
+    const current = birdList.find(item => item.id === birdId);
+    setCurrentBird(current);
+  },[birdList])
+
 
   return (
     <Page title="Bird Profile">

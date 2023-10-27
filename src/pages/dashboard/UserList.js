@@ -26,7 +26,6 @@ import {
 } from '@material-ui/core';
 import { Form, FormikProvider } from 'formik/dist';
 import { foodsData } from '../../utils/mock-data/food';
-
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUserList, deleteUser } from '../../redux/slices/user';
@@ -155,7 +154,7 @@ export default function FoodList() {
     }
   };
   return (
-    <Page title="Food List | Minimal-UI">
+    <Page title="Food List">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Food List"

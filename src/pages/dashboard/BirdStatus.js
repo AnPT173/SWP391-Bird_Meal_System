@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Container, Box, Stack, Grid, Skeleton } from '@material-ui/core';
+import { useParams } from 'react-router';
+// material
+import { Container, Tab, Box, Tabs, Stack, Grid, Skeleton } from '@material-ui/core';
+// redux
+import { foodsData } from '../../utils/mock-data/food';
 import { useDispatch, useSelector } from '../../redux/store';
 import { getUsers } from '../../redux/slices/user';
 import { PATH_DASHBOARD } from '../../routes/paths';
@@ -7,7 +11,11 @@ import useSettings from '../../hooks/useSettings';
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import StatusForm from '../../components/_dashboard/user/StatusForm';
-import foodPlanData from '../../utils/mock-data/foodPlan';
+import { getCurrentFoodPlan, getFoodList } from '../../redux/slices/food';
+
+
+
+// ----------------------------------------------------------------------
 
 const SkeletonLoad = (
   <>
@@ -19,18 +27,54 @@ const SkeletonLoad = (
   </>
 );
 
+
 export default function BirdStatus() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.user);
-  const [loading, setLoading] = useState(true);
+  const { foodList } = useSelector(state => state.food);
+  const [currentFoodPlan, setCurrentFoodPlan] = useState();
+  const [currentTab, setCurrentTab] = useState('Normal');
+  const { speciesId, periodId } = useParams();
+
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
+    dispatch(getFoodList());
+  }, [])
+
+  useEffect(() => {
+    const foodPlan = getCurrentFoodPlan(1,1, foodList);
+    setCurrentFoodPlan(foodPlan);
+  }, [foodList])
+
+  const STATUS_TABS = [
+    {
+      value: 'Normal',
+      component: <StatusForm currentPlan={currentFoodPlan} />
+    },
+    {
+      value: 'Sick',
+      component: <StatusForm currentPlan={currentFoodPlan} />
+    },
+    {
+      value: 'Birth',
+      component: <StatusForm currentPlan={currentFoodPlan} />
+    },
+  ];
+
+  const handleChangeTab = (event, newValue) => {
+    setCurrentTab(newValue);
+  };
+
+
+
+  
+  function BirdStatus() {
+    const dispatch = useDispatch();
+    const themeStretch = true; 
+    const currentPlan = foodsData;
+  
+    useEffect(() => {
       dispatch(getUsers());
-    }, 20);
-  }, [dispatch]);
-  const currentPlan = foodPlanData;
+    }, [dispatch]);
   return (
     <Page title="Food Plan">
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -48,4 +92,4 @@ export default function BirdStatus() {
       </Container>
     </Page>
   );
-}
+}}

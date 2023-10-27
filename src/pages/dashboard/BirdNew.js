@@ -22,41 +22,9 @@ import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import CreateNewBirdForm from '../../components/_dashboard/user/UserNewForm'; 
 
-const TabsWrapperStyle = styled('div')(({ theme }) => ({
-  zIndex: 9,
-  bottom: 0,
-  width: '100%',
-  display: 'flex',
-  position: 'absolute',
-  backgroundColor: theme.palette.background.paper,
-  [theme.breakpoints.up('sm')]: {
-    justifyContent: 'center'
-  },
-  [theme.breakpoints.up('md')]: {
-    justifyContent: 'flex-end',
-    paddingRight: theme.spacing(3)
-  }
-}));
-
 export default function BirdNew() {
   const { themeStretch } = useSettings();
-  const dispatch = useDispatch();
-  const { posts, followers, friends, gallery } = useSelector((state) => state.user);
-  const { user } = useAuth();
-  const [currentTab, setCurrentTab] = useState('createBird');
-  const { cageId, birdId } = useParams();
-
-  useEffect(() => {
-    dispatch(getProfile());
-    dispatch(getPosts());
-    dispatch(getFollowers());
-    dispatch(getFriends());
-    dispatch(getGallery());
-  }, [dispatch]);
-
-  const handleChangeTab = (event, newValue) => {
-    setCurrentTab(newValue);
-  };
+  const { cageId } = useParams();
 
   return (
     <Page title="Create">
@@ -72,7 +40,7 @@ export default function BirdNew() {
         />
         <Card sx={{ mb: 3 }}>
           <Box sx={{ p: 3 }}>
-            {currentTab === 'createBird' && <CreateNewBirdForm />}
+            <CreateNewBirdForm  cageId/>
           </Box>
         </Card>
       </Container>

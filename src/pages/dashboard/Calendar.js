@@ -1,54 +1,33 @@
 import FullCalendar from '@fullcalendar/react'; // => request placed at the top
-import listPlugin from '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import listPlugin from '@fullcalendar/list';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import timelinePlugin from '@fullcalendar/timeline';
-import interactionPlugin from '@fullcalendar/interaction';
-import { Icon } from '@iconify/react';
-import { useSnackbar } from 'notistack5';
 import plusFill from '@iconify/icons-eva/plus-fill';
-import { useState, useRef, useEffect } from 'react';
+import { Icon } from '@iconify/react';
+import { useRef } from 'react';
 // material
-import { styled, useTheme } from '@material-ui/core/styles';
-import { Card, Button, Container, DialogTitle, useMediaQuery, Stack, Typography, Grid } from '@material-ui/core';
-import { useLocation, useParams } from 'react-router';
-import useAuth from '../../hooks/useAuth';
+import { Button, Card, Container, DialogTitle, Grid, Stack, Typography, useMediaQuery } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
+import { useParams } from 'react-router';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import {
-  getEvents,
-  openModal,
-  closeModal,
-  updateEvent,
-  selectEvent,
-  selectRange,
-  openTaskDialog,
-  openLocationDialog,
-  closeTaskDialog
-} from '../../redux/slices/calendar';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // components
-import Page from '../../components/Page';
-import { DialogAnimate } from '../../components/animate';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import Page from '../../components/Page';
 import { CalendarForm, CalendarStyle, CalendarToolbar } from '../../components/_dashboard/calendar';
-import Label from '../../components/Label';
-import AssignTaskForm from '../../components/_dashboard/calendar/AssignTaskForm';
-import { getSchedule, getScheduleById, saveSchedule } from '../../utils/mock-data/localStorageUtil';
+import { DialogAnimate } from '../../components/animate';
+import { useCalendar } from '../../hooks/useCalendar';
+import { openCreateMultipleTaskDialog } from '../../redux/slices/calendar';
+import CreateMultipleTaskDialog from '../../components/_dashboard/user/cards/CreateMultipleTaskDialog';
 
 // ----------------------------------------------------------------------
 
-const selectedEventSelector = async (state) => {
-  const { selectedEventId } = state.calendar;
-  const events = await getSchedule();
-  if (selectedEventId) {
-    return events.find((_event) => _event.id === selectedEventId);
-  }
-  return null;
-};
 
 const getStatusColor = (status) => {
   switch (status) {
@@ -144,149 +123,38 @@ function LocationScheduleMap(props) {
 }
 
 export default function Calendar() {
-  const { themeStretch } = useSettings();
-  const dispatch = useDispatch();
+  const { themeStretch } = useSettings;
   const theme = useTheme();
+  const dispatch = useDispatch();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const calendarRef = useRef(null);
-  const { enqueueSnackbar } = useSnackbar();
-  const [scheduleData, setScheduleData] = useState([]);
-  const [date, setDate] = useState(new Date());
-  const [view, setView] = useState(isMobile ? 'listWeek' : 'dayGridMonth');
-  const [selectedEvent, setSelectedEvent] = useState();
-  const { events, isOpenModal, selectedRange, isOpenTaskDialog, isOpenLocationDialog } = useSelector(
-    (state) => state.calendar
-  );
-  const { user } = useAuth();
   const { cageId } = useParams();
-  const isManager = !!user && user?.role === 'manager';
-  const [isCreating, setIsCreating] = useState(false);
-  const scheduleBaseOnCage = scheduleData.filter((data) => data.cageId === cageId);
-  const fullScheduleBaseOnRole = isManager ? scheduleData : scheduleData.filter((data) => data.staffId === user.id);
+  const { start, end, selectedRange, isOpenTaskDialog, isOpenLocationDialog, isOpenCreateMultipleTaskDialog } = useSelector(state => state.calendar);
+  const {
+    date,
+    view,
+    isManager,
+    isCreating,
+    selectedEvent,
+    filteredScheduleData,
+    handleClickToday,
+    handleChangeView,
+    handleClickDatePrev,
+    handleClickDateNext,
+    handleSelectRange,
+    handleSelectEvent,
+    // handleResizeEvent,
+    handleDropEvent,
+    handleAddTask,
+    handleSelectTask,
+    handleCloseModal,
+    handleCloseTask,
+    handleAddMultipleTasks
+  } = useCalendar({ dispatch, isMobile, calendarRef, cageId });
 
-  const filterdScheduleData = cageId ? scheduleBaseOnCage : fullScheduleBaseOnRole;
 
   const cageIdTitle = cageId ? `    ||    CageId: ${cageId}` : '';
 
-  useEffect(async () => {
-    const data = await getSchedule();
-    setScheduleData(data);
-  }, []);
-
-  useEffect(() => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-      const newView = isMobile ? 'listWeek' : 'dayGridMonth';
-      calendarApi.changeView(newView);
-      setView(newView);
-    }
-  }, [isMobile]);
-
-  const handleClickToday = () => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-      calendarApi.today();
-      setDate(calendarApi.getDate());
-    }
-  };
-
-  const handleChangeView = (newView) => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-      calendarApi.changeView(newView);
-      setView(newView);
-    }
-  };
-
-  const handleClickDatePrev = () => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-      calendarApi.prev();
-      setDate(calendarApi.getDate());
-    }
-  };
-
-  const handleClickDateNext = () => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-      calendarApi.next();
-      setDate(calendarApi.getDate());
-    }
-  };
-
-  const handleSelectRange = (arg) => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-      calendarApi.unselect();
-    }
-    dispatch(selectRange(arg.start, arg.end));
-  };
-
-  const handleSelectEvent = (arg) => {
-    dispatch(openLocationDialog());
-    // dispatch(selectEvent(arg.event.id));
-  };
-
-  const handleResizeEvent = async ({ event }) => {
-    try {
-      dispatch(
-        updateEvent(event.id, {
-          allDay: event.allDay,
-          start: event.start,
-          end: event.end
-        })
-      );
-      enqueueSnackbar('Update event success', { variant: 'success' });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleDropEvent = async ({ event }) => {
-    try {
-      dispatch(
-        updateEvent(event.id, {
-          allDay: event.allDay,
-          start: event.start,
-          end: event.end
-        })
-      );
-      enqueueSnackbar('Update event success', {
-        variant: 'success'
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleAddEvent = () => {
-    setIsCreating(true);
-    dispatch(openTaskDialog());
-  };
-
-  const handleCloseModal = () => {
-    setIsCreating(false);
-    dispatch(closeModal());
-  };
-
-  const onSelectTask = async (id) => {
-    const event = await getScheduleById(id);
-    setSelectedEvent(event);
-    dispatch(openTaskDialog());
-    setIsCreating(false);
-  };
-
-  const handleCloseTask = () => {
-    setIsCreating(false);
-    dispatch(closeTaskDialog());
-  };
-  const handleCloseFrom = () => {};
   return (
     <Page title={`Calendar${cageIdTitle}`}>
       <Container maxWidth={themeStretch ? false : 'xl'}>
@@ -299,7 +167,7 @@ export default function Calendar() {
                 <Button
                   variant="contained"
                   startIcon={<Icon icon={plusFill} width={20} height={20} />}
-                  onClick={handleAddEvent}
+                  onClick={handleAddTask}
                 >
                   New Event
                 </Button>
@@ -309,7 +177,7 @@ export default function Calendar() {
                   variant="contained"
                   hidden
                   startIcon={<Icon icon={plusFill} width={20} height={20} />}
-                  onClick={handleAddEvent}
+                  onClick={handleAddMultipleTasks}
                 >
                   New Batch Event
                 </Button>
@@ -333,7 +201,7 @@ export default function Calendar() {
               editable
               droppable
               selectable
-              events={filterdScheduleData}
+              events={filteredScheduleData}
               ref={calendarRef}
               rerenderDelay={10}
               initialDate={date}
@@ -346,7 +214,7 @@ export default function Calendar() {
               select={handleSelectRange}
               eventDrop={handleDropEvent}
               eventClick={handleSelectEvent}
-              eventResize={handleResizeEvent}
+              // eventResize={handleResizeEvent}
               height={isMobile ? 'auto' : 720}
               plugins={[listPlugin, dayGridPlugin, timelinePlugin, timeGridPlugin, interactionPlugin]}
             />
@@ -357,11 +225,11 @@ export default function Calendar() {
           <Stack direction="column" spacing={2}>
             <DialogTitle>Event by Location</DialogTitle>
             {cageLocation.map((item) => {
-              const data = filterdScheduleData.filter((i) => i.locationId === item.id);
+              const data = filteredScheduleData.filter((i) => i.locationId === item.id);
               return (
                 <>
                   {data && data.length > 0 && <Typography>{item.value}</Typography>}
-                  <LocationScheduleMap data={data} onClick={onSelectTask} />
+                  <LocationScheduleMap data={data} onClick={handleSelectTask} />
                 </>
               );
             })}
@@ -375,6 +243,10 @@ export default function Calendar() {
             range={selectedRange}
             onCancel={handleCloseTask}
           />
+        </DialogAnimate>
+
+        <DialogAnimate open={isOpenCreateMultipleTaskDialog} onClose={() => openCreateMultipleTaskDialog()}>
+          <CreateMultipleTaskDialog />
         </DialogAnimate>
       </Container>
     </Page>

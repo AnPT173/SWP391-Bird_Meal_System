@@ -21,7 +21,8 @@ import PeriodCards from '../pages/dashboard/BirdPeriod';
 import CreateNewBirdForm from '../components/_dashboard/user/UserNewForm';
 import CageNew from '../pages/dashboard/CageNew';
 
-
+import BirdProfile from '../pages/dashboard/BirdProfile';
+import BirdCards from '../pages/dashboard/BirdCards';
 
 
 
@@ -103,10 +104,7 @@ export default function Router() {
           path: 'task',
           children: [
             { path: '/', element: <Navigate to="/dashboard/task/list" replace /> },
-            { path: 'list', element: <UserList /> },
-            { path: 'new', element: <UserCreate /> },
-            { path: '/:name/edit', element: <UserCreate /> },
-            { path: 'account', element: <UserAccount /> }
+            { path: 'list', element: <TaskList /> },
           ]
          },
         {
@@ -143,18 +141,15 @@ export default function Router() {
           path: 'foodPlan',
           children: [
             { path: '/', element: <Navigate to="/dashboard/foodPlan/species" replace /> },
-            { path: '/species', element: <BirdSpeciesCard /> },
+            { path: '/species', element: <SpeciesCards /> },
             { path: '/species/:speciesId/period', element: <PeriodCards /> },
             { path: '/species/:speciesId/period/:periodId/status', element: <BirdStatus /> },
             { path: '/:cageId/schedule', element: <Calendar /> },
-            { path: '/cards', element: <FoodPlanCards /> },
-            { path: '/cards/:name/edit', element: <BirdStatus /> },
-            { path: 'account', element: <UserAccount /> }
+            { path: '/:name/edit', element: <FoodEditForm /> }        
           ]
         },
 
-        { path: 'calendar', element: <Calendar /> },
-        { path: 'kanban', element: <Kanban /> }
+        { path: 'calendar', element: <Calendar /> }        
       ]
     },
 
@@ -250,10 +245,10 @@ const ResetPassword = Loadable(lazy(() => import('../pages/authentication/ResetP
 const VerifyCode = Loadable(lazy(() => import('../pages/authentication/VerifyCode')));
 // Dashboard
 const GeneralApp = Loadable(lazy(() => import('../pages/dashboard/GeneralApp')));
-const BirdProfile = Loadable(lazy(() => import('../pages/dashboard/BirdProfile')));
+const SpeciesCards = Loadable(lazy(() => import('../pages/dashboard/BirdSpecies')));
 const CageCards = Loadable(lazy(() => import('../pages/dashboard/CageCards')));
-const BirdCards = Loadable(lazy(() => import('../pages/dashboard/BirdCards')));
 const UserList = Loadable(lazy(() => import('../pages/dashboard/UserList')));
+const TaskList = Loadable(lazy(() => import('../pages/dashboard/TaskList')));
 const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
 const UserCreate = Loadable(lazy(() => import('../pages/dashboard/UserCreate')));
 const Calendar = Loadable(lazy(() => import('../pages/dashboard/Calendar')));
