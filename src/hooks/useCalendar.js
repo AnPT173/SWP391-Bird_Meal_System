@@ -137,6 +137,7 @@ export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
     };
 
     const handleSelectTask = async (id) => {
+        console.log("id", id);
         const event = await getScheduleById(id);
         setSelectedEvent(event);
         dispatch(openTaskDialog());
