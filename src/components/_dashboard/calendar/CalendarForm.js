@@ -109,7 +109,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
   const isManager = user?.role === 'manager';
 
   const EventSchema = Yup.object().shape({
-    title: Yup.string().max(255).required('Title is required'),
+    title: Yup.string().max(255),
     description: Yup.string().max(5000),
     cageId: Yup.string(),
     foodType: Yup.string(),
@@ -145,7 +145,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
           dispatch(createEvent(values));
           enqueueSnackbar('Create event success', { variant: 'success' });
         } else {
-          await saveSchedule([...currentEvent, values]);
+          dispatch(updateEvent(values.id,values))
           enqueueSnackbar('Update event success', { variant: 'success' });
         }
         resetForm();
@@ -159,7 +159,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
 
   const { values, errors, touched, handleSubmit, isSubmitting, getFieldProps, setFieldValue } = formik;
 
-  console.log("vvv", values)
+  console.log('error', errors)
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
@@ -183,59 +183,86 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
             helperText={touched.description && errors.description}
           />
           <Stack direction="row" spacing={1.0}>
-            <TextField
-              select
-              {...getFieldProps('foodType')}
-              value={values.foodType}
-              fullWidth
-              label="Food Type"
-              disabled={!isManager || values?.status === 'completed'}
-              error={Boolean(touched.foodType && errors.foodType)}
-              helperText={touched.foodType && errors.foodType}
-              SelectProps={{ native: true }}
-            >
-              {foodList.map((f) => (
-                <option key={f.id} value={f.id}>
-                  {`Food Norm ${f.id}`}
-                </option>
-              ))}
-            </TextField>
+            {isCreating &&
+              <TextField
+                select
+                {...getFieldProps('foodType')}
+                value={values.foodType}
+                fullWidth
+                label="Food Type"
+                disabled={!isManager || values?.status === 'completed'}
+                error={Boolean(touched.foodType && errors.foodType)}
+                helperText={touched.foodType && errors.foodType}
+                SelectProps={{ native: true }}
+              >
+                {foodList.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {`Food Norm ${f.id}`}
+                  </option>
+                ))}
+              </TextField>}
 
-            <TextField
-              select
-              {...getFieldProps('cageId')}
-              value={values.cageId}
-              fullWidth
-              label="Cage ID"
-              disabled={!isManager || values?.status === 'completed'}
-              error={Boolean(touched.cageId && errors.cageId)}
-              helperText={touched.cageId && errors.cageId}
-              SelectProps={{ native: true }}
-            >
-              {cageList.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {`Cage ${c.id}`}
-                </option>
-              ))}
-            </TextField>
+            {!isCreating &&
+              <TextField
+                disabled
+                value={values.foodType}
+                fullWidth
+                label="Food Type"
+              />}
 
-            <TextField
-              select
-              {...getFieldProps('staffId')}
-              value={values.staffId}
-              fullWidth
-              label="Staff ID"
-              disabled={!isManager || values?.status === 'completed'}
-              error={Boolean(touched.staffId && errors.staffId)}
-              helperText={touched.staffId && errors.staffId}
-              SelectProps={{ native: true }}
-            >
-              {STAFFS.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.value}
-                </option>
-              ))}
-            </TextField>
+            {isCreating &&
+              <TextField
+                select
+                {...getFieldProps('cageId')}
+                value={values.cageId}
+                fullWidth
+                label="Cage ID"
+                disabled={!isManager || values?.status === 'completed'}
+                error={Boolean(touched.cageId && errors.cageId)}
+                helperText={touched.cageId && errors.cageId}
+                SelectProps={{ native: true }}
+              >
+                {cageList.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {`Cage ${c.id}`}
+                  </option>
+                ))}
+              </TextField>}
+
+
+            {!isCreating &&
+              <TextField
+                disabled
+                value={values.cageId}
+                fullWidth
+                label="Cage ID"
+              />}
+            {isCreating &&
+              <TextField
+                select
+                {...getFieldProps('staffId')}
+                value={values.staffId}
+                fullWidth
+                label="Staff ID"
+                disabled={!isManager || values?.status === 'completed'}
+                error={Boolean(touched.staffId && errors.staffId)}
+                helperText={touched.staffId && errors.staffId}
+                SelectProps={{ native: true }}
+              >
+                {STAFFS.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.value}
+                  </option>
+                ))}
+              </TextField>}
+
+            {!isCreating &&
+              <TextField
+                disabled
+                value={values.staffId}
+                fullWidth
+                label="Staff ID"
+              />}
           </Stack>
 
           <Stack direction="row" spacing={1.0}>

@@ -106,7 +106,7 @@ function LocationScheduleMap(props) {
   const color = locationBackgroundColor[Math.floor(Math.random() * 4)];
 
   return (
-    <Grid container spacing={1} style={{ backgroundColor: color.color1, margin: '5px 5px 10px 5px' }}>
+    <Grid container spacing={1} style={{ margin: '5px 5px 10px 5px' }}>
       {props.data.map((item, index) => (
         <Grid item xs={4} key={index}>
           <CageLabel

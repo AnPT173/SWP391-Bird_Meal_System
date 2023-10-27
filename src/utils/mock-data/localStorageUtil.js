@@ -18,6 +18,9 @@ export async function saveFoodType(data) {
 export async function saveSchedule(data) {
   localStorage.setItem('schedule', JSON.stringify(data));
 }
+export async function saveOriginalSchedule(data) {
+  localStorage.setItem('originalSchedule', JSON.stringify(data));
+}
 
 export async function saveCurrentLocation(data) {
   localStorage.setItem('currentLocation', JSON.stringify(data));
@@ -45,9 +48,19 @@ export async function getFoodType() {
   return data;
 }
 
+
 export async function getSchedule() {
   const data = JSON.parse(localStorage.getItem('schedule'));
   return data;
+}
+
+export async function getOriginalSchedule() {
+  const data = JSON.parse(localStorage.getItem('originalSchedule'));
+  return data;
+}
+export async function getOriginalScheduleById(id) {
+  const data = JSON.parse(localStorage.getItem('originalSchedule'));
+  return data.find(item => item.id ===id);
 }
 
 export async function getScheduleById(id) {

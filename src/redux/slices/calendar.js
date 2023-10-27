@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { filter, map } from 'lodash';
 import { add } from 'date-fns';
+import { filter, map } from 'lodash';
 // utils
 import axios from '../../utils/axios';
+import { getOriginalScheduleById, saveOriginalSchedule, saveSchedule } from '../../utils/mock-data/localStorageUtil';
 
 // ----------------------------------------------------------------------
 
@@ -129,12 +130,10 @@ export function getEvents() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      console.log("before")
       const response = await axios.get('/manager/schedule/getall');
-      console.log("before2")
+      await saveOriginalSchedule(response.data);
       const transformedResponse = buildTaskResponse(response.data)
-      console.log(transformedResponse);
-      console.log(response.data);
+      await saveSchedule(transformedResponse);
       dispatch(slice.actions.getEventsSuccess(transformedResponse));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -145,7 +144,6 @@ export function getEvents() {
 // ----------------------------------------------------------------------
 
 export function createEvent(newEvent) {
-  console.log("new event", newEvent);
   const requestBody = buildCreateTaskRequestBody(newEvent)
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
@@ -161,15 +159,20 @@ export function createEvent(newEvent) {
 // ----------------------------------------------------------------------
 
 export function updateEvent(eventId, updateEvent) {
+
+  console.log('update 1')
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post('/api/calendar/events/update', {
-        eventId,
-        updateEvent
-      });
-      dispatch(slice.actions.updateEventSuccess(response.data.event));
+      const originalData = await getOriginalScheduleById(eventId);
+      const { textColor } = updateEvent;
+    
+      originalData.task.color = textColor;
+      console.log('update 12')
+      const response = await axios.post(`/manager/schedule/updateInfoTaskBird/${eventId}`,{...originalData} );
+      dispatch(slice.actions.updateEventSuccess(response.data));
     } catch (error) {
+      console.log('update 13')
       dispatch(slice.actions.hasError(error));
     }
   };
@@ -242,18 +245,20 @@ function buildCreateTaskRequestBody(payload) {
 }
 
 function buildTaskResponse(responses) {
-  const result =  Object.values(responses).map((response) =>{
+  const result = Object.values(responses).map((response, index) => {
     const data = {
       id: response.id,
-      cageId: getCageFromBird(),
-      title: response.title,
+      cageId: `Cage ${index + 1}`,
+      title: response.task.title,
+      description: response.task.description,
       foodType: response.foodTypeID.id,
-      start: add(new Date(), { days: 0, hours: 0, minutes: 35 }),
-      end: add(new Date(), { days: 0, hours: 0, minutes: 45 }),
-      foodQuantity: response.quantity,
+      start: add(new Date(), { days: 0, hours: index, minutes: 35 }),
+      end: add(new Date(), { days: 0, hours: index, minutes: 45 }),
+      foodQuantity: response?.quantity ?? 100,
       staffId: response.staff.accountName,
       feedingRegimen: "None",
-      locationId: 1
+      locationId: index % 3 + 1,
+      color: response?.task?.color
     }
 
     return data
