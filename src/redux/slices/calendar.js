@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { filter, map } from 'lodash';
+import { add } from 'date-fns';
 // utils
 import axios from '../../utils/axios';
 
@@ -15,7 +16,8 @@ const initialState = {
   country: null,
   isOpenLocationDialog: false,
   isOpenTaskDialog: false,
-  isOpenCreateMultipleTaskDialog: false
+  isOpenCreateMultipleTaskDialog: false,
+
 };
 
 const slice = createSlice({
@@ -127,8 +129,13 @@ export function getEvents() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
+      console.log("before")
       const response = await axios.get('/manager/schedule/getall');
-      dispatch(slice.actions.getEventsSuccess(response.data));
+      console.log("before2")
+      const transformedResponse = buildTaskResponse(response.data)
+      console.log(transformedResponse);
+      console.log(response.data);
+      dispatch(slice.actions.getEventsSuccess(transformedResponse));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -193,7 +200,24 @@ export function selectRange(start, end) {
     );
   };
 }
+// {
+//   color: "#33",
+//   title: "Task for cage xx",
+//   description: "description",
+//   birdDTOList:[
 
+//   birdID: 1,
+//   foodTypeID:1,
+//   schedules:[{
+//   startDate:'2023-01-01 18:00:00',
+//   endDate:'2023-01-02 18:00:00',
+//   staffID:1,
+//   note:"non",
+//   status:0
+//   }],
+//   quantity:10
+//   ]
+//   }
 function buildCreateTaskRequestBody(payload) {
   return {
     color: payload.textColor,
@@ -202,12 +226,67 @@ function buildCreateTaskRequestBody(payload) {
     birdDTOList: [
       {
         birdID: 1,
-        foodTypeID: payload.foodType,
-        schedules: [formatDate(payload.start)],
+        foodTypeID: 1,
+        schedules: [
+          {
+            startDate: formatDate(payload.start),
+            endDate: formatDate(payload.start),
+            staffID: payload.staffId,
+            note: '',
+            status: 0
+          }],
         quantity: 10,
       }
     ]
   }
+}
+
+function buildTaskResponse(responses) {
+  const result =  Object.values(responses).map((response) =>{
+    const data = {
+      id: response.id,
+      cageId: getCageFromBird(),
+      title: response.title,
+      foodType: response.foodTypeID.id,
+      start: add(new Date(), { days: 0, hours: 0, minutes: 35 }),
+      end: add(new Date(), { days: 0, hours: 0, minutes: 45 }),
+      foodQuantity: response.quantity,
+      staffId: response.staff.accountName,
+      feedingRegimen: "None",
+      locationId: 1
+    }
+
+    return data
+  })
+
+  console.log('result', result)
+  return result
+}
+
+function getCageFromBird() {
+  return 1
+}
+
+function stringToDate(input) {
+  // Parse the string as a Date object
+  const date = new Date(input);
+
+  // Create a new Date object with the same value but adjusted for the local time zone
+  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+
+  // Extract the date and time components
+  const day = localDate.getDate();
+  const month = localDate.getMonth() + 1;
+  const year = localDate.getFullYear();
+  const hour = localDate.getHours();
+  const minute = localDate.getMinutes();
+  const ampm = hour >= 12 ? "PM" : "AM";
+
+  // Format the components using string concatenation and conditional operators
+  const output = `${day < 10 ? "0" : ""}${day}/${month < 10 ? "0" : ""}${month}/${year} ${(hour % 12) || 12}:${minute < 10 ? "0" : ""}${minute} ${ampm}`;
+  // Return or display the output
+  console.log(output); // 01/01/2023 06:00 PM
+  return output
 }
 
 function formatDate(input) {

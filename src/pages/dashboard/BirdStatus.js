@@ -15,6 +15,7 @@ import CageCard from '../../components/_dashboard/user/cards/CageCard';
 
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import StatusForm from '../../components/_dashboard/user/StatusForm';
+import { getCurrentFoodPlan, getFoodList } from '../../redux/slices/food';
 
 
 // ----------------------------------------------------------------------
@@ -29,42 +30,46 @@ const SkeletonLoad = (
   </>
 );
 
-const STATUS_TABS = [
-  {
-    value: 'Normal',
-    component: <StatusForm />
-  },
-  {
-    value: 'Sick',
-    component: <StatusForm />
-  },
-  {
-    value: 'Birth',
-    component: <StatusForm />
-  },
-];
 
 export default function BirdStatus() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.user);
-  const [loading, setLoading] = useState(true);
+  const { foodList } = useSelector(state => state.food);
+  const [currentFoodPlan, setCurrentFoodPlan] = useState();
   const [currentTab, setCurrentTab] = useState('Normal');
+  const { speciesId, periodId } = useParams();
+
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-      dispatch(getUsers());
-    }, 20);
-  }, [dispatch]);
+    dispatch(getFoodList());
+  }, [])
+
+  useEffect(() => {
+    const foodPlan = getCurrentFoodPlan(1,1, foodList);
+    setCurrentFoodPlan(foodPlan);
+  }, [foodList])
+
+  const STATUS_TABS = [
+    {
+      value: 'Normal',
+      component: <StatusForm currentPlan={currentFoodPlan} />
+    },
+    {
+      value: 'Sick',
+      component: <StatusForm currentPlan={currentFoodPlan} />
+    },
+    {
+      value: 'Birth',
+      component: <StatusForm currentPlan={currentFoodPlan} />
+    },
+  ];
 
   const handleChangeTab = (event, newValue) => {
     setCurrentTab(newValue);
   };
 
-  const {speciesId, periodId} = useParams();
 
-  const [selectedSpecies, setSelectedSpecies] = useState(null);
-  const [selectedPeriod, setSelectedPeriod] = useState(null);
+
+  console.log('species', speciesId, periodId)
 
   return (
     <Page title="Food Plan">

@@ -34,7 +34,7 @@ export default function PeriodCards() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-      dispatch(getUsers());
+     
     }, 20);
   }, [dispatch]);
 

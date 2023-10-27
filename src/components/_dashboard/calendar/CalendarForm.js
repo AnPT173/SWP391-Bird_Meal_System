@@ -20,6 +20,7 @@ import {
   FormControlLabel
 } from '@material-ui/core';
 import { LoadingButton, MobileDateTimePicker } from '@material-ui/lab';
+import { useSelector } from 'react-redux';
 import { Typography } from '@mui/material';
 import { title } from '../../../utils/mock-data/text';
 // redux
@@ -29,6 +30,8 @@ import { createEvent, updateEvent, deleteEvent } from '../../../redux/slices/cal
 //
 import ColorSinglePicker from '../../ColorSinglePicker';
 import { getSchedule, saveSchedule } from '../../../utils/mock-data/localStorageUtil';
+import { getCageList } from '../../../redux/slices/cage';
+import { getFoodList } from '../../../redux/slices/food';
 
 // ----------------------------------------------------------------------
 
@@ -40,26 +43,12 @@ const COLOR_OPTIONS = [
 
 const STAFFS = [
   { id: '-1', value: '' },
-  { id: 'STA001', value: 'Staff 001' },
-  { id: 'STA002', value: 'Staff 002' },
-  { id: 'STA003', value: 'Staff 003' },
-  { id: 'STA004', value: 'Staff 004' }
+  { id: '1', value: 'Staff 001' },
+  { id: '2', value: 'Staff 002' },
+  { id: '3', value: 'Staff 003' },
+  { id: '4', value: 'Staff 004' }
 ];
-const CAGES = [
-  { id: '-1', value: '' },
-  { id: 'CA001', value: 'Cage 001' },
-  { id: 'CA002', value: 'Cage 002' },
-  { id: 'CA003', value: 'Cage 003' },
-  { id: 'CA004', value: 'Cage 004' },
-  { id: 'CA005', value: 'Cage 005' }
-];
-const FOODS = [
-  { id: '-1', value: '' },
-  { id: '1', value: 'Food 1' },
-  { id: '2', value: 'Food 2' },
-  { id: '3', value: 'Food 3' },
-  { id: '4', value: 'Food 4' }
-];
+
 
 const FEEDING_NOTE = [
   { id: '-1', value: '' },
@@ -108,10 +97,13 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const [currentEvent, setCurrentEvent] = useState([]);
+  const { cageList } = useSelector(state => state.cage);
+  const { foodList } = useSelector(state => state.food);
   const dispatch = useDispatch();
+
   useEffect(async () => {
-    const data = await getSchedule();
-    setCurrentEvent(data);
+    dispatch(getCageList());
+    dispatch(getFoodList());
   }, []);
 
   const isManager = user?.role === 'manager';
@@ -202,9 +194,9 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
               helperText={touched.foodType && errors.foodType}
               SelectProps={{ native: true }}
             >
-              {FOODS.map((f) => (
+              {foodList.map((f) => (
                 <option key={f.id} value={f.id}>
-                  {f.value}
+                  {`Food Norm ${f.id}`}
                 </option>
               ))}
             </TextField>
@@ -220,9 +212,9 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
               helperText={touched.cageId && errors.cageId}
               SelectProps={{ native: true }}
             >
-              {CAGES.map((c) => (
+              {cageList.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.value}
+                  {`Cage ${c.id}`}
                 </option>
               ))}
             </TextField>

@@ -1,14 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
-import { getNumberOfBirdInCage } from './bird';
 
 // ----------------------------------------------------------------------
 
 const initialState = {
   isLoading: false,
   error: false,
-  foodList: [],
+  foodList: [], // food norm
   foodTypeList: [],
   medicineList: []
 };
@@ -59,7 +58,6 @@ export default slice.reducer;
 // ----------------------------------------------------------------------
 
 export function createFood(payload) {
-  console.log('payload ',payload)
   const body = buildCreateFoodRequestBody(payload);
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
@@ -112,34 +110,39 @@ export function getMedicineList() {
 
 
 function buildCreateFoodRequestBody(payload) {
-  // get bird type
-  // get food type
-  // get medicine
-  //
+
   return {
-    // birdType: 
-    // foodType:
-    // quantityFood:
-    // medicine:
-    // quantityMedicine:
-    // numberOfFeeding:
-    // startTime:
-    // duration:
-    // note: 
+     birdType: getBirdType(payload),
+     foodType: getFoodType(payload),
+     quantityFood: payload.products[0]?.quantity ?? 10,
+     medicine: payload.medicineList[0],
+     quantityMedicine: 10,
+     numberOfFeeding: payload.numberOfFeedings,
+     startTime: '2023-02-10T07:07:00',
+     duration: payload.duration,
+     note: payload.note
   }
 }
 
-// {
-//   "birdType":  {
-//           "id": 1,
-//           "name": "t01",
-//           "specieID": {
-//               "id": 1,
-//               "name": "specie 1",
-//               "hibernateLazyInitializer": {}
-//           }
-//       },
-//   "foodType": {
-//           "id": 1,
-//           "name": "ft001",
-//           "quanti
+function getBirdType(payload){
+  const { birdTypeList} = payload;
+  const specieId = 1;
+  const periodId = 1;
+  const birdInTheSameSpecie = birdTypeList.filter(item => item.specieID.id === + specieId);
+  const birdType = birdInTheSameSpecie.find(item => item.id === periodId);
+  return birdType
+}
+
+function getFoodType(payload){
+  const {products, foodTypeList} = payload;
+  const foodTypeId = products[0]?.product ?? 1;
+  const foodType = foodTypeList.find(item => item.id === foodTypeId);
+  return foodType;
+}
+
+export function getCurrentFoodPlan(speciesId, periodId, payload){
+  const birdType = payload.filter(item => item.birdType?.id === periodId);
+  const species = birdType.find(item => item?.birdType?.specieID?.id === speciesId);
+  console.log('species', species);
+  return species;
+}

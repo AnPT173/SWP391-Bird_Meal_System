@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import useAuth from "./useAuth";
 import { closeModal, closeTaskDialog, getEvents, openCreateMultipleTaskDialog, openLocationDialog, openTaskDialog, selectRange, updateEvent } from "../redux/slices/calendar";
 import { getScheduleById } from "../utils/mock-data/localStorageUtil";
+import { scheduleData } from "../utils/mock-data/schedule";
 
 export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
 
@@ -12,6 +13,10 @@ export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
     const [view, setView] = useState(isMobile ? 'listWeek' : 'dayGridMonth');
     const [selectedEvent, setSelectedEvent] = useState();
     const { events } = useSelector((state) => state.calendar);
+
+    // const events = scheduleData;
+
+    console.log('event', events)
     const { user } = useAuth();
     const [isCreating, setIsCreating] = useState(false);
 
@@ -86,7 +91,7 @@ export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
     // click on an event, open location form
     const handleSelectEvent = (arg) => {
         dispatch(openLocationDialog());
-        dispatch(selectedEvent(arg.event.id));
+        // dispatch(selectedEvent(arg.event.id));
     };
 
     // const handleResizeEvent = async ({ event }) => {
