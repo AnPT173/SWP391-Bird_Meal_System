@@ -1,29 +1,19 @@
-import { Icon } from '@iconify/react';
-import { capitalCase } from 'change-case';
-import { useEffect, useState } from 'react';
-import heartFill from '@iconify/icons-eva/heart-fill';
-import peopleFill from '@iconify/icons-eva/people-fill';
-import roundPermMedia from '@iconify/icons-ic/round-perm-media';
-import roundAccountBox from '@iconify/icons-ic/round-account-box';
+import { useState } from 'react';
 // material
+import { Card, Container } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
-import { useParams, Link } from 'react-router-dom'; // Import Link from react-router-dom
-import { Tab, Box, Card, Tabs, Container } from '@material-ui/core';
+import { useParams } from 'react-router-dom'; // Import Link from react-router-dom
 import StatusForm from '../../components/_dashboard/user/StatusForm';
 // redux
-import { foodsData } from '../../utils/mock-data/food';
-import FoodEditForm from '../../components/_dashboard/user/FoodEditForm';
 import { useDispatch, useSelector } from '../../redux/store';
-import { getPosts, getGallery, getFriends, getProfile, getFollowers, onToggleFollow } from '../../redux/slices/user';
+import { foodsData } from '../../utils/mock-data/food';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useAuth from '../../hooks/useAuth';
 import useSettings from '../../hooks/useSettings';
 // components
-import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-
 
 
 

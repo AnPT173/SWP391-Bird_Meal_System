@@ -144,6 +144,7 @@ export function getEvents() {
 // ----------------------------------------------------------------------
 
 export function createEvent(newEvent) {
+  console.log('payload', newEvent)
   const requestBody = buildCreateTaskRequestBody(newEvent)
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());

@@ -47,6 +47,7 @@ export default slice.reducer;
 // ----------------------------------------------------------------------
 
 export function createCage(payload) {
+  console.log('payload', payload)
   const formData = buildCreateCageRequestBody(payload);
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
@@ -78,7 +79,7 @@ export function getCageList() {
 }
 
 export function buildCurrentLocationCageList(locationId, cageList, birdInCageList) {
-  const cageInLocation = cageList.filter((item) => item?.location?.id === locationId);
+  const cageInLocation = cageList.filter((item) => item?.locationid?.id === locationId);
   return cageInLocation.map((item) => {
     const numberOfBirdInCage = getNumberOfBirdInCage(item.id, birdInCageList);
     return { ...item, numberOfBirdInCage };
@@ -86,28 +87,26 @@ export function buildCurrentLocationCageList(locationId, cageList, birdInCageLis
 }
 
 function buildCreateCageRequestBody(payload) {
+//   {
+//     "type": "small",
+//     "max":10,
+//     "quantity": 10,
+//     "locationID":1,
+//     "birdTypeID":1
+// }
   const data = new FormData();
   const cage = {
     max: payload.quantity,
     quantity: payload.quantity,
     type: payload.cageType,
-    locationID: payload.location.id
+    locationID: payload.location.id,
+    birdTypeID: payload.species
   };
 
-  console.log('cage,', payload)
   const { file } = payload;
 
   data.append('cage', JSON.stringify(cage));
   data.append('file', file);
-  console.log('data', data)
   
   return data
 }
-
-// {
-//   "max":2,
-//   "quantity":2,
-//   "type":"TP01",
-//   "locationID": 1
-//   }
-// }

@@ -23,7 +23,7 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { buildCurrentLocationCageList, getCageList } from '../../redux/slices/cage';
 import { PATH_DASHBOARD } from '../../routes/paths';
 import { createLocation, getLocationList } from '../../redux/slices/location';
-import { saveCurrentLocation } from '../../utils/mock-data/localStorageUtil';
+import { getCurrentLocation, saveCurrentLocation } from '../../utils/mock-data/localStorageUtil';
 import { getBirdInCageList } from '../../redux/slices/bird';
 
 export default function CageCards() {
@@ -62,7 +62,7 @@ export default function CageCards() {
       name: newLocationName,
     };
 
-    dispatch(createLocation(newLocation));
+    dispatch(createLocation(newLocation, setCurrentTab));
     // setUpdatedLocations((prevLocations) => [...prevLocations, newLocation]);
     setNewLocationName('');
     handleCloseCreateLocationDialog();
@@ -114,15 +114,18 @@ export default function CageCards() {
     //   setUpdateDialogOpen(false);
     // }
   };
-  useEffect(() => {
+  useEffect(async () => {
     dispatch(getCageList());
     dispatch(getLocationList());
     dispatch(getBirdInCageList());
+    const currentLocation = await getCurrentLocation();
+    setCurrentTab(currentLocation ? currentLocation?.name : "");
   }, []);
 
   useEffect(()=>{
     if (!currentTab && locationList.length > 0){
       setCurrentTab(locationList[0]?.name);
+      saveCurrentLocation(locationList[0]);
     }
   },[locationList])
   return (
@@ -184,6 +187,8 @@ export default function CageCards() {
           {locationList.map((location) => {
             const isMatched = location.name === currentTab;
             const cages = buildCurrentLocationCageList(location.id, cageList, birdInCage);
+            console.log("location", location);
+            
             return isMatched && (
               <Box key={location.id}>
                 <CageCard cageList={cages}/>

@@ -14,7 +14,6 @@ import { getCurrentLocation } from '../../utils/mock-data/localStorageUtil';
 
 
 export default function CageNew() {
-
   const [currentLocation, setCurrentLocation] = useState('');
   useEffect(async ()=>{
     const location = await getCurrentLocation();

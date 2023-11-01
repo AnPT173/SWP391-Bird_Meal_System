@@ -1,37 +1,30 @@
-import React, { useEffect, useState } from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
-import * as Yup from 'yup';
+import { Form, FormikProvider, useFormik } from 'formik';
 import { merge } from 'lodash';
-import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
 import { useSnackbar } from 'notistack5';
-import trash2Fill from '@iconify/icons-eva/trash-2-fill';
-import { useFormik, Form, FormikProvider } from 'formik';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import * as Yup from 'yup';
 // material
 import {
   Box,
-  Stack,
   Button,
-  Switch,
-  Tooltip,
-  TextField,
-  IconButton,
   DialogActions,
-  FormControlLabel
+  IconButton,
+  Stack,
+  TextField
 } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { LoadingButton, MobileDateTimePicker } from '@material-ui/lab';
 import { useSelector } from 'react-redux';
-import { Typography } from '@mui/material';
-import { title } from '../../../utils/mock-data/text';
 // redux
 import useAuth from '../../../hooks/useAuth';
+import { createEvent, updateEvent } from '../../../redux/slices/calendar';
 import { useDispatch } from '../../../redux/store';
-import { createEvent, updateEvent, deleteEvent } from '../../../redux/slices/calendar';
 //
-import ColorSinglePicker from '../../ColorSinglePicker';
-import { getSchedule, saveSchedule } from '../../../utils/mock-data/localStorageUtil';
 import { getCageList } from '../../../redux/slices/cage';
-import { getFoodList } from '../../../redux/slices/food';
+import { getFoodList, getFoodTypeList, getMedicineList } from '../../../redux/slices/food';
+import ColorSinglePicker from '../../ColorSinglePicker';
 
 // ----------------------------------------------------------------------
 
@@ -64,19 +57,17 @@ const STATUS = [
 ];
 const getInitialValues = (event, range) => {
   const _event = {
-    status: '',
     title: '',
     description: '',
-    foodType: '',
     cageId: '',
     staffId: '',
+    medicines: [{ id: '', name: '', dose: '', error: false }],
+    foods: [{ id: '', name: '', quantity: '', error: false }],
+    status: '',
+    textColor: '',
+    start: '',
     feedingRegimen: '',
-    medicine: '',
-    textColor: '#1890FF',
-    allDay: false,
-    start: range ? new Date(range.start) : new Date(),
-    country: '',
-    end: range ? new Date(range.end) : new Date()
+    feedingTime: ''
   };
 
   if (event || range) {
@@ -98,12 +89,13 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
   const { user } = useAuth();
   const [currentEvent, setCurrentEvent] = useState([]);
   const { cageList } = useSelector(state => state.cage);
-  const { foodList } = useSelector(state => state.food);
+  const { foodTypeList, medicineList } = useSelector(state => state.food);
   const dispatch = useDispatch();
 
   useEffect(async () => {
     dispatch(getCageList());
-    dispatch(getFoodList());
+    dispatch(getFoodTypeList());
+    dispatch(getMedicineList());
   }, []);
 
   const isManager = user?.role === 'manager';
@@ -112,8 +104,6 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
     title: Yup.string().max(255),
     description: Yup.string().max(5000),
     cageId: Yup.string(),
-    foodType: Yup.string(),
-    foodQuantity: Yup.string(),
     staffId: Yup.string(),
     status: Yup.string(),
     feedingRegimen: Yup.string(),
@@ -129,14 +119,12 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
         const newEvent = {
           title: values.title ?? '',
           description: values.description ?? '',
-          foodType: values.foodType ?? '',
           cageId: values.cageId ?? '',
           staffId: values.staffId ?? '',
-          medicine: values.medicine ?? '',
-          foodQuantity: values.foodQuantity ?? '',
+          medicines: values.medicines ?? [],
+          foods: values.foods ?? [],
           status: values.status ?? '',
           textColor: values.textColor ?? '',
-          allDay: values.allDay ?? '',
           start: values.start ?? '',
           feedingRegimen: values.feedingRegimen ?? '',
           feedingTime: values.feedingTime ?? ''
@@ -145,7 +133,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
           dispatch(createEvent(values));
           enqueueSnackbar('Create event success', { variant: 'success' });
         } else {
-          dispatch(updateEvent(values.id,values))
+          dispatch(updateEvent(values.id, values))
           enqueueSnackbar('Update event success', { variant: 'success' });
         }
         resetForm();
@@ -159,7 +147,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
 
   const { values, errors, touched, handleSubmit, isSubmitting, getFieldProps, setFieldValue } = formik;
 
-  console.log('error', errors)
+  console.log('error', values)
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
@@ -182,33 +170,88 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
             error={Boolean(touched.description && errors.description)}
             helperText={touched.description && errors.description}
           />
-          <Stack direction="row" spacing={1.0}>
-            {isCreating &&
-              <TextField
-                select
-                {...getFieldProps('foodType')}
-                value={values.foodType}
-                fullWidth
-                label="Food Type"
-                disabled={!isManager || values?.status === 'completed'}
-                error={Boolean(touched.foodType && errors.foodType)}
-                helperText={touched.foodType && errors.foodType}
-                SelectProps={{ native: true }}
-              >
-                {foodList.map((f) => (
-                  <option key={f.id} value={f.id}>
-                    {`Food Norm ${f.id}`}
-                  </option>
-                ))}
-              </TextField>}
 
-            {!isCreating &&
+          <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+            <LoadingButton onClick={() => setFieldValue('foods', [...values.foods, { id: '', name: '', quantity: '', error: false }])} color="primary">
+              Add Food
+            </LoadingButton>
+          </Box>
+          {formik.values.foods.map((food, index) => (
+            <Stack key={index} direction="row" spacing={2}>
               <TextField
-                disabled
-                value={values.foodType}
                 fullWidth
-                label="Food Type"
-              />}
+                select
+                label={`Food Type ${index + 1}`}
+                value={values.foods[index]?.id}
+                error={food.error}
+                helperText={food.error ? 'Food is required' : ''}
+                onChange={(e) => {
+                  const foodId = e.target.value;
+                  const selectedFood = foodTypeList.find(i => i.id === +foodId);
+                  setFieldValue('foods', values.foods.map((f, i) => i === index ? { ...f, id: foodId, name: selectedFood?.name} : f));
+                }
+              }
+              >
+{                foodTypeList.map(option => (
+                            <MenuItem key={option.id} value={option.id}>
+                              {option.name}
+                            </MenuItem>
+                          ))}
+              </TextField>
+              <TextField
+                fullWidth
+                label="Quantity"
+                disabled={false}
+                value={values.foods[index]?.quantity}
+                error={food.error && !food.quantity}
+                helperText={food.error && !food.quantity ? 'Quantity is required' : ''}
+                onChange={(e) => setFieldValue('foods', formik.values.foods.map((f, i) => i === index ? { ...f, quantity: e.target.value } : f))}
+              />
+              <IconButton onClick={() => setFieldValue('foods', values.foods.toSpliced(index, 1))} color="error">
+                <DeleteIcon />
+              </IconButton>
+            </Stack>
+          ))}
+
+          <Stack direction="column" spacing={2}>
+            <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+              <LoadingButton onClick={() => setFieldValue('medicines', [...values.medicines, { medicine: '', dosage: '', error: false }])} color="primary">
+                Add Medicine
+              </LoadingButton>
+            </Box>
+            {formik.values.medicines.map((medicine, index) => (
+              <Stack key={index} direction="row" spacing={2}>
+                <TextField
+                  select
+                  fullWidth
+                  label={`Medicine ${index + 1}`}
+                  value={values.medicine[index]?.id}
+                  error={medicine.error}
+                  helperText={medicine.error ? 'Medicine is required' : ''}
+                  onChange={(e) => setFieldValue('medicines', values.medicines.map((p, i) => i === index ? { ...p, name: e.target.value } : p))}
+                >
+                  {medicineList.map((option) => (
+                    <MenuItem key={option.name} value={option.id}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  fullWidth
+                  label="Dosage"
+                  value={values.medicine[index]?.dosage}
+                  error={medicine.error && !medicine.dosage}
+                  helperText={medicine.error && !medicine.dosage ? 'Dosage is required' : ''}
+                  onChange={(e) => setFieldValue('medicines', values.medicines.map((p, i) => i === index ? { ...p, dose: e.target.value } : p))}
+                />
+                <IconButton onClick={() => setFieldValue('medicines', values.medicines.toSpliced(index, 1))} color="error">
+                  <DeleteIcon />
+                </IconButton>
+              </Stack>
+            ))}
+          </Stack>
+
+          <Stack direction="row" spacing={1.0}>
 
             {isCreating &&
               <TextField

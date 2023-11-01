@@ -1,17 +1,17 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import { Box, Card, FormHelperText, Grid, MenuItem, Stack, TextField, Typography } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useSnackbar } from 'notistack5';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getSpecieList } from '../../../redux/slices/bird';
 import { createCage } from '../../../redux/slices/cage';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { fData } from '../../../utils/formatNumber';
 import { cageType } from '../../../utils/mock-data/cage';
-import { species } from '../../../utils/mock-data/species';
 import { UploadAvatar } from '../../upload';
 
 export default function CreateNewCageForm({location}) {
@@ -19,6 +19,12 @@ export default function CreateNewCageForm({location}) {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [cageImage, setCageImage] = useState();
+  const { species} = useSelector(state => state.bird);
+
+  useEffect(()=>{
+    dispatch(getSpecieList());
+  },[])
+
 
 
   const NewCageSchema = Yup.object().shape({
@@ -118,8 +124,8 @@ export default function CreateNewCageForm({location}) {
                       Select Species
                     </MenuItem>
                     {species.map((option) => (
-                      <MenuItem key={option.speciesID} value={option.specie}>
-                        {option.specie}
+                      <MenuItem key={option.id} value={option.id}>
+                        {option.name}
                       </MenuItem>
                     ))}
                   </TextField>

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
+import { saveCurrentLocation } from '../../utils/mock-data/localStorageUtil';
 
 // ----------------------------------------------------------------------
 
@@ -44,11 +45,13 @@ export default slice.reducer;
 
 // ----------------------------------------------------------------------
 
-export function createLocation(payload) {
+export function createLocation(payload, setCurrentTab) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.post('/location/create', payload);
+      setCurrentTab(payload.name);
+      await saveCurrentLocation(response.data);
       dispatch(slice.actions.afterCreateLocationSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

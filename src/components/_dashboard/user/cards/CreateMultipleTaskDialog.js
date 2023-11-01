@@ -14,8 +14,8 @@ import {
 import { LoadingButton, MobileDateTimePicker } from '@material-ui/lab';
 // redux
 import { createEvent, openCreateMultipleTaskDialog } from '../../../../redux/slices/calendar';
+import LocationScheduleMap from './LocationScheduleList';
 
-//
 
 // ----------------------------------------------------------------------
 
@@ -70,6 +70,7 @@ export default function CreateMultipleTaskDialog() {
                         onChange={(date) => setFieldValue('toDate', date)}
                         renderInput={(params) => <TextField {...params} fullWidth />}
                     />
+                    <LocationScheduleMap />
                 </Stack>
 
                 <DialogActions>

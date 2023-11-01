@@ -19,7 +19,7 @@ import AuthGuard from '../guards/AuthGuard';
 // components
 import LoadingScreen from '../components/LoadingScreen';
 import PeriodCards from '../pages/dashboard/BirdPeriod';
-import CreateNewBirdForm from '../components/_dashboard/user/UserNewForm';
+import NewBirdForm from '../components/_dashboard/user/NewBirdForm';
 import CageNew from '../pages/dashboard/CageNew';
 
 import BirdProfile from '../pages/dashboard/BirdProfile';
@@ -110,22 +110,9 @@ export default function Router() {
           ]
          },
         {
-          path: 'user',
-          children: [
-            { path: '/', element: <Navigate to="/dashboard/user/profile" replace /> },
-            { path: 'profile', element: <BirdProfile /> },
-            { path: 'cards', element: <CageCards /> },
-            { path: 'birds', element: <BirdCards /> },
-            { path: 'list', element: <UserList /> },
-            { path: 'new', element: <UserCreate /> },
-            { path: '/:name/edit', element: <UserCreate /> },
-            { path: 'account', element: <UserAccount /> }
-          ]
-        },
-        {
           path: 'cage',
           children: [
-            { path: '/', element: <Navigate to="/dashboard/user/profile" replace /> },
+            { path: '/', element: <Navigate to="/dashboard/cage/cards" replace /> },
             { path: '/:cageId/birds/:birdId/profile', element: <BirdProfile /> },
             { path: 'cards', element: <CageCards /> },
             { path: '/:cageId/birds', element: <BirdCards /> },
