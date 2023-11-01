@@ -71,11 +71,6 @@ export const managerSidebar = [
       { title: 'Task', path: PATH_DASHBOARD.task.root, icon: ICONS.cart },
       { title: 'Food', path: PATH_DASHBOARD.food.card, icon: ICONS.cart },
       {
-        title: 'Report',
-        path: PATH_DASHBOARD.blog.root,
-        icon: ICONS.setting
-      },
-      {
         title: 'Storage',
         path: PATH_DASHBOARD.user.list,
         icon: ICONS.storage

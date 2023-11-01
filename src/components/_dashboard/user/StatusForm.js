@@ -284,7 +284,6 @@ export default function StatusForm({ isEdit, currentPlan }) {
                       <TextField
                         select
                         fullWidth
-                        select
                         label={`Product ${index + 1}`}
                         {...getFieldProps(`products.${index}.product`)}
                         error={product.error}
