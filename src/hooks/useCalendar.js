@@ -20,11 +20,13 @@ export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
     const { user } = useAuth();
     const [isCreating, setIsCreating] = useState(false);
 
+    console.log('scheduke data',scheduleData);
 
     const isManager = !!user && user?.role === 'manager';
-    const scheduleBaseOnCage = events.filter((data) => data?.cageId === cageId);
+     const scheduleBaseOnCage = scheduleData.filter((data) => data?.id === 1);
+     console.log('scheduke data', scheduleBaseOnCage );
     const fullScheduleBaseOnRole = isManager ? events : events.filter((data) => data.staffId === user.id);
-    const filteredScheduleData = cageId ? scheduleBaseOnCage : fullScheduleBaseOnRole;
+    const filteredScheduleData = scheduleData;
 
 
 
@@ -152,8 +154,7 @@ export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
     const handleAddMultipleTasks = () => {
         dispatch(openCreateMultipleTaskDialog());
     }
-
-
+    
     return {
         date,
         view,

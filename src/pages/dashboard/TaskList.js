@@ -1,49 +1,40 @@
-import { filter } from 'lodash';
+import editFill from '@iconify/icons-eva/edit-fill';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
-import { useState, useEffect } from 'react';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import editFill from '@iconify/icons-eva/edit-fill';
-import { Link as RouterLink } from 'react-router-dom';
+import { filter } from 'lodash';
+import { useEffect, useState } from 'react';
 // material
-import { useTheme } from '@material-ui/core/styles';
 import {
   Card,
-  Table,
+  Container,
+  DialogTitle,
   Stack,
-  Avatar,
-  Button,
-  Checkbox,
-  TableRow,
+  Table,
   TableBody,
   TableCell,
-  Container,
-  Typography,
   TableContainer,
   TablePagination,
-  DialogTitle,
-  TextField
+  TableRow,
+  Typography
 } from '@material-ui/core';
-import { Form, FormikProvider } from 'formik/dist';
+import { useTheme } from '@material-ui/core/styles';
 // redux
-import { useDispatch, useSelector } from '../../redux/store';
-import { getUserList, deleteUser } from '../../redux/slices/user';
+import { useDispatch } from '../../redux/store';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // components
-import Page from '../../components/Page';
+import { tempUser } from '../../_apis_/user';
+import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import Label from '../../components/Label';
+import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
-import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../../components/_dashboard/user/list';
-import { DialogAnimate } from '../../components/animate';
-import Grid from '../../theme/overrides/Grid';
 import AssignTaskForm from '../../components/_dashboard/calendar/AssignTaskForm';
 import TaskListHead from '../../components/_dashboard/user/list/TaskListHead';
-import { tempUser } from '../../_apis_/user';
+import { DialogAnimate } from '../../components/animate';
+import { getUserList } from '../../redux/slices/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -90,6 +81,7 @@ export default function TaskList() {
   const theme = useTheme();
   const dispatch = useDispatch();
   const userList = tempUser;
+  // const userList = useSelector(state => state.user);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -100,7 +92,7 @@ export default function TaskList() {
 
   useEffect(() => {
     dispatch(getUserList());
-  }, [dispatch]);
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -146,7 +138,7 @@ export default function TaskList() {
   };
 
   const handleDeleteUser = (userId) => {
-    dispatch(deleteUser(userId));
+    
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;

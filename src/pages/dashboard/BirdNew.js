@@ -1,30 +1,27 @@
-import { Icon } from '@iconify/react';
-import { capitalCase } from 'change-case';
 import { useEffect, useState } from 'react';
-import heartFill from '@iconify/icons-eva/heart-fill';
-import peopleFill from '@iconify/icons-eva/people-fill';
-import roundPermMedia from '@iconify/icons-ic/round-perm-media';
-import roundAccountBox from '@iconify/icons-ic/round-account-box';
 // material
-import { styled } from '@material-ui/core/styles';
-import { useParams, Link } from 'react-router-dom';
-import { Tab, Box, Card, Tabs, Container, Button } from '@material-ui/core';
+import { Box, Card, Container } from '@material-ui/core';
 // redux
-import { useDispatch, useSelector } from '../../redux/store';
-import { getPosts, getGallery, getFriends, getProfile, getFollowers, onToggleFollow } from '../../redux/slices/user';
 // routes
+import { useParams } from 'react-router';
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
-import useAuth from '../../hooks/useAuth';
 import useSettings from '../../hooks/useSettings';
 // components
-import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import CreateNewBirdForm from '../../components/_dashboard/user/UserNewForm'; 
+import Page from '../../components/Page';
+import NewBirdForm from '../../components/_dashboard/user/NewBirdForm';
+import { getCurrentLocation } from '../../utils/mock-data/localStorageUtil';
 
 export default function BirdNew() {
   const { themeStretch } = useSettings();
+  const [currentLocation, setCurrentLocation] = useState();
+
   const { cageId } = useParams();
+  useEffect(async()=>{
+    const data = await getCurrentLocation();
+    setCurrentLocation(data);
+  },[])
 
   return (
     <Page title="Create">
@@ -40,7 +37,7 @@ export default function BirdNew() {
         />
         <Card sx={{ mb: 3 }}>
           <Box sx={{ p: 3 }}>
-            <CreateNewBirdForm  cageId/>
+            <NewBirdForm location={currentLocation}/>
           </Box>
         </Card>
       </Container>

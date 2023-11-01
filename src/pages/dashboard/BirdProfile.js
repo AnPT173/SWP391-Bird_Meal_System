@@ -1,48 +1,22 @@
-import { Icon } from '@iconify/react';
-import { capitalCase } from 'change-case';
 import { useEffect, useState } from 'react';
-import heartFill from '@iconify/icons-eva/heart-fill';
-import peopleFill from '@iconify/icons-eva/people-fill';
-import roundPermMedia from '@iconify/icons-ic/round-perm-media';
-import roundAccountBox from '@iconify/icons-ic/round-account-box';
 // material
+import { Card, Container } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
-import { useParams, Link } from 'react-router-dom'; // Import Link from react-router-dom
-import { Tab, Box, Card, Tabs, Container } from '@material-ui/core';
+import { useParams } from 'react-router-dom'; // Import Link from react-router-dom
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getPosts, getGallery, getFriends, getProfile, getFollowers, onToggleFollow } from '../../redux/slices/user';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
-import useAuth from '../../hooks/useAuth';
 import useSettings from '../../hooks/useSettings';
 // components
-import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import Page from '../../components/Page';
 
 import BirdProfile from '../../components/_dashboard/user/BirdProfileForm';
-import { getBirdData } from '../../utils/mock-data/localStorageUtil';
 import { getBirdList } from '../../redux/slices/bird';
 // ----------------------------------------------------------------------
 
-const TabsWrapperStyle = styled('div')(({ theme }) => ({
-  zIndex: 9,
-  bottom: 0,
-  width: '100%',
-  display: 'flex',
-  position: 'absolute',
-  backgroundColor: theme.palette.background.paper,
-  [theme.breakpoints.up('sm')]: {
-    justifyContent: 'center'
-  },
-  [theme.breakpoints.up('md')]: {
-    justifyContent: 'flex-end',
-    paddingRight: theme.spacing(3)
-  }
-}));
-
-// ----------------------------------------------------------------------
 
 export default function BirdProfileWrapper() {
   // Rename the component to avoid conflicts
@@ -54,14 +28,14 @@ export default function BirdProfileWrapper() {
 
   const { birdList } = useSelector(state => state.bird);
 
-  useEffect(async() => {
+  useEffect(async () => {
     dispatch(getBirdList());
   }, []);
 
-  useEffect(()=>{
-    const current = birdList.find(item => item.id === birdId);
+  useEffect(() => {
+    const current = birdList.find(item => item.id === +birdId);
     setCurrentBird(current);
-  },[birdList])
+  }, [birdList])
 
 
   return (
@@ -81,7 +55,7 @@ export default function BirdProfileWrapper() {
             mb: 3
           }}
         >
-          <BirdProfile isEdit currentBird={currentBird} />
+          <BirdProfile currentBird={currentBird} />
         </Card>
       </Container>
     </Page>

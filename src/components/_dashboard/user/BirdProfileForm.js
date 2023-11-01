@@ -1,32 +1,26 @@
-import * as Yup from 'yup';
-import PropTypes from 'prop-types';
-import { useCallback, useEffect, useState } from 'react';
-import { useSnackbar } from 'notistack5';
-import { useNavigate, useParams } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
+import { useSnackbar } from 'notistack5';
+import PropTypes from 'prop-types';
+import { useCallback, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 // material
-import { DatePicker, LoadingButton } from '@material-ui/lab';
 import {
   Box,
   Card,
-  Grid,
-  Stack,
-  Switch,
-  TextField,
-  Typography,
-  FormHelperText,
   FormControlLabel,
+  FormHelperText,
+  Grid,
   MenuItem,
-  Avatar,
+  Stack,
+  TextField,
+  Typography
 } from '@material-ui/core';
-import { CheckBox } from '@material-ui/icons';
+import { DatePicker, LoadingButton } from '@material-ui/lab';
 import { fData } from '../../../utils/formatNumber';
-import { status } from '../../../utils/mock-data/status';
 import { species } from '../../../utils/mock-data/species';
-import { cagesData } from '../../../utils/mock-data/cage';
-import { birdsData } from '../../../utils/mock-data/bird';
+import { status } from '../../../utils/mock-data/status';
 // utils
-import fakeRequest from '../../../utils/fakeRequest';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //
@@ -35,14 +29,14 @@ import { UploadAvatar } from '../../upload';
 
 
 BirdProfileForm.propTypes = {
-  isEdit: PropTypes.bool,
   currentBird: PropTypes.object,
 };
 
-export default function BirdProfileForm({ isEdit, currentBird }) {
+export default function BirdProfileForm({ currentBird }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { birdId } = useParams();
+  const [ isEdit, setIsEdit ] = useState(false);
 
   const NewBirdSchema = Yup.object().shape({
     birdName: Yup.string().required('Bird Name is required'),
@@ -65,16 +59,16 @@ export default function BirdProfileForm({ isEdit, currentBird }) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      birdId: currentBird ? currentBird.birdId : '',
-      birdName: currentBird ? currentBird.birdName : '',
-      birdAge: currentBird ? currentBird.birdAge : '',
-      birdGender: currentBird ? currentBird.birdGender : '',
+      birdId: currentBird ? currentBird.id : '',
+      birdName: currentBird ? currentBird.name : '',
+      birdAge: currentBird ? currentBird.age : '',
+      birdGender: currentBird ? (currentBird.gender) : '',
       status: currentBird ? currentBird.status : '',
-      species: currentBird ? currentBird.species : '',
+      species: currentBird ? currentBird?.birdTypeID?.specieID?.name : '',
       cageId: currentBird ? currentBird.cageId : '',
       avatarUrl: currentBird ? currentBird.avatarUrl : null,
       hatchingDate: currentBird ? new Date(currentBird.hatchingDate) : null,
-      attitudes: currentBird ? currentBird.attitudes : '',
+      attitudes: currentBird ? currentBird.attituteds : '',
       featherColor: currentBird ? currentBird.featherColor : '',
       appearance: currentBird ? currentBird.appearance : '',
       qualities: currentBird ? currentBird.qualities : '',

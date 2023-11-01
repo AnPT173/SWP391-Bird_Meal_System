@@ -8,7 +8,7 @@ import plusFill from '@iconify/icons-eva/plus-fill';
 import { Icon } from '@iconify/react';
 import { useRef } from 'react';
 // material
-import { Button, Card, Container, DialogTitle, Grid, Stack, Typography, useMediaQuery } from '@material-ui/core';
+import { Button, Card, Container, DialogTitle, Stack, Typography, useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import { useParams } from 'react-router';
 // redux
@@ -21,26 +21,15 @@ import useSettings from '../../hooks/useSettings';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import Page from '../../components/Page';
 import { CalendarForm, CalendarStyle, CalendarToolbar } from '../../components/_dashboard/calendar';
+import { LocationScheduleMap } from '../../components/_dashboard/user/cards';
+import CreateMultipleTaskDialog from '../../components/_dashboard/user/cards/CreateMultipleTaskDialog';
 import { DialogAnimate } from '../../components/animate';
 import { useCalendar } from '../../hooks/useCalendar';
 import { openCreateMultipleTaskDialog } from '../../redux/slices/calendar';
-import CreateMultipleTaskDialog from '../../components/_dashboard/user/cards/CreateMultipleTaskDialog';
 
 // ----------------------------------------------------------------------
 
 
-const getStatusColor = (status) => {
-  switch (status) {
-    case 'Feeded':
-      return '#94D82D';
-    case 'Pending':
-      return '#FFC107';
-    case 'Late':
-      return '#FF4842';
-    default:
-      return '#00AB55';
-  }
-};
 const cageLocation = [
   {
     id: 1,
@@ -59,68 +48,8 @@ const cageLocation = [
     value: 'Etoxic'
   }
 ];
-const locationBackgroundColor = [
-  {
-    color1: '#80bbcd',
-    color2: '#35bb60'
-  },
-  {
-    color1: '#FBEAEB',
-    color2: '#2F3C7E'
-  },
-  {
-    color1: '#101820',
-    color2: '#FEE715'
-  },
-  {
-    color1: 'green',
-    color2: 'blue'
-  },
-  {
-    color1: '#4831D4',
-    color2: '#CCF381'
-  },
-  {
-    color1: '#E2D1F9',
-    color2: '#317773'
-  }
-];
 
-function CageLabel({ id, title, quantity, onClick, status }) {
-  const color = getStatusColor(status);
-  return (
-    <Typography
-      onClick={() => onClick(id)}
-      variant="h6"
-      align="center"
-      style={{ backgroundColor: color, 'border-radius': '5px', 'margin-bottom': '5px' }}
-    >
-      {title}
-      <br />
-      {quantity}
-    </Typography>
-  );
-}
 
-function LocationScheduleMap(props) {
-  const color = locationBackgroundColor[Math.floor(Math.random() * 4)];
-
-  return (
-    <Grid container spacing={1} style={{ margin: '5px 5px 10px 5px' }}>
-      {props.data.map((item, index) => (
-        <Grid item xs={4} key={index}>
-          <CageLabel
-            id={item.id}
-            title={item.cageId}
-            quantity={item.foodQuantity}
-            onClick={props.onClick}
-            status={item.status}
-          />
-        </Grid>
-      ))}
-    </Grid>
-  );
-}
 
 export default function Calendar() {
   const { themeStretch } = useSettings;
@@ -224,7 +153,7 @@ export default function Calendar() {
         <DialogAnimate open={isOpenLocationDialog} maxwidth="md" onClose={handleCloseModal}>
           <Stack direction="column" spacing={2}>
             <DialogTitle>Event by Location</DialogTitle>
-            {cageLocation.map((item) => {
+            {cageLocation && cageLocation?.map((item) => {
               const data = filteredScheduleData.filter((i) => i.locationId === item.id);
               return (
                 <>
@@ -236,7 +165,7 @@ export default function Calendar() {
           </Stack>
         </DialogAnimate>
 
-        <DialogAnimate open={isOpenTaskDialog} onClose={handleCloseTask}>
+        <DialogAnimate open={isOpenTaskDialog} onClose={handleCloseTask} maxwidth="md">
           <CalendarForm
             event={selectedEvent}
             isCreating={isCreating}

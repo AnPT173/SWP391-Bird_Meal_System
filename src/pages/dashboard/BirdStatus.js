@@ -14,7 +14,7 @@ import Page from '../../components/Page';
 import CageCard from '../../components/_dashboard/user/cards/CageCard';
 
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import StatusForm from '../../components/_dashboard/user/StatusForm';
+import NewFoodNormForm from '../../components/_dashboard/user/NewFoodNormForm';
 import { getCurrentFoodPlan, getFoodList } from '../../redux/slices/food';
 
 
@@ -51,15 +51,15 @@ export default function BirdStatus() {
   const STATUS_TABS = [
     {
       value: 'Normal',
-      component: <StatusForm currentPlan={currentFoodPlan} />
+      component: <NewFoodNormForm currentPlan={currentFoodPlan} />
     },
     {
       value: 'Sick',
-      component: <StatusForm currentPlan={currentFoodPlan} />
+      component: <NewFoodNormForm currentPlan={currentFoodPlan} />
     },
     {
       value: 'Birth',
-      component: <StatusForm currentPlan={currentFoodPlan} />
+      component: <NewFoodNormForm currentPlan={currentFoodPlan} />
     },
   ];
 

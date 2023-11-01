@@ -10,27 +10,24 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { createBird } from '../../../redux/slices/bird';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { fData } from '../../../utils/formatNumber';
-import { birdCageLocation } from '../../../utils/mock-data/area';
 import { species } from '../../../utils/mock-data/species';
 import { UploadAvatar } from '../../upload';
 
 
-export default function CreateNewBirdForm({ cageId }) {
+export default function NewBirdForm({location}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const [cagesData, setCagesData] = useState([]);
   const [birdImage, setBirdImage] = useState();
   const [isExoticChecked, setExoticChecked] = useState(false);
 
-  const { area, location } = useParams();
+  const { cageId } = useParams();
   
   const NewBirdSchema = Yup.object().shape({
     birdName: Yup.string(),
     birdAge: Yup.number(),
     status: Yup.string(),
     species: Yup.string(),
-    cageId: Yup.string(),
     avatarUrl: Yup.mixed(),
     birdGender: Yup.string(),
     hatchingDate: Yup.string(),
@@ -42,19 +39,19 @@ export default function CreateNewBirdForm({ cageId }) {
 
   const formik = useFormik({
     initialValues: {
-      birdName: 'B02',
-      birdAge: '1',
-      status: '1',
-      species: '1',
-      cageId: '1',
+      birdName: '',
+      birdAge: '',
+      status: '',
+      species: '',
+      cageId,
       avatarUrl: null,
-      birdGender: '1',
-      hatchingDate: '2023-01-01',
-      attitudes: '1',
-      featherColor: '1',
+      birdGender: '',
+      hatchingDate: '',
+      attitudes: '',
+      featherColor: '',
       area: location,
-      appearance: '1',
-      qualities: '1',
+      appearance: '',
+      qualities: '',
     },
     validationSchema: NewBirdSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
@@ -154,20 +151,7 @@ export default function CreateNewBirdForm({ cageId }) {
                     error={Boolean(touched.birdAge && errors.birdAge)}
                     helperText={touched.birdAge && errors.birdAge}
                   />
-                  {isExoticChecked && (
-                    <TextField
-                      fullWidth
-                      label="Exotic Rate (%)"
-                      type="number"
-                      {...getFieldProps('exoticRate')}
-                      error={Boolean(touched.exoticRate && errors.exoticRate)}
-                      helperText={touched.exoticRate && errors.exoticRate}
-                    />
-                  )
-                  }
-                </Stack>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
-                  <TextField
+                                    <TextField
                     select
                     fullWidth
                     label="Status"
@@ -182,7 +166,36 @@ export default function CreateNewBirdForm({ cageId }) {
                     <MenuItem value="2">Sick</MenuItem>
                     <MenuItem value="3">Birth</MenuItem>
                   </TextField>
+                  {isExoticChecked && (
+                    <TextField
+                      fullWidth
+                      label="Exotic Rate (%)"
+                      type="number"
+                      {...getFieldProps('exoticRate')}
+                      error={Boolean(touched.exoticRate && errors.exoticRate)}
+                      helperText={touched.exoticRate && errors.exoticRate}
+                    />
+                  )
+                  }
+                </Stack>
+
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
+                <TextField
+                    disabled
+                    fullWidth
+                    label="Location"
+                    value={location?.name}
+/>
                   <TextField
+                    
+                    disabled
+                    fullWidth
+                    label="Cage"
+                    value={`CA-${cageId}`}
+                    />
+                </Stack>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
+                <TextField
                     select
                     fullWidth
                     label="Bird Gender"
@@ -196,25 +209,6 @@ export default function CreateNewBirdForm({ cageId }) {
                     <MenuItem value="Male">Male</MenuItem>
                     <MenuItem value="Female">Female</MenuItem>
                   </TextField>
-                </Stack>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
-                  <TextField
-                    select
-                    fullWidth
-                    label="Cage"
-                    value={cageId}
-                    {...getFieldProps('cageId')}
-                    error={Boolean(touched.cageId && errors.cageId)}
-                    helperText={touched.cageId && errors.cageId}
-                  >
-                    {cagesData.map((option) => (
-                      <MenuItem key={option.cageID} value={option.cageID}>
-                        {option.cageID}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Stack>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                   <TextField
                     select
                     fullWidth
@@ -232,7 +226,10 @@ export default function CreateNewBirdForm({ cageId }) {
                       </MenuItem>
                     ))}
                   </TextField>
-                  <DatePicker
+                  
+                </Stack>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
+                <DatePicker
                     fullWidth
                     label="Hatching Date"
                     value={formik.values.hatchingDate}
@@ -243,8 +240,6 @@ export default function CreateNewBirdForm({ cageId }) {
                     error={Boolean(touched.hatchingDate && errors.hatchingDate)}
                     helperText={touched.hatchingDate && errors.hatchingDate}
                   />
-                </Stack>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                   <TextField
                     fullWidth
                     label="Attitudes"
@@ -252,36 +247,26 @@ export default function CreateNewBirdForm({ cageId }) {
                     error={Boolean(touched.attitudes && errors.attitudes)}
                     helperText={touched.attitudes && errors.attitudes}
                   />
-                  <TextField
+
+
+                </Stack>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
+
+                <TextField
                     fullWidth
                     label="Feather Color"
                     {...getFieldProps('featherColor')}
                     error={Boolean(touched.featherColor && errors.featherColor)}
                     helperText={touched.featherColor && errors.featherColor}
-                  />
-                  <TextField
-                    select
-                    fullWidth
-                    label="Area"
-                    value={area}
-                    {...getFieldProps('area')}
-                    error={Boolean(touched.area && errors.area)}
-                    helperText={touched.area && errors.area}
-                  >
-                    {birdCageLocation.map((option) => (
-                      <MenuItem key={option.id} value={option.locationName}>
-                        {option.locationName}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Stack>
+                    />
                 <TextField
                   fullWidth
                   label="Appearance"
                   {...getFieldProps('appearance')}
                   error={Boolean(touched.appearance && errors.appearance)}
                   helperText={touched.appearance && errors.appearance}
-                />
+                  />
+                  </Stack>
                 <TextField
                   fullWidth
                   label="Qualities"

@@ -30,29 +30,6 @@ import Typography from '../../../theme/overrides/Typography';
 
 // ----------------------------------------------------------------------
 
-
-const getInitialValues = (event, range) => {
-  const _event = {
-    title: '',
-    description: '',
-    foodtype: '',
-    cageID: '',
-    feedingregimen: '',
-    medicine: '',
-    textColor: '#1890FF',
-    allDay: false,
-    start: range ? new Date(range.start) : new Date(),
-    country: '',
-    end: range ? new Date(range.end) : new Date()
-  };
-
-  if (event || range) {
-    return merge({}, _event, event);
-  }
-
-  return _event;
-};
-
 AssignTaskForm.propTypes = {
   event: PropTypes.object,
   range: PropTypes.object,
@@ -67,28 +44,12 @@ export default function AssignTaskForm({ event, range, onCancel }) {
   // // id: '003',
   // //   cageId: 'CA002',
   // //   title: 'Feed Bird',
-  // //   description: 'Feeding for CA002',
-  // //   foodType: 'Product 1',
-  // //   start: sub(new Date(), { days: 1, hours: 0, minutes: 45 }),
-  // //   end: sub(new Date(), { days: 1, hours: 0, minutes: 35 }),
-  // //   foodQuantity: '90 grams',
-  // //   staffId: 'STA002',
-  // //   status: 'Completed',
-  // //   textColor: COLOR_OPTIONS[2]
 
   // const EventSchema = Yup.object().shape({
   //   title: Yup.string().max(255).required('Title is required'),
   //   description: Yup.string().max(5000),
   //   cageId: Yup.string(),
   //   foodtype: Yup.string(),
-  //   foodQuantity: Yup.string(),
-  //   staffId: Yup.string(),
-  //   status: Yup.string(),
-  //   feedingRegimen: Yup.string(),
-  //   end: Yup.date().when(
-  //     'start',
-  //     (start, schema) => start && schema.min(start, 'End date must be later than start date')
-  //   ),
   //   start: Yup.date(),
   //   feedingTime: Yup.date()
   // });
@@ -102,14 +63,6 @@ export default function AssignTaskForm({ event, range, onCancel }) {
   //         description: values.description,
   //         foodtype: values.foodtype,
   //         cageID: values.cageID,
-  //         feedingregimen: values.feedingregimen,
-  //         medicine: values.medicine,
-  //         foodQuantity: values.foodQuantity,
-  //         staffId: values.staffId,
-  //         status: values.status,
-  //         textColor: values.textColor,
-  //         allDay: values.allDay,
-  //         start: values.start,
   //         end: values.end,
   //         feedingRegimen: values.feedingRegimen,
   //         feedingTime: values.feedingTime

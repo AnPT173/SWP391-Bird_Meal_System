@@ -146,3 +146,38 @@ export function getCurrentFoodPlan(speciesId, periodId, payload){
   console.log('species', species);
   return species;
 }
+
+// {
+//   "birdType" : {
+//     "id": 1,
+//     "name": "t01",
+//           "specieid": {
+//               "id": 1,
+//               "name": "specie 1"
+//           }        
+//   },
+//   "duration" : 30,
+//   "numberOfFeeding" : 2,
+//   "startTime" : "07:00",
+//   "note" : "abc",
+//   "foodNormMedicineDTOS" : [
+//   {
+//   "medicine" :  {
+//           "id": 1,
+//           "quantity": 10,
+//           "name": "meoo1"
+//       },
+//   "quantity" : 10
+//   }
+//   ],
+//   "foodNormFoodDTOS" : [
+//   {
+//   "foodType" : {
+//   "id" : 1,
+//   "quantity" : 10,
+//   "name": "ff002"
+//   },
+//   "quantity" : 10
+//   }
+//   ]
+//   }

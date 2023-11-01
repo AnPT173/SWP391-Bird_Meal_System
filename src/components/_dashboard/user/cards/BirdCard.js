@@ -93,6 +93,7 @@ export default function BirdCard({ cageId, birdList, birdInCage }) {
                 <Divider />
                 <Grid container sx={{ py: 3, textAlign: 'center' }}>
                   <Grid item xs={4}>
+                    {/* age or hatching date */}
                     <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
                       Age
                     </Typography>
@@ -100,6 +101,7 @@ export default function BirdCard({ cageId, birdList, birdInCage }) {
                       {getBirdAge(currentBird.age)}
                     </Typography>
                   </Grid>
+                  {/* tinh trang suc khoa */}
                   <Grid item xs={4}>
                     <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
                       Status
@@ -118,6 +120,7 @@ export default function BirdCard({ cageId, birdList, birdInCage }) {
                     </Label>
                   </Grid>
                   <Grid item xs={4}>
+                    {/* id long */}
                     <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
                       Hatch Date
                     </Typography>

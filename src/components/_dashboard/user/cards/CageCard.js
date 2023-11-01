@@ -60,7 +60,7 @@ function CageCard({ cageList }) {
                   </Typography>
                 </Link>
                 <Typography variant="body2" align="center" sx={{ color: 'text.secondary', marginTop: 1 }}>
-                  Species: {cage.species}
+                  Species: {cage?.birdTypeid?.specieid?.name}
                 </Typography>
                 <Divider />
                 <Grid container sx={{ py: 3, textAlign: 'center' }}>
@@ -96,7 +96,7 @@ function CageCard({ cageList }) {
                       Cage Type
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {cage.cageType}
+                      {cage.type}
                     </Typography>
                   </Grid>
                 </Grid>

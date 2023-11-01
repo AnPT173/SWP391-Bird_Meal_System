@@ -10,7 +10,7 @@ const initialState = {
   birdList: [],
   birdInCage: [],
   birdTypeList: [],
-  species:[]
+  species: []
 };
 
 const slice = createSlice({
@@ -49,7 +49,7 @@ const slice = createSlice({
       state.birdTypeList = action.payload;
     },
 
-    getSpecieListSuccess(state, action){
+    getSpecieListSuccess(state, action) {
       state.isLoading = false;
       state.species = action.payload
     }
@@ -76,8 +76,6 @@ export function createBird(payload) {
         },
         transformRequest: formData => formData
       });
-
-      console.log("after create", response);
       dispatch(slice.actions.afterCreateBirdSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -90,7 +88,6 @@ export function getBirdList() {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get('/manager/bird/');
-
       dispatch(slice.actions.getBirdListSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -105,6 +102,33 @@ export function getBirdInCageList() {
       const response = await axios.get('/manager/birdcage/');
 
       dispatch(slice.actions.getBirdInCageSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+
+export function getBirdType() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/manager/birdtype/');
+
+      dispatch(slice.actions.getBirdTypeSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getSpecieList() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('manager/species/');
+
+      dispatch(slice.actions.getSpecieListSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -136,31 +160,6 @@ export function getBirdAge(dateInString) {
 
 }
 
-export function getBirdType() {
-  return async (dispatch) => {
-    dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.get('/manager/birdtype/');
-
-      dispatch(slice.actions.getBirdTypeSuccess(response.data));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
-
-export function getSpecieList() {
-  return async (dispatch) => {
-    dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.get('manager/species/');
-
-      dispatch(slice.actions.getSpecieListSuccess(response.data));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
 
 function buildBirdCreateRequestBody(payload) {
   const data = new FormData();
