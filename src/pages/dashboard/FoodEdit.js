@@ -9,6 +9,7 @@ import roundAccountBox from '@iconify/icons-ic/round-account-box';
 import { styled } from '@material-ui/core/styles';
 import { useParams, Link } from 'react-router-dom'; // Import Link from react-router-dom
 import { Tab, Box, Card, Tabs, Container } from '@material-ui/core';
+import StatusForm from '../../components/_dashboard/user/StatusForm';
 // redux
 import { foodsData } from '../../utils/mock-data/food';
 import FoodEditForm from '../../components/_dashboard/user/FoodEditForm';
@@ -22,6 +23,7 @@ import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+
 
 
 
@@ -79,8 +81,8 @@ export default function FoodEditPage() {
             mb: 3,
           }}
         >
-          <FoodEditForm
-        isEdit={!!currentProduct}
+          <StatusForm
+        isEdit
         currentProduct={currentProduct}
           />
         </Card>
