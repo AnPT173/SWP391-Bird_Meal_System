@@ -5,6 +5,7 @@ import useAuth from "./useAuth";
 import { closeModal, closeTaskDialog, getEvents, openCreateMultipleTaskDialog, openLocationDialog, openTaskDialog, selectRange, updateEvent } from "../redux/slices/calendar";
 import { getScheduleById } from "../utils/mock-data/localStorageUtil";
 import { scheduleData } from "../utils/mock-data/schedule";
+import { getLocationList } from "../redux/slices/location";
 
 export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
 
@@ -13,6 +14,7 @@ export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
     const [view, setView] = useState(isMobile ? 'listWeek' : 'dayGridMonth');
     const [selectedEvent, setSelectedEvent] = useState();
     const { events } = useSelector((state) => state.calendar);
+    const { locationList } = useSelector((state) => state.location);
 
     // const events = scheduleData;
 
@@ -20,18 +22,19 @@ export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
     const { user } = useAuth();
     const [isCreating, setIsCreating] = useState(false);
 
-    console.log('scheduke data',scheduleData);
+
 
     const isManager = !!user && user?.role === 'manager';
      const scheduleBaseOnCage = scheduleData.filter((data) => data?.id === 1);
-     console.log('scheduke data', scheduleBaseOnCage );
+    
     const fullScheduleBaseOnRole = isManager ? events : events.filter((data) => data.staffId === user.id);
-    const filteredScheduleData = scheduleData;
+    const filteredScheduleData = fullScheduleBaseOnRole;
 
 
 
     useEffect(async () => {
         dispatch(getEvents());
+        dispatch(getLocationList());
     }, []);
 
     useEffect(() => {
@@ -160,6 +163,7 @@ export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
         view,
         isManager,
         isCreating,
+        locationList,
         selectedEvent,
         filteredScheduleData,
         handleClickToday,

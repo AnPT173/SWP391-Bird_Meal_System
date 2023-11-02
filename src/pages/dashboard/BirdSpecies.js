@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 // material
 import { Container, Grid, Skeleton } from '@material-ui/core';
 // redux
-import { useDispatch, useSelector } from '../../redux/store';
-import { getUsers } from '../../redux/slices/user';
+import { useDispatch } from '../../redux/store';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -29,7 +28,6 @@ const SkeletonLoad = (
 export default function SpeciesCards() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setTimeout(() => {

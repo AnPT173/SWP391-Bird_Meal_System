@@ -137,12 +137,12 @@ export function getSpecieList() {
 
 export function getNumberOfBirdInCage(cageId, birdInCageList) {
 
-  return birdInCageList.reduce((acc, cur) => cur?.cageID.id === cageId ? acc += 1 : acc, 0);
+  return birdInCageList.reduce((acc, cur) => cur?.cageID?.id === cageId ? acc += 1 : acc, 0);
 
 }
 
 export function buildCurrentBirdInfo(cageId, birdId, birdList, birdInCage) {
-  const currentBird = birdList.find(bird => bird.id === birdId);
+  const currentBird = birdList.find(bird => bird?.id === birdId);
   const currentBirdInCage = birdInCage.find(bird => bird?.birdID?.id === birdId);
   return { ...currentBird, ...currentBirdInCage };
 

@@ -3,10 +3,11 @@ import { useState } from 'react';
 import { Card, Container } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 import { useParams } from 'react-router-dom'; // Import Link from react-router-dom
-import StatusForm from '../../components/_dashboard/user/StatusForm';
+import NewFoodNormForm from '../../components/_dashboard/user/NewFoodNormForm';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { foodsData } from '../../utils/mock-data/food';
+import Page from '../../components/Page';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -71,7 +72,7 @@ export default function FoodEditPage() {
             mb: 3,
           }}
         >
-          <StatusForm
+          <NewFoodNormForm
         isEdit
         currentProduct={currentProduct}
           />

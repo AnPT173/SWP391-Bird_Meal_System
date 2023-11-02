@@ -23,7 +23,6 @@ export default function BirdProfileWrapper() { // Rename the component to avoid 
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { birdProfile } = useSelector((state) => state.user);
-  const { user } = useAuth();
   const [currentTab, setCurrentTab] = useState('profile');
   const { cageId, birdId } = useParams();
 

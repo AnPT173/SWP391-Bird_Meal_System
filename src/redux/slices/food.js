@@ -128,7 +128,7 @@ function getBirdType(payload){
   const { birdTypeList} = payload;
   const specieId = 1;
   const periodId = 1;
-  const birdInTheSameSpecie = birdTypeList.filter(item => item.specieID.id === + specieId);
+  const birdInTheSameSpecie = birdTypeList.filter(item => item.specieid.id === + specieId);
   const birdType = birdInTheSameSpecie.find(item => item.id === periodId);
   return birdType
 }
@@ -142,7 +142,7 @@ function getFoodType(payload){
 
 export function getCurrentFoodPlan(speciesId, periodId, payload){
   const birdType = payload.filter(item => item.birdType?.id === periodId);
-  const species = birdType.find(item => item?.birdType?.specieID?.id === speciesId);
+  const species = birdType.find(item => item?.birdType?.specieid?.id === speciesId);
   console.log('species', species);
   return species;
 }

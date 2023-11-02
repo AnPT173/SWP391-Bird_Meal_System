@@ -30,27 +30,6 @@ import { openCreateMultipleTaskDialog } from '../../redux/slices/calendar';
 // ----------------------------------------------------------------------
 
 
-const cageLocation = [
-  {
-    id: 1,
-    value: 'Normal'
-  },
-  {
-    id: 2,
-    value: 'Sick'
-  },
-  {
-    id: 3,
-    value: 'Birth'
-  },
-  {
-    id: 4,
-    value: 'Etoxic'
-  }
-];
-
-
-
 export default function Calendar() {
   const { themeStretch } = useSettings;
   const theme = useTheme();
@@ -64,6 +43,7 @@ export default function Calendar() {
     view,
     isManager,
     isCreating,
+    locationList,
     selectedEvent,
     filteredScheduleData,
     handleClickToday,
@@ -140,7 +120,7 @@ export default function Calendar() {
               headerToolbar={false}
               allDayMaintainDuration
               eventResizableFromStart
-              select={handleSelectRange}
+              // select={handleSelectRange}
               eventDrop={handleDropEvent}
               eventClick={handleSelectEvent}
               // eventResize={handleResizeEvent}
@@ -152,12 +132,13 @@ export default function Calendar() {
 
         <DialogAnimate open={isOpenLocationDialog} maxwidth="md" onClose={handleCloseModal}>
           <Stack direction="column" spacing={2}>
-            <DialogTitle>Event by Location</DialogTitle>
-            {cageLocation && cageLocation?.map((item) => {
-              const data = filteredScheduleData.filter((i) => i.locationId === item.id);
+            <DialogTitle>Tasks</DialogTitle>
+            {locationList && locationList?.map((item) => {
+              const data = filteredScheduleData.filter((i) => i.locationId.id === item.id);
+              console.log('data', data);
               return (
                 <>
-                  {data && data.length > 0 && <Typography>{item.value}</Typography>}
+                  {data && data.length > 0 && <Typography>{item.name}</Typography>}
                   <LocationScheduleMap data={data} onClick={handleSelectTask} />
                 </>
               );

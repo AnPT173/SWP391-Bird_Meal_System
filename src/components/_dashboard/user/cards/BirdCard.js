@@ -50,7 +50,7 @@ export default function BirdCard({ cageId, birdList, birdInCage }) {
   console.log('bird in cage', birdInCage);
 
   let filteredBirdInCage = [];
-  filteredBirdInCage = birdInCage?.filter(item => item?.cageID?.id === +cageId)
+  filteredBirdInCage = birdInCage?.filter(item => item?.cageid?.id === +cageId)
 
   console.log('bird in cage', filteredBirdInCage);
 
@@ -84,11 +84,11 @@ export default function BirdCard({ cageId, birdList, birdInCage }) {
                 </CardMediaStyle>
                 <Link href={`${PATH_DASHBOARD.cages.root}/${currentBird?.cageID?.id}/birds/${currentBird.id}/profile`}>
                   <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
-                    {currentBird.name}
+                    {currentBird?.birdid?.name}
                   </Typography>
                 </Link>
                 <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
-                  {currentBird?.birdTypeID?.specieID?.name}
+                  {currentBird?.birdid?.birdTypeid?.specieid?.name}
                 </Typography>
                 <Divider />
                 <Grid container sx={{ py: 3, textAlign: 'center' }}>
@@ -98,7 +98,7 @@ export default function BirdCard({ cageId, birdList, birdInCage }) {
                       Age
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {getBirdAge(currentBird.age)}
+                      {getBirdAge(currentBird?.birdid?.age)}
                     </Typography>
                   </Grid>
                   {/* tinh trang suc khoa */}
@@ -125,7 +125,7 @@ export default function BirdCard({ cageId, birdList, birdInCage }) {
                       Hatch Date
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {currentBird?.hatchingDate}
+                      {currentBird?.startDate}
                     </Typography>
                   </Grid>
                 </Grid>

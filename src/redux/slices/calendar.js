@@ -143,9 +143,10 @@ export function getEvents() {
 
 // ----------------------------------------------------------------------
 
-export function createEvent(newEvent) {
+export function createEvent(newEvent, foods, medicines) {
   console.log('payload', newEvent)
-  const requestBody = buildCreateTaskRequestBody(newEvent)
+  const requestBody = buildCreateTaskRequestBody(newEvent, foods, medicines)
+  console.log('body', requestBody)
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
@@ -167,10 +168,10 @@ export function updateEvent(eventId, updateEvent) {
     try {
       const originalData = await getOriginalScheduleById(eventId);
       const { textColor } = updateEvent;
-    
+
       originalData.task.color = textColor;
       console.log('update 12')
-      const response = await axios.post(`/manager/schedule/updateInfoTaskBird/${eventId}`,{...originalData} );
+      const response = await axios.post(`/manager/schedule/updateInfoTaskBird/${eventId}`, { ...originalData });
       dispatch(slice.actions.updateEventSuccess(response.data));
     } catch (error) {
       console.log('update 13')
@@ -205,67 +206,142 @@ export function selectRange(start, end) {
   };
 }
 // {
-//   color: "#33",
-//   title: "Task for cage xx",
-//   description: "description",
-//   birdDTOList:[
+//   "accountID" : 2,
+//     "color": "aaa",
+//       "title": "abc",
+//         "description": "abc",
+//           "cageTaskDTOList": [
+//             {
+//               "cageID": 1,
+//               "schedules": [
+//                 {
+//                   "startDate": "2023-10-10 19:00",
+//                   "endDate": "2023-10-10 20:00",
+//                   "staffID": 1,
+//                   "note": "abc",
+//                   "status": 1,
+//                   "foodList": [
+//                     
+//                   ],
+//                   "medicineList": [
+//                     {
+//                       "medicine": {
+//                         "id": 1,
+//                         "quantity": 10,
+//                         "name": "meoo1"
+//                       },
+//                       "quantity": 10
+//                     }
+//                   ]
+//                 }
+//               ],
+//               "foodNormID": 1
 
-//   birdID: 1,
-//   foodTypeID:1,
-//   schedules:[{
-//   startDate:'2023-01-01 18:00:00',
-//   endDate:'2023-01-02 18:00:00',
-//   staffID:1,
-//   note:"non",
-//   status:0
-//   }],
-//   quantity:10
-//   ]
-//   }
-function buildCreateTaskRequestBody(payload) {
+//             }
+//           ]
+// }
+function buildCreateTaskRequestBody(payload, foods, medicines) {
   return {
+    accountID: payload.staffId,
     color: payload.textColor,
     title: payload.title,
     description: payload.description,
-    birdDTOList: [
-      {
-        birdID: 1,
-        foodTypeID: 1,
-        schedules: [
-          {
-            startDate: formatDate(payload.start),
-            endDate: formatDate(payload.start),
-            staffID: payload.staffId,
-            note: '',
-            status: 0
-          }],
-        quantity: 10,
-      }
-    ]
+    cageTaskDTOList: buildCageList(payload, foods, medicines),
+    foodNormID: payload?.foodNormID ?? null
   }
+}
+
+function buildCageList(payload, foods, medicines) {
+  const cages = payload?.cageId;
+  const cageDTOs = [];
+  cages.forEach(item => {
+    const cageDTO = {
+      cageID: item,
+      schedules: [{
+        startDate: formatDate(payload.start),
+        endDate: formatDate(payload.start),
+        staffID: payload.staffId,
+        note: 'abc',
+        status: 1,
+        foodList: buildFoodList(payload, foods),
+        medicineList: buildMedicineList(payload, medicines)
+      }
+      ]
+    }
+    cageDTOs.push(cageDTO);
+  });
+  return cageDTOs;
+}
+
+function buildFoodList(payload, foods) {
+  // {
+  //                       "foodType": {
+  //                         "id": 1,
+  //                         "name": "ft001",
+  //                         "quantity": 10
+  //                       },
+  //                       "quantity": 10
+  //                     }
+  if (payload?.foods) {
+    const foodList = [];
+    const selectedFoods = payload?.foods;
+    selectedFoods.forEach(food => {
+      const foodType = foods.find(f => f.id === food.id);
+      const { quantity } = food;
+      foodList.push({
+        foodType: { ...foodType },
+        quantity
+      })
+    })
+
+    return foodList;
+  }
+  return []
+
+}
+
+function buildMedicineList(payload, medicines) {
+  if (payload?.medicines) {
+    const medicineList = [];
+    const selectedMedicines = payload?.medicines;
+    selectedMedicines.forEach(item => {
+      const medicine = medicines.find(m => m.id === item.id);
+      const quantity = item.dose;
+      medicineList.push({
+        medicine: { ...medicine },
+        quantity
+      })
+    })
+    return medicineList;
+  }
+  return []
+
 }
 
 function buildTaskResponse(responses) {
   const result = Object.values(responses).map((response, index) => {
+    const  { task, cageid, staffid} = response;
+
     const data = {
       id: response.id,
-      cageId: `Cage ${index + 1}`,
+      taskId : task.id,
+      cageId: cageid.id,
       title: response.task.title,
       description: response.task.description,
-      foodType: response.foodTypeID.id,
-      start: add(new Date(), { days: 0, hours: index, minutes: 35 }),
-      end: add(new Date(), { days: 0, hours: index, minutes: 45 }),
+      foods: response.taskBirdFoods,
+      medicines: response.taskBirdMedicines,
+      start: new Date(response.startDate),
+      end: new Date(response.endDate),
       foodQuantity: response?.quantity ?? 100,
-      staffId: response.staff.accountName,
-      feedingRegimen: "None",
-      locationId: index % 3 + 1,
+      staffId: staffid,
+      feedingRegimen: response.note,
+      locationId: cageid.locationid,
       color: response?.task?.color
     }
 
     return data
   })
 
-  console.log('result', result)
   return result
 }
 
