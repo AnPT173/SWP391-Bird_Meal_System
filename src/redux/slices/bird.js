@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
+import { formatDate } from './calendar';
 
 // ----------------------------------------------------------------------
 
@@ -51,9 +52,8 @@ const slice = createSlice({
 
     getSpecieListSuccess(state, action) {
       state.isLoading = false;
-      state.species = action.payload
+      state.species = action.payload;
     }
-
   }
 });
 
@@ -74,9 +74,10 @@ export function createBird(payload) {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
-        transformRequest: formData => formData
+        transformRequest: (formData) => formData
       });
       dispatch(slice.actions.afterCreateBirdSuccess(response.data));
+      window.location.reload();
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -108,7 +109,6 @@ export function getBirdInCageList() {
   };
 }
 
-
 export function getBirdType() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
@@ -136,36 +136,36 @@ export function getSpecieList() {
 }
 
 export function getNumberOfBirdInCage(cageId, birdInCageList) {
-
-  return birdInCageList.reduce((acc, cur) => cur?.cageID?.id === cageId ? acc += 1 : acc, 0);
-
+  return birdInCageList.reduce((acc, cur) => (cur?.cageid?.id === cageId ? (acc += 1) : acc), 0);
 }
 
 export function buildCurrentBirdInfo(cageId, birdId, birdList, birdInCage) {
-  const currentBird = birdList.find(bird => bird?.id === birdId);
-  const currentBirdInCage = birdInCage.find(bird => bird?.birdID?.id === birdId);
+  const currentBird = birdList.find((bird) => bird?.id === birdId);
+  const currentBirdInCage = birdInCage.find((bird) => bird?.birdID?.id === birdId);
   return { ...currentBird, ...currentBirdInCage };
-
 }
 
 export function getBirdAge(dateInString) {
   // input date with pattern yyyy-mm-dd
-  console.log(dateInString)
+  console.log(dateInString);
   const parts = dateInString.split('-');
   const year = parseInt(parts[0], 10);
   const month = parseInt(parts[1], 10) - 1;
   const day = parseInt(parts[2], 10);
   const differenceInMilliSeconds = Math.abs(new Date() - new Date(year, month, day));
-  return Math.floor(differenceInMilliSeconds / (1000 * 60 * 60 * 24));
-
+  const date1 = new Date(year, month, day);
+  const date2 = new Date(); // the current date
+  const yearDiff = date2.getFullYear() - date1.getFullYear(); // the difference in years
+  const monthDiff = date2.getMonth() - date1.getMonth(); // the difference in months
+  return yearDiff * 12 + monthDiff;
 }
 
-
 function buildBirdCreateRequestBody(payload) {
+  const date = formatDate(payload?.hatchingDate).split(' ');
   const data = new FormData();
   const bird = {
     name: payload.birdName,
-    age: "2021-01-02",
+    age: date[0],
     birdTypeID: 1,
     cageID: payload.cageId,
     statusID: +payload.status,
@@ -176,11 +176,10 @@ function buildBirdCreateRequestBody(payload) {
     color: payload.featherColor,
     exotic: true,
     exoticrate: 1
-
-  }
+  };
   const { file } = payload;
 
   data.append('bird', JSON.stringify(bird));
   data.append('file', file);
-  return data
+  return data;
 }

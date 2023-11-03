@@ -82,7 +82,7 @@ export default function BirdCard({ cageId, birdList, birdInCage }) {
                     src={birdImageUrl}
                   />
                 </CardMediaStyle>
-                <Link href={`${PATH_DASHBOARD.cages.root}/${currentBird?.cageID?.id}/birds/${currentBird.id}/profile`}>
+                <Link href={`${PATH_DASHBOARD.cages.root}/${cageId}/birds/${currentBird.id}/profile`}>
                   <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
                     {currentBird?.birdid?.name}
                   </Typography>
@@ -125,7 +125,7 @@ export default function BirdCard({ cageId, birdList, birdInCage }) {
                       Hatch Date
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {currentBird?.startDate}
+                    {currentBird?.birdid?.age}
                     </Typography>
                   </Grid>
                 </Grid>

@@ -17,8 +17,7 @@ const initialState = {
   country: null,
   isOpenLocationDialog: false,
   isOpenTaskDialog: false,
-  isOpenCreateMultipleTaskDialog: false,
-
+  isOpenCreateMultipleTaskDialog: false
 };
 
 const slice = createSlice({
@@ -109,7 +108,6 @@ const slice = createSlice({
       state.selectedEventId = null;
       state.selectedRange = null;
       state.isOpenLocationDialog = false;
-
     },
 
     closeTaskDialog(state) {
@@ -122,7 +120,15 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { openModal, closeModal, selectEvent, openLocationDialog, openTaskDialog, closeTaskDialog, openCreateMultipleTaskDialog } = slice.actions;
+export const {
+  openModal,
+  closeModal,
+  selectEvent,
+  openLocationDialog,
+  openTaskDialog,
+  closeTaskDialog,
+  openCreateMultipleTaskDialog
+} = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -132,7 +138,7 @@ export function getEvents() {
     try {
       const response = await axios.get('/manager/schedule/getall');
       await saveOriginalSchedule(response.data);
-      const transformedResponse = buildTaskResponse(response.data)
+      const transformedResponse = buildTaskResponse(response.data);
       await saveSchedule(transformedResponse);
       dispatch(slice.actions.getEventsSuccess(transformedResponse));
     } catch (error) {
@@ -144,9 +150,9 @@ export function getEvents() {
 // ----------------------------------------------------------------------
 
 export function createEvent(newEvent, foods, medicines) {
-  console.log('payload', newEvent)
-  const requestBody = buildCreateTaskRequestBody(newEvent, foods, medicines)
-  console.log('body', requestBody)
+  console.log('payload', newEvent);
+  const requestBody = buildCreateTaskRequestBody(newEvent, foods, medicines);
+  console.log('body', requestBody);
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
@@ -159,9 +165,9 @@ export function createEvent(newEvent, foods, medicines) {
   };
 }
 export function createMultipleEvent(values, cageList, foodNormList) {
-  console.log("multiple, ", values, cageList, foodNormList)
+  console.log('multiple, ', values, cageList, foodNormList);
   const requestBody = buildRequestBodyForMultipleEvents(values, cageList, foodNormList);
-  console.log("request bosy", requestBody)
+  console.log('request bosy', requestBody);
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
@@ -172,7 +178,6 @@ export function createMultipleEvent(values, cageList, foodNormList) {
       dispatch(slice.actions.hasError(error));
     }
   };
-
 }
 // ----------------------------------------------------------------------
 
@@ -193,7 +198,6 @@ export function updateEvent(eventId, updateEvent) {
       const response = await axios.put(`/manager/schedule/updateInfoTaskBird/${eventId}`, { ...originalData });
       dispatch(slice.actions.updateEventSuccess(response.data));
     } catch (error) {
-
       dispatch(slice.actions.hasError(error));
     }
   };
@@ -273,26 +277,27 @@ function buildCreateTaskRequestBody(payload, foods, medicines) {
     title: payload.title,
     description: payload.description,
     cageTaskDTOList: buildCageList(payload, foods, medicines)
-  }
+  };
 }
 
 function buildCageList(payload, foods, medicines) {
   const cages = payload?.cageId;
   const cageDTOs = [];
-  cages.forEach(item => {
+  cages.forEach((item) => {
     const cageDTO = {
       cageID: item,
-      schedules: [{
-        startDate: formatDate(payload.start),
-        endDate: formatDate(payload.start),
-        staffID: payload.staffId,
-        note: payload?.feedingRegimen,
-        status: 1,
-        foodList: buildFoodList(payload, foods),
-        medicineList: buildMedicineList(payload, medicines)
-      }
+      schedules: [
+        {
+          startDate: formatDate(payload.start),
+          endDate: formatDate(payload.start),
+          staffID: payload.staffId,
+          note: payload?.feedingRegimen,
+          status: 1,
+          foodList: buildFoodList(payload, foods),
+          medicineList: buildMedicineList(payload, medicines)
+        }
       ]
-    }
+    };
     cageDTOs.push(cageDTO);
   });
   return cageDTOs;
@@ -302,37 +307,35 @@ function buildFoodList(payload, foods) {
   if (payload?.foods) {
     const foodList = [];
     const selectedFoods = payload?.foods;
-    selectedFoods.forEach(food => {
-      const foodType = foods.find(f => f.id === food.id);
+    selectedFoods.forEach((food) => {
+      const foodType = foods.find((f) => f.id === food.id);
       const { quantity } = food;
       foodList.push({
         foodType: { ...foodType },
         quantity
-      })
-    })
+      });
+    });
 
     return foodList;
   }
-  return []
-
+  return [];
 }
 
 function buildMedicineList(payload, medicines) {
   if (payload?.medicines) {
     const medicineList = [];
     const selectedMedicines = payload?.medicines;
-    selectedMedicines.forEach(item => {
-      const medicine = medicines.find(m => m.id === item.id);
+    selectedMedicines.forEach((item) => {
+      const medicine = medicines.find((m) => m.id === item.id);
       const quantity = item.dose;
       medicineList.push({
         medicine: { ...medicine },
         quantity
-      })
-    })
+      });
+    });
     return medicineList;
   }
-  return []
-
+  return [];
 }
 
 function buildTaskResponse(responses) {
@@ -345,8 +348,8 @@ function buildTaskResponse(responses) {
       cageId: cageid.id,
       title: response.task.title,
       description: response.task.description,
-      foods: response.taskBirdFoods,
-      medicines: response.taskBirdMedicines,
+      foods: response?.foodNormID?.id ? response?.foodNormID?.foodnormFoods : response.taskBirdFoods,
+      medicines: response?.foodNormID?.id ? response?.foodNormID?.foodnormMedicines : response.taskBirdMedicines,
       start: new Date(response.startDate),
       end: new Date(response.endDate),
       foodQuantity: response?.quantity ?? 100,
@@ -354,12 +357,12 @@ function buildTaskResponse(responses) {
       feedingRegimen: response.note,
       locationId: cageid.locationid,
       color: response?.task?.color
-    }
+    };
 
-    return data
-  })
+    return data;
+  });
 
-  return result
+  return result;
 }
 
 function buildRequestBodyForMultipleEvents(values, cageList, foodNormList) {
@@ -369,30 +372,31 @@ function buildRequestBodyForMultipleEvents(values, cageList, foodNormList) {
     title: 'Feeding bird',
     description: 'Feeding bird',
     cageTaskDTOList: buildCageListForCreateMultipleEvent(values, cageList, foodNormList)
-  }
+  };
 }
 
 function buildCageListForCreateMultipleEvent(values, cageList, foodNormList) {
   const timeDiff = values.toDate.getTime() - values.fromDate.getTime();
   const dayDiff = Math.round(Math.abs(timeDiff / (1000 * 60 * 60 * 24)));
-  console.log('dayDiff',add(new Date(values.fromDate), 0));
+  console.log('dayDiff', add(new Date(values.fromDate), 0));
   const { cages } = values;
   const cageDTOs = [];
-  cages.forEach(item => {
-    for (let i = 0; i < dayDiff; i+=1) {
-      console.log(',i', i)
+  cages.forEach((item) => {
+    for (let i = 0; i < dayDiff; i += 1) {
+      console.log(',i', i);
       const cageDTO = {
         cageID: item,
-        schedules: [{
-          startDate: formatDate(addDays(new Date(values.fromDate), i)),
-          endDate: formatDate(addDays(new Date(values.toDate), i)),
-          staffID: values?.staffId ?? 1,
-          note: 'Batch schedule',
-          status: 1,
-          foodNormID: getFoodNormByCageId(item, cageList, foodNormList)
-        }
-        ]
-      }
+        schedules: [
+          {
+            startDate: formatDate(addDays(new Date(values.fromDate), i)),
+            endDate: formatDate(addDays(new Date(values.toDate), i)),
+            staffID: values?.staffId ?? 1,
+            note: 'Batch schedule',
+            status: 1,
+          }
+        ],
+        foodNormID: getFoodNormByCageId(item, cageList, foodNormList)
+      };
       cageDTOs.push(cageDTO);
     }
   });
@@ -400,9 +404,9 @@ function buildCageListForCreateMultipleEvent(values, cageList, foodNormList) {
 }
 
 function getFoodNormByCageId(cageId, cageList, foodNormList) {
-  console.log("cage list,", cageList)
-  const cage = cageList.find(cage => cage.id === +cageId);
-  const foodNorm = foodNormList.find(i => i.birdTypeid.id === cage?.birdTypeid?.id);
+  console.log('cage list,', cageList);
+  const cage = cageList.find((cage) => cage.id === +cageId);
+  const foodNorm = foodNormList.find((i) => i.birdTypeid.id === cage?.birdTypeid?.id);
   console.log('birdTypeid', cage);
   console.log('food norm id', foodNorm?.id);
   return foodNorm?.id;
@@ -421,17 +425,19 @@ function stringToDate(input) {
   const year = localDate.getFullYear();
   const hour = localDate.getHours();
   const minute = localDate.getMinutes();
-  const ampm = hour >= 12 ? "PM" : "AM";
+  const ampm = hour >= 12 ? 'PM' : 'AM';
 
   // Format the components using string concatenation and conditional operators
-  const output = `${day < 10 ? "0" : ""}${day}/${month < 10 ? "0" : ""}${month}/${year} ${(hour % 12) || 12}:${minute < 10 ? "0" : ""}${minute} ${ampm}`;
+  const output = `${day < 10 ? '0' : ''}${day}/${month < 10 ? '0' : ''}${month}/${year} ${hour % 12 || 12}:${
+    minute < 10 ? '0' : ''
+  }${minute} ${ampm}`;
   // Return or display the output
   console.log(output); // 01/01/2023 06:00 PM
-  return output
+  return output;
 }
 
-function formatDate(input) {
-  console.log('input', input)
+export function formatDate(input) {
+  console.log('input', input);
   const date = new Date(input);
   const isoDate = date.toISOString().substring(0, 16).replace('T', ' ');
   return isoDate;
@@ -442,18 +448,17 @@ function formatDate(input) {
 // { color: '#FFC107', title: 'Pending' },// statusID: 2
 // { color: '#FF4842', title: 'Feeding Late' }// statusID: 3
 
-function getStatusByColor(color){
-  switch (color){
-    case "#808080" :
+function getStatusByColor(color) {
+  switch (color) {
+    case '#808080':
       return 1;
-    case "#94D82D":
+    case '#94D82D':
       return 2;
-    case "#FFC107":
+    case '#FFC107':
       return 3;
-    case "#FF4842":
+    case '#FF4842':
       return 4;
     default:
-      return 1
+      return 1;
   }
-
 }

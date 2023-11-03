@@ -25,7 +25,7 @@ import { birdMedicines } from '../../../utils/mock-data/medicine';
 //
 import { getBirdType, getSpecieList } from '../../../redux/slices/bird';
 import { createFood, getFoodTypeList, getMedicineList } from '../../../redux/slices/food';
-
+import { PATH_DASHBOARD } from '../../../routes/paths';
 
 
 // ----------------------------------------------------------------------
@@ -113,10 +113,10 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
         // }
 
         dispatch(createFood({ ...values, birdTypeList, species, foodTypeList, medicineList, speciesId, periodId }));
-        // resetForm();
-        // setSubmitting(false);
-        // enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
-        // navigate(PATH_DASHBOARD.user.list);
+        resetForm();
+        setSubmitting(false);
+        enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
+        navigate(PATH_DASHBOARD.food.card);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
