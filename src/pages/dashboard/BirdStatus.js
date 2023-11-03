@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 // material
-import { Container, Tab, Box, Tabs, Stack, Grid, Skeleton } from '@material-ui/core';
+import { Box, Container, Grid, Skeleton, Stack } from '@material-ui/core';
 // redux
-import { foodsData } from '../../utils/mock-data/food';
-import { useDispatch, useSelector } from '../../redux/store';
-import { getUsers } from '../../redux/slices/user';
-import { PATH_DASHBOARD } from '../../routes/paths';
-import useSettings from '../../hooks/useSettings';
-import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import Page from '../../components/Page';
 import NewFoodNormForm from '../../components/_dashboard/user/NewFoodNormForm';
+import useSettings from '../../hooks/useSettings';
 import { getCurrentFoodPlan, getFoodList } from '../../redux/slices/food';
+import { useDispatch, useSelector } from '../../redux/store';
+import { PATH_DASHBOARD } from '../../routes/paths';
+import { foodsData } from '../../utils/mock-data/food';
 
 
 
@@ -73,8 +72,8 @@ export default function BirdStatus() {
     const currentPlan = foodsData;
   
     useEffect(() => {
-      dispatch(getUsers());
-    }, [dispatch]);
+
+    }, []);
   return (
     <Page title="Food Plan">
       <Container maxWidth={themeStretch ? false : 'lg'}>

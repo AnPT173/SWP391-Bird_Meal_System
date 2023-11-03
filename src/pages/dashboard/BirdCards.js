@@ -1,7 +1,7 @@
 import listTask from '@iconify/icons-bi/list-task';
 import { Icon } from '@iconify/react';
-import { Button, Container, Grid, Skeleton } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { Button, Container, Grid } from '@material-ui/core';
+import { useEffect } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
 // Redux
@@ -40,7 +40,7 @@ export default function BirdCards() {
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'Cages', href: PATH_DASHBOARD.cages.cards },
-            { name: 'cage xx', href: PATH_DASHBOARD.cages.birds }
+            { name: `Cage ${cageId}`, href: PATH_DASHBOARD.cages.birds }
           ]}
           action={
             <>

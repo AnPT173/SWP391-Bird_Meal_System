@@ -1,5 +1,4 @@
-import { FormControlLabel, Grid, TextField, Typography } from '@material-ui/core';
-import { CheckBox } from '@material-ui/icons';
+import { Grid, Typography } from '@material-ui/core';
 
 
 const getStatusColor = (status) => {
@@ -24,8 +23,8 @@ function CageLabel({ id, title, quantity, onClick, status }) {
             align="center"
             style={{ backgroundColor: color, 'border-radius': '5px', 'margin-bottom': '5px' }}
         >
-            {title}
-            {/* <CheckBox /> */}
+            {`Cage ${title}`}
+            <br/>
             {quantity}
            
         </Typography>

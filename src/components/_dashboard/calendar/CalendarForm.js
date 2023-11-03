@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { LoadingButton, MobileDateTimePicker } from '@material-ui/lab';
+import { Checkbox } from '@mui/material';
 import { useSelector } from 'react-redux';
 // redux
 import useAuth from '../../../hooks/useAuth';
@@ -23,7 +24,7 @@ import { createEvent, updateEvent } from '../../../redux/slices/calendar';
 import { useDispatch } from '../../../redux/store';
 //
 import { getCageList } from '../../../redux/slices/cage';
-import { getFoodList, getFoodTypeList, getMedicineList } from '../../../redux/slices/food';
+import { getFoodTypeList, getMedicineList } from '../../../redux/slices/food';
 import ColorSinglePicker from '../../ColorSinglePicker';
 
 // ----------------------------------------------------------------------
@@ -59,7 +60,7 @@ const getInitialValues = (event, range) => {
   const _event = {
     title: '',
     description: '',
-    cageId: '',
+    cageId: [],
     staffId: '',
     medicines: [{ id: '', name: '', dose: '', error: false }],
     foods: [{ id: '', name: '', quantity: '', error: false }],
@@ -103,7 +104,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
   const EventSchema = Yup.object().shape({
     title: Yup.string().max(255),
     description: Yup.string().max(5000),
-    cageId: Yup.string(),
+    cageId: Yup.array(),
     staffId: Yup.string(),
     status: Yup.string(),
     feedingRegimen: Yup.string(),
@@ -119,7 +120,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
         const newEvent = {
           title: values.title ?? '',
           description: values.description ?? '',
-          cageId: values.cageId ?? '',
+          cageId: values.cageId ?? [],
           staffId: values.staffId ?? '',
           medicines: values.medicines ?? [],
           foods: values.foods ?? [],
@@ -130,7 +131,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
           feedingTime: values.feedingTime ?? ''
         };
         if (isCreating) {
-          dispatch(createEvent(values));
+          dispatch(createEvent(values, foodTypeList, medicineList));
           enqueueSnackbar('Create event success', { variant: 'success' });
         } else {
           dispatch(updateEvent(values.id, values))
@@ -147,7 +148,10 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
 
   const { values, errors, touched, handleSubmit, isSubmitting, getFieldProps, setFieldValue } = formik;
 
-  console.log('error', values)
+  const handleAddCage = (e) => {
+
+  }
+  // console.log('error', values)
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
@@ -225,10 +229,15 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
                   select
                   fullWidth
                   label={`Medicine ${index + 1}`}
-                  value={values.medicines[index]?.id}
-                  error={medicine.error}
-                  helperText={medicine.error ? 'Medicine is required' : ''}
-                  onChange={(e) => setFieldValue('medicines', values.medicines.map((p, i) => i === index ? { ...p, id: e.target.value } : p))}
+                  value={values?.medicines[index]?.id}
+                  error={medicine?.error}
+                  helperText={medicine?.error ? 'Medicine is required' : ''}
+                  onChange={(e) => {
+                    const medicineId = e.target.value;
+                    const selectedMedicine = medicineList.find(i => i.id === +medicineId);
+                    setFieldValue('medicines', values.medicines.map((m, i) => i === index ? { ...m, id: medicineId, name: selectedMedicine?.name } : m));
+
+                  }}
                 >
                   {medicineList.map((option) => (
                     <MenuItem key={option.name} value={option.id}>
@@ -253,25 +262,20 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
 
           <Stack direction="row" spacing={1.0}>
 
-            {isCreating &&
-              <TextField
-                select
-                {...getFieldProps('cageId')}
-                value={values.cageId}
-                fullWidth
-                label="Cage ID"
-                disabled={!isManager || values?.status === 'completed'}
-                error={Boolean(touched.cageId && errors.cageId)}
-                helperText={touched.cageId && errors.cageId}
-                SelectProps={{ native: true }}
-              >
-                {cageList.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {`Cage ${c.id}`}
-                  </option>
-                ))}
-              </TextField>}
+            {isCreating && cageList.map((cage) => (
+              <>
+                <p>
+                  {`Cage ${cage.id}`}
+                  <Checkbox value={cage.id} onChange={(e, checked) => {
+                    if (checked) { setFieldValue('cageId', [...values.cageId, e.target.value]) }
+                    else { setFieldValue('cageId', values.cageId.filter(i => i !== e.target.value)) }
+                  }} />
+                </p>
+              </>
+            ))}
 
+          </Stack>
+          <Stack direction="row" spacing={1.0}>
 
             {!isCreating &&
               <TextField
@@ -280,13 +284,14 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
                 fullWidth
                 label="Cage ID"
               />}
+
             {isCreating &&
               <TextField
                 select
                 {...getFieldProps('staffId')}
                 value={values.staffId}
                 fullWidth
-                label="Staff ID"
+                label="Staff"
                 disabled={!isManager || values?.status === 'completed'}
                 error={Boolean(touched.staffId && errors.staffId)}
                 helperText={touched.staffId && errors.staffId}
@@ -302,9 +307,9 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
             {!isCreating &&
               <TextField
                 disabled
-                value={values.staffId}
+                value={values.staffId.accountName}
                 fullWidth
-                label="Staff ID"
+                label="Staff"
               />}
           </Stack>
 

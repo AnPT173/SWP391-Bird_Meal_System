@@ -64,7 +64,7 @@ export default function BirdProfileForm({ currentBird }) {
       birdAge: currentBird ? currentBird.age : '',
       birdGender: currentBird ? (currentBird.gender) : '',
       status: currentBird ? currentBird.status : '',
-      species: currentBird ? currentBird?.birdTypeID?.specieID?.name : '',
+      species: currentBird ? currentBird?.birdTypeID?.specieid?.name : '',
       cageId: currentBird ? currentBird.cageId : '',
       avatarUrl: currentBird ? currentBird.avatarUrl : null,
       hatchingDate: currentBird ? new Date(currentBird.hatchingDate) : null,

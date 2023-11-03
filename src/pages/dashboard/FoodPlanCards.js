@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react';
 import { Container, Grid, Skeleton } from '@material-ui/core';
-import { useDispatch, useSelector } from '../../redux/store';
-import { getUsers } from '../../redux/slices/user';
-import { PATH_DASHBOARD } from '../../routes/paths';
-import useSettings from '../../hooks/useSettings';
-import Page from '../../components/Page';
+import { useEffect, useState } from 'react';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import Page from '../../components/Page';
 import FoodPlanCard from '../../components/_dashboard/user/cards/FoodPlanCards';
-import FoodPlanData from '../../utils/mock-data/foodPlan'; 
+import useSettings from '../../hooks/useSettings';
+import { useDispatch } from '../../redux/store';
+import { PATH_DASHBOARD } from '../../routes/paths';
+import FoodPlanData from '../../utils/mock-data/foodPlan';
 
 const SkeletonLoad = (
   <>
@@ -22,13 +21,11 @@ const SkeletonLoad = (
 export default function FoodPlanCards() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-      dispatch(getUsers());
     }, 20);
   }, [dispatch]);
 
