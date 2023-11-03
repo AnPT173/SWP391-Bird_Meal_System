@@ -6,6 +6,7 @@ import { closeModal, closeTaskDialog, getEvents, openCreateMultipleTaskDialog, o
 import { getScheduleById } from "../utils/mock-data/localStorageUtil";
 import { scheduleData } from "../utils/mock-data/schedule";
 import { getLocationList } from "../redux/slices/location";
+import { getCageList } from "../redux/slices/cage";
 
 export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
 
@@ -15,20 +16,19 @@ export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
     const [selectedEvent, setSelectedEvent] = useState();
     const { events } = useSelector((state) => state.calendar);
     const { locationList } = useSelector((state) => state.location);
+    const { cageList } = useSelector((state) => state.cage);
 
-    // const events = scheduleData;
 
-    console.log('event', events)
     const { user } = useAuth();
     const [isCreating, setIsCreating] = useState(false);
 
 
 
     const isManager = !!user && user?.role === 'manager';
-     const scheduleBaseOnCage = scheduleData.filter((data) => data?.id === 1);
-    
+    const scheduleBaseOnCage = scheduleData.filter((data) => data?.id === 1);
+
     const fullScheduleBaseOnRole = isManager ? events : events.filter((data) => data.staffId === user.id);
-    const filteredScheduleData = fullScheduleBaseOnRole;
+    const filteredScheduleData = cageId ? scheduleBaseOnCage :fullScheduleBaseOnRole;
 
 
 
@@ -157,7 +157,7 @@ export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
     const handleAddMultipleTasks = () => {
         dispatch(openCreateMultipleTaskDialog());
     }
-    
+
     return {
         date,
         view,

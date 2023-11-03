@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { add } from 'date-fns';
+import { add, addDays } from 'date-fns';
 import { filter, map } from 'lodash';
 // utils
 import axios from '../../utils/axios';
@@ -152,12 +152,28 @@ export function createEvent(newEvent, foods, medicines) {
     try {
       const response = await axios.post('/manager/schedule/create', requestBody);
       dispatch(slice.actions.createEventSuccess(response.data));
+      window.location.reload();
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
   };
 }
+export function createMultipleEvent(values, cageList, foodNormList) {
+  console.log("multiple, ", values, cageList, foodNormList)
+  const requestBody = buildRequestBodyForMultipleEvents(values, cageList, foodNormList);
+  console.log("request bosy", requestBody)
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.post('/manager/schedule/create', requestBody);
+      dispatch(slice.actions.createEventSuccess(response.data));
+      window.location.reload();
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
 
+}
 // ----------------------------------------------------------------------
 
 export function updateEvent(eventId, updateEvent) {
@@ -221,7 +237,14 @@ export function selectRange(start, end) {
 //                   "note": "abc",
 //                   "status": 1,
 //                   "foodList": [
-//                     
+//                       // {
+//                       "foodType": {
+//                         "id": 1,
+//                         "name": "ft001",
+//                         "quantity": 10
+//                       },
+//                       "quantity": 10
+//                     }
 //                   ],
 //                   "medicineList": [
 //                     {
@@ -246,8 +269,7 @@ function buildCreateTaskRequestBody(payload, foods, medicines) {
     color: payload.textColor,
     title: payload.title,
     description: payload.description,
-    cageTaskDTOList: buildCageList(payload, foods, medicines),
-    foodNormID: payload?.foodNormID ?? null
+    cageTaskDTOList: buildCageList(payload, foods, medicines)
   }
 }
 
@@ -274,14 +296,6 @@ function buildCageList(payload, foods, medicines) {
 }
 
 function buildFoodList(payload, foods) {
-  // {
-  //                       "foodType": {
-  //                         "id": 1,
-  //                         "name": "ft001",
-  //                         "quantity": 10
-  //                       },
-  //                       "quantity": 10
-  //                     }
   if (payload?.foods) {
     const foodList = [];
     const selectedFoods = payload?.foods;
@@ -320,11 +334,11 @@ function buildMedicineList(payload, medicines) {
 
 function buildTaskResponse(responses) {
   const result = Object.values(responses).map((response, index) => {
-    const  { task, cageid, staffid} = response;
+    const { task, cageid, staffid } = response;
 
     const data = {
       id: response.id,
-      taskId : task.id,
+      taskId: task.id,
       cageId: cageid.id,
       title: response.task.title,
       description: response.task.description,
@@ -345,8 +359,50 @@ function buildTaskResponse(responses) {
   return result
 }
 
-function getCageFromBird() {
-  return 1
+function buildRequestBodyForMultipleEvents(values, cageList, foodNormList) {
+  return {
+    accountID: values?.staffId ?? 1,
+    color: '#94D82D',
+    title: 'Feeding bird',
+    description: 'Feeding bird',
+    cageTaskDTOList: buildCageListForCreateMultipleEvent(values, cageList, foodNormList)
+  }
+}
+
+function buildCageListForCreateMultipleEvent(values, cageList, foodNormList) {
+  const timeDiff = values.toDate.getTime() - values.fromDate.getTime();
+  const dayDiff = Math.round(Math.abs(timeDiff / (1000 * 60 * 60 * 24)));
+  console.log('dayDiff',add(new Date(values.fromDate), 0));
+  const { cages } = values;
+  const cageDTOs = [];
+  cages.forEach(item => {
+    for (let i = 0; i < dayDiff; i+=1) {
+      console.log(',i', i)
+      const cageDTO = {
+        cageID: item,
+        schedules: [{
+          startDate: formatDate(addDays(new Date(values.fromDate), i)),
+          endDate: formatDate(addDays(new Date(values.toDate), i)),
+          staffID: values?.staffId ?? 1,
+          note: 'Batch schedule',
+          status: 1,
+          foodNormID: getFoodNormByCageId(item, cageList, foodNormList)
+        }
+        ]
+      }
+      cageDTOs.push(cageDTO);
+    }
+  });
+  return cageDTOs;
+}
+
+function getFoodNormByCageId(cageId, cageList, foodNormList) {
+  console.log("cage list,", cageList)
+  const cage = cageList.find(cage => cage.id === +cageId);
+  const foodNorm = foodNormList.find(i => i.birdTypeid.id === cage?.birdTypeid?.id);
+  console.log('birdTypeid', cage);
+  console.log('food norm id', foodNorm?.id);
+  return foodNorm?.id;
 }
 
 function stringToDate(input) {
@@ -372,6 +428,7 @@ function stringToDate(input) {
 }
 
 function formatDate(input) {
+  console.log('input', input)
   const date = new Date(input);
   const isoDate = date.toISOString().substring(0, 16).replace('T', ' ');
   return isoDate;
