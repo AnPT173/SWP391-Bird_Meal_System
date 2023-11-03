@@ -1,7 +1,7 @@
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useSnackbar } from 'notistack5';
 import PropTypes from 'prop-types';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 // material
@@ -27,34 +27,38 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import Label from '../../Label';
 import { UploadAvatar } from '../../upload';
 
-
 BirdProfileForm.propTypes = {
-  currentBird: PropTypes.object,
+  currentBird: PropTypes.object
 };
 
 export default function BirdProfileForm({ currentBird }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { birdId } = useParams();
-  const [ isEdit, setIsEdit ] = useState(false);
+  const [isEdit, setIsEdit] = useState(!!currentBird?.id);
+  const [gender, setGender] = useState('Male');
+  console.log('current bird', currentBird);
+
+  console.log('is edit', isEdit);
+  useEffect(() => {
+    setIsEdit(!!currentBird?.id);
+    setGender(currentBird?.gender ? 'Male' : 'Female');
+  }, [currentBird]);
 
   const NewBirdSchema = Yup.object().shape({
-    birdName: Yup.string().required('Bird Name is required'),
-    birdAge: Yup.number().required('Bird Age is required'),
-    status: Yup.string().required('Status is required'),
-    species: Yup.string().required('Species is required'),
-    cageId: Yup.string().required('Cage is required'),
-    avatarUrl: Yup.mixed().required('Avatar is required'),
-    birdGender: Yup.string().required('Bird Gender is required'),
-    hatchingDate: Yup.date().required('Hatching Date is required'),
-    attitudes: Yup.string().required('Attitudes are required'),
-    featherColor: Yup.string().required('Feather Color is required'),
-    appearance: Yup.string().required('Appearance is required'),
-    qualities: Yup.string().required('Qualities are required'),
-    
+    birdName: Yup.string(),
+    birdAge: Yup.number(),
+    status: Yup.string(),
+    species: Yup.string(),
+    cageId: Yup.string(),
+    avatarUrl: Yup.mixed(),
+    birdGender: Yup.string(),
+    hatchingDate: Yup.date(),
+    attitudes: Yup.string(),
+    featherColor: Yup.string(),
+    appearance: Yup.string(),
+    qualities: Yup.string()
   });
-
-
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -62,17 +66,16 @@ export default function BirdProfileForm({ currentBird }) {
       birdId: currentBird ? currentBird.id : '',
       birdName: currentBird ? currentBird.name : '',
       birdAge: currentBird ? currentBird.age : '',
-      birdGender: currentBird ? (currentBird.gender) : '',
+      birdGender: currentBird ? gender : '',
       status: currentBird ? currentBird.status : '',
-      species: currentBird ? currentBird?.birdTypeID?.specieid?.name : '',
+      species: currentBird ? currentBird?.birdTypeid?.specieid?.name : '',
       cageId: currentBird ? currentBird.cageId : '',
       avatarUrl: currentBird ? currentBird.avatarUrl : null,
-      hatchingDate: currentBird ? new Date(currentBird.hatchingDate) : null,
+      hatchingDate: currentBird ? new Date(currentBird.age) : null,
       attitudes: currentBird ? currentBird.attituteds : '',
-      featherColor: currentBird ? currentBird.featherColor : '',
+      featherColor: currentBird ? currentBird?.color : '',
       appearance: currentBird ? currentBird.appearance : '',
-      qualities: currentBird ? currentBird.qualities : '',
-      
+      qualities: currentBird ? currentBird.qualities : ''
     },
     validationSchema: NewBirdSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
@@ -87,19 +90,22 @@ export default function BirdProfileForm({ currentBird }) {
         setSubmitting(false);
         setErrors(error);
       }
-    },
+    }
   });
   const { values, errors, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
 
-  const handleDrop = useCallback((acceptedFiles) => {
-    const file = acceptedFiles[0];
-    if (file) {
-      setFieldValue('avatarUrl', {
-        ...file,
-        preview: URL.createObjectURL(file),
-      });
-    }
-  }, [setFieldValue]);
+  const handleDrop = useCallback(
+    (acceptedFiles) => {
+      const file = acceptedFiles[0];
+      if (file) {
+        setFieldValue('avatarUrl', {
+          ...file,
+          preview: URL.createObjectURL(file)
+        });
+      }
+    },
+    [setFieldValue]
+  );
 
   let color = 'info'; // Default color
 
@@ -121,14 +127,10 @@ export default function BirdProfileForm({ currentBird }) {
           <Grid item xs={12} md={4}>
             <Card sx={{ py: 10, px: 3 }}>
               {isEdit && (
-                <Label
-                  color={color}
-                  sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
-                >
+                <Label color={color} sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}>
                   {currentBird && currentBird.status}
                 </Label>
-              )
-              }
+              )}
 
               <Box sx={{ mb: 5 }}>
                 <UploadAvatar
@@ -145,7 +147,7 @@ export default function BirdProfileForm({ currentBird }) {
                         mx: 'auto',
                         display: 'block',
                         textAlign: 'center',
-                        color: 'text.secondary',
+                        color: 'text.secondary'
                       }}
                     >
                       Allowed *.jpeg, *.jpg, *.png, *.gif
@@ -167,10 +169,8 @@ export default function BirdProfileForm({ currentBird }) {
                   }
                   label="Exotic"
                 />
-
               </Box>
             </Card>
-
           </Grid>
           <Grid item xs={12} md={8}>
             <Card sx={{ p: 3 }}>
@@ -184,7 +184,7 @@ export default function BirdProfileForm({ currentBird }) {
                     error={Boolean(touched.birdId && errors.birdId)}
                     helperText={touched.birdId && errors.birdId}
                     InputProps={{
-                      readOnly: true,
+                      readOnly: true
                     }}
                   />
                   <TextField
@@ -204,8 +204,7 @@ export default function BirdProfileForm({ currentBird }) {
                       error={Boolean(touched.exoticRate && errors.exoticRate)}
                       helperText={touched.exoticRate && errors.exoticRate}
                     />
-                  )
-                  }
+                  )}
                 </Stack>
 
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
@@ -217,44 +216,50 @@ export default function BirdProfileForm({ currentBird }) {
                     error={Boolean(touched.birdAge && errors.birdAge)}
                     helperText={touched.birdAge && errors.birdAge}
                   />
-                  <TextField
-                    select
-                    fullWidth
-                    label="Status"
-                    value={formik.values.status}
-                    {...getFieldProps('status')}
-                    error={Boolean(touched.status && errors.status)}
-                    helperText={touched.status && errors.status}
-                  >
-                    <MenuItem value="" disabled>
-                      Select Status
-                    </MenuItem>
-                    {status.map((option) => (
-                      <MenuItem key={option.statusId} value={option.status}>
-                        {option.status}
+                  {!isEdit && (
+                    <TextField
+                      select
+                      fullWidth
+                      label="Status"
+                      value={formik.values.status}
+                      {...getFieldProps('status')}
+                      error={Boolean(touched.status && errors.status)}
+                      helperText={touched.status && errors.status}
+                    >
+                      <MenuItem value="" disabled>
+                        Select Status
                       </MenuItem>
-                    ))}
-                  </TextField>
+                      {status.map((option) => (
+                        <MenuItem key={option.statusId} value={option.status}>
+                          {option.status}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                  {isEdit && <TextField fullWidth label="Status" value={formik.values.status ?? 'Normal'} />}
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
-                  <TextField
-                    select
-                    fullWidth
-                    label="Species"
-                    value={formik.values.species}
-                    {...getFieldProps('species')}
-                    error={Boolean(touched.species && errors.species)}
-                    helperText={touched.species && errors.species}
-                  >
-                    <MenuItem value="" disabled>
-                      Select Species
-                    </MenuItem>
-                    {species.map((option) => (
-                      <MenuItem key={option.speciesID} value={option.specie}>
-                        {option.specie}
+                  {!isEdit && (
+                    <TextField
+                      select
+                      fullWidth
+                      label="Species"
+                      value={values.species}
+                      {...getFieldProps('species')}
+                      error={Boolean(touched.species && errors.species)}
+                      helperText={touched.species && errors.species}
+                    >
+                      <MenuItem value="" disabled>
+                        Select Species
                       </MenuItem>
-                    ))}
-                  </TextField>
+                      {species.map((option) => (
+                        <MenuItem key={option.speciesID} value={option.specie}>
+                          {option.specie}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                  {isEdit && <TextField fullWidth disabled label="Species" value={formik.values.species} />}
                   <DatePicker
                     fullWidth
                     label="Hatching Date"
@@ -268,18 +273,21 @@ export default function BirdProfileForm({ currentBird }) {
                   />
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
-                  <TextField
-                    select
-                    fullWidth
-                    label="Gender"
-                    value={formik.values.birdGender}
-                    {...getFieldProps('birdGender')}
-                    error={Boolean(touched.birdGender && errors.birdGender)}
-                    helperText={touched.birdGender && errors.birdGender}
-                  >
-                    <MenuItem value="Male">Male</MenuItem>
-                    <MenuItem value="Female">Female</MenuItem>
-                  </TextField>
+                  {!isEdit && (
+                    <TextField
+                      select
+                      fullWidth
+                      label="Gender"
+                      value={formik.values.birdGender}
+                      {...getFieldProps('birdGender')}
+                      error={Boolean(touched.birdGender && errors.birdGender)}
+                      helperText={touched.birdGender && errors.birdGender}
+                    >
+                      <MenuItem value="Male">Male</MenuItem>
+                      <MenuItem value="Female">Female</MenuItem>
+                    </TextField>
+                  )}
+                  {isEdit && <TextField disabled fullWidth label="Gender" value={values.birdGender} />}
                   <TextField
                     fullWidth
                     label="Attitudes"
@@ -288,14 +296,18 @@ export default function BirdProfileForm({ currentBird }) {
                     error={Boolean(touched.attitudes && errors.attitudes)}
                     helperText={touched.attitudes && errors.attitudes}
                   />
-                  <TextField
-                    fullWidth
-                    label="Feather Color"
-                    value={formik.values.featherColor}
-                    {...getFieldProps('featherColor')}
-                    error={Boolean(touched.featherColor && errors.featherColor)}
-                    helperText={touched.featherColor && errors.featherColor}
-                  />
+                  {!isEdit && (
+                    <TextField
+                      fullWidth
+                      label="Feather Color"
+                      value={formik.values.featherColor}
+                      {...getFieldProps('featherColor')}
+                      error={Boolean(touched.featherColor && errors.featherColor)}
+                      helperText={touched.featherColor && errors.featherColor}
+                    />
+                  )}
+
+                  {isEdit && <TextField fullWidth label="Feather Color" value={formik.values.featherColor} disabled />}
                 </Stack>
                 <TextField
                   fullWidth
