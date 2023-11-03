@@ -59,6 +59,7 @@ export function createCage(payload) {
         transformRequest: (formData) => formData
       });
       dispatch(slice.actions.afterCreateCageSuccess(response.data));
+      window.location.reload();
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
