@@ -31,7 +31,7 @@ export default function BirdProfileWrapper() { // Rename the component to avoid 
   const [currentBird, setCurrentBird] = useState();
 
   const { birdList } = useSelector(state => state.bird);
-
+  console.log(birdList)
   useEffect(async () => {
     dispatch(getBirdList());
   }, []);

@@ -69,7 +69,7 @@ export const managerSidebar = [
       },
       { title: 'Schedule', path: PATH_DASHBOARD.calendar, icon: ICONS.calendar },
       { title: 'Task', path: PATH_DASHBOARD.task.root, icon: ICONS.cart },
-      { title: 'Food', path: PATH_DASHBOARD.food.species, icon: ICONS.cart },
+      { title: 'Food', path: PATH_DASHBOARD.food.card, icon: ICONS.cart },
       {
         title: 'Storage',
         path: PATH_DASHBOARD.food.list,

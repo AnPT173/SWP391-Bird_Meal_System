@@ -38,10 +38,10 @@ const COLOR_OPTIONS = [
 
 const STAFFS = [
   { id: '-1', value: '' },
-  { id: '1', value: 'Staff 001' },
-  { id: '2', value: 'Staff 002' },
-  { id: '3', value: 'Staff 003' },
-  { id: '4', value: 'Staff 004' }
+  { id: '2', value: 'Staff 001' },
+  { id: '3', value: 'Staff 002' },
+  { id: '4', value: 'Staff 003' },
+  { id: '5', value: 'Staff 004' }
 ];
 
 
@@ -69,6 +69,7 @@ const getInitialValues = (event, range) => {
     textColor: '',
     start: '',
     feedingRegimen: '',
+    water: '',
     feedingTime: ''
   };
 
@@ -318,6 +319,7 @@ console.log('event', event);
             <TextField
               disabled={!isCreating}
               // value={values.staffId.accountName}
+              value={isCreating ? values.water : 10}
               fullWidth
               label="Water"
             />

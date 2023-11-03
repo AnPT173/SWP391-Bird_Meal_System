@@ -61,7 +61,7 @@ export default function BirdCard({ cageId, birdList, birdInCage }) {
           const currentBird = buildCurrentBirdInfo(cageId, bird?.birdID?.id, birdList, filteredBirdInCage);
           console.log('current bird', currentBird);
           let statusColor = 'info';
-          const birdImageUrl = currentBird?.image ?? `/static/mock-images/birds/bird_${index + 1}.jpg`;
+          const birdImageUrl = currentBird?.birdid?.image ?? `/static/mock-images/birds/bird_${index + 1}.jpg`;
 
           if (bird?.status === 'Normal') {
             statusColor = 'success';
@@ -82,7 +82,7 @@ export default function BirdCard({ cageId, birdList, birdInCage }) {
                     src={birdImageUrl}
                   />
                 </CardMediaStyle>
-                <Link href={`${PATH_DASHBOARD.cages.root}/${cageId}/birds/${currentBird.id}/profile`}>
+                <Link href={`${PATH_DASHBOARD.cages.root}/${cageId}/birds/${currentBird?.birdid?.id}/profile`}>
                   <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
                     {currentBird?.birdid?.name}
                   </Typography>

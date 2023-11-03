@@ -42,6 +42,7 @@ export default function SpeciesCards() {
         <HeaderBreadcrumbs
           heading="Species"
           links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, 
+                  { name: 'Food Plan', href: PATH_DASHBOARD.food.card},
                   { name: 'Species' }]}
         /> 
           {loading ? (

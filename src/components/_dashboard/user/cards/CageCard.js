@@ -35,6 +35,7 @@ function CageCard({ cageList }) {
     <>
       <Grid container spacing={3}>
         {cageList.map((cage, index) => {
+          console.log('cage', cage)
           let statusColor = 'info';
 
         if (cage.type === 'Normal') {
@@ -55,12 +56,12 @@ function CageCard({ cageList }) {
           }
 
           return (
-            <Grid item xs={12} sm={6} md={4} key={cage.cageID}>
+            <Grid item xs={12} sm={6} md={4} key={cage?.id}>
               <Card>
                 <CardMediaStyle>
                   <CoverImgStyle
                     alt="cover"
-                    src={`/static/mock-images/cages/cage_${index + 1}.jpg`}
+                    src={cage?.image ?? `/static/mock-images/cages/cage_${index + 1}.jpg`}
                   />
                 </CardMediaStyle>
                 <Link href={`${PATH_DASHBOARD.cages.root}/${cage.id}/birds`}>

@@ -197,6 +197,7 @@ export function updateEvent(eventId, updateEvent) {
 
       const response = await axios.put(`/manager/schedule/updateInfoTaskBird/${eventId}`, { ...originalData });
       dispatch(slice.actions.updateEventSuccess(response.data));
+      window.location.reload();
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -367,7 +368,7 @@ function buildTaskResponse(responses) {
 
 function buildRequestBodyForMultipleEvents(values, cageList, foodNormList) {
   return {
-    accountID: values?.staffId ?? 1,
+    accountID: values?.staffId ?? 2,
     color: '#808080',
     title: 'Feeding bird',
     description: 'Feeding bird',
@@ -390,7 +391,7 @@ function buildCageListForCreateMultipleEvent(values, cageList, foodNormList) {
           {
             startDate: formatDate(addDays(new Date(values.fromDate), i)),
             endDate: formatDate(addDays(new Date(values.toDate), i)),
-            staffID: values?.staffId ?? 1,
+            staffID: values?.staffId ?? 2,
             note: 'Batch schedule',
             status: 1,
           }

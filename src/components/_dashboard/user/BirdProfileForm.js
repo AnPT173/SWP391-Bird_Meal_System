@@ -70,7 +70,7 @@ export default function BirdProfileForm({ currentBird }) {
       status: currentBird ? currentBird.status : '',
       species: currentBird ? currentBird?.birdTypeid?.specieid?.name : '',
       cageId: currentBird ? currentBird.cageId : '',
-      avatarUrl: currentBird ? currentBird.avatarUrl : null,
+      avatarUrl: currentBird ? currentBird?.image : null,
       hatchingDate: currentBird ? new Date(currentBird.age) : null,
       attitudes: currentBird ? currentBird.attituteds : '',
       featherColor: currentBird ? currentBird?.color : '',

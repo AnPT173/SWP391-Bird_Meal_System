@@ -1,5 +1,6 @@
-import { Container, Grid, Skeleton } from '@material-ui/core';
+import { Button, Container, Grid, Skeleton } from '@material-ui/core';
 import { useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import Page from '../../components/Page';
 import FoodPlanCard from '../../components/_dashboard/user/cards/FoodPlanCards';
@@ -7,6 +8,7 @@ import useSettings from '../../hooks/useSettings';
 import { useDispatch } from '../../redux/store';
 import { PATH_DASHBOARD } from '../../routes/paths';
 import FoodPlanData from '../../utils/mock-data/foodPlan';
+
 
 const SkeletonLoad = (
   <>
@@ -35,7 +37,20 @@ export default function FoodPlanCards() {
         <HeaderBreadcrumbs
           heading="Food Plan"
           links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, { name: 'Food Plan' }]}
+          action={
+            <>
+              <Button
+                variant="contained"
+                component={RouterLink}
+                to={`${PATH_DASHBOARD.food.species}`}
+              >
+                Create Food Plan
+              </Button>
+            </>
+          }
         />
+        
+
         {loading ? (
           SkeletonLoad
         ) : (

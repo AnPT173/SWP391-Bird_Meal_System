@@ -45,6 +45,7 @@ export default function PeriodCards() {
           heading="Periods"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: 'Food Plan', href: PATH_DASHBOARD.food.card},
             { name: 'Species', href: PATH_DASHBOARD.food.species },
             { name: 'Period'}]}
         />
