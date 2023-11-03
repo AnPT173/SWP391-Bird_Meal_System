@@ -4,7 +4,7 @@ export const tasks = [
         title: "Feed the birds",
         description: "Regular feeding of all birds in the aviary",
         staffId: "STA001",
-        location: "normal",
+        location: "Normal",
         status: "Feeded",
     },
     {
@@ -12,7 +12,7 @@ export const tasks = [
         title: "Administer medication",
         description: "Administer prescribed medication to sick birds",
         staffId: "STA002",
-        location: "sick",
+        location: "Sick",
         status: "Pending",
     },
     {
@@ -20,7 +20,7 @@ export const tasks = [
         title: "Welcome new arrivals",
         description: "Prepare birthing area for the arrival of new birds",
         staffId: "STA003",
-        location: "birth",
+        location: "Birth",
         status: "Feeding Late",
     },
     {
@@ -28,7 +28,7 @@ export const tasks = [
         title: "Exotic bird care",
         description: "Special care for exotic birds in a separate enclosure",
         staffId: "STA004",
-        location: "exotic",
+        location: "Exotic",
         status: "Pending",
     },
     {
@@ -36,7 +36,7 @@ export const tasks = [
         title: "Clean bird cages",
         description: "Thoroughly clean and sanitize all bird cages",
         staffId: "STA001",
-        location: "normal",
+        location: "Normal",
         status: "Feeded",
     },
     {
@@ -44,7 +44,7 @@ export const tasks = [
         title: "Veterinary checkup",
         description: "Schedule and take birds for routine veterinary checkups",
         staffId: "STA002",
-        location: "normal",
+        location: "Normal",
         status: "Pending",
     },
     {
@@ -52,7 +52,7 @@ export const tasks = [
         title: "Incubate eggs",
         description: "Monitor and maintain incubation of bird eggs in the hatchery",
         staffId: "STA003",
-        location: "birth",
+        location: "Birth",
         status: "Feeding Late",
     },
     {
@@ -60,7 +60,7 @@ export const tasks = [
         title: "Exotic bird showcase",
         description: "Prepare and showcase exotic birds for educational events",
         staffId: "STA004",
-        location: "exotic",
+        location: "Exotic",
         status: "Pending",
     },
     {
@@ -68,7 +68,7 @@ export const tasks = [
         title: "Sick bay care",
         description: "Provide care and monitoring for birds in the sick bay",
         staffId: "STA002",
-        location: "sick",
+        location: "Sick",
         status: "Feeded",
     },
 ];
