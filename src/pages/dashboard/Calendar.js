@@ -43,6 +43,7 @@ export default function Calendar() {
     view,
     isManager,
     isCreating,
+    cageList,
     locationList,
     selectedEvent,
     filteredScheduleData,
@@ -134,14 +135,17 @@ export default function Calendar() {
           <Stack direction="column" spacing={2}>
             <DialogTitle>Tasks</DialogTitle>
             {locationList && locationList?.map((item) => {
-              const data = filteredScheduleData.filter((i) => i.locationId.id === item.id);
-              console.log('data', data);
+              if (filteredScheduleData[filteredScheduleData.length - 1] === '') { window.location.reload(); }
+              const data = filteredScheduleData.filter((i) => i?.locationId?.id === item?.id);
+              console.log('data', data)
               return (
                 <>
                   {data && data.length > 0 && <Typography>{item.name}</Typography>}
-                  <LocationScheduleMap data={data} onClick={handleSelectTask} />
+                  <LocationScheduleMap data={data} onClick={handleSelectTask} locationList={locationList} cageList={cageList} />
                 </>
               );
+
+
             })}
           </Stack>
         </DialogAnimate>

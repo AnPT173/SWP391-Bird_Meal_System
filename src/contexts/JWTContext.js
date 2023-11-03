@@ -150,9 +150,9 @@ function AuthProvider({ children }) {
     };
 
     const staff = {
-      id: 'STA001',
+      id: '1',
       displayName: 'Jaydon Frankie',
-      email: 'staff1',
+      email: 'staff',
       password: 'demo1234',
       photoURL: '/static/mock-images/avatars/avatar_default.jpg',
       phoneNumber: '+40 777666555',

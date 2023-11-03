@@ -30,9 +30,10 @@ import ColorSinglePicker from '../../ColorSinglePicker';
 // ----------------------------------------------------------------------
 
 const COLOR_OPTIONS = [
-  { color: '#94D82D', title: 'Feeded' },
-  { color: '#FFC107', title: 'Pending' },
-  { color: '#FF4842', title: 'Feeding Late' }
+  { color: '#808080', title: 'Not feeded' }, // statusID: 1
+  { color: '#94D82D', title: 'Feeded' }, // statusID: 1
+  { color: '#FFC107', title: 'Pending' },// statusID: 2
+  { color: '#FF4842', title: 'Feeding Late' }// statusID: 3
 ];
 
 const STAFFS = [
@@ -85,7 +86,7 @@ CalendarForm.propTypes = {
 };
 
 export default function CalendarForm({ event, isCreating, range, onCancel }) {
-
+console.log('event', event);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const [currentEvent, setCurrentEvent] = useState([]);
@@ -104,8 +105,6 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
   const EventSchema = Yup.object().shape({
     title: Yup.string().max(255),
     description: Yup.string().max(5000),
-    cageId: Yup.array(),
-    staffId: Yup.string(),
     status: Yup.string(),
     feedingRegimen: Yup.string(),
     start: Yup.date(),
@@ -134,6 +133,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
           dispatch(createEvent(values, foodTypeList, medicineList));
           enqueueSnackbar('Create event success', { variant: 'success' });
         } else {
+          console.log("update..")
           dispatch(updateEvent(values.id, values))
           enqueueSnackbar('Update event success', { variant: 'success' });
         }
@@ -148,6 +148,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
 
   const { values, errors, touched, handleSubmit, isSubmitting, getFieldProps, setFieldValue } = formik;
 
+  console.log('values', errors);
   const handleAddCage = (e) => {
 
   }
@@ -174,13 +175,14 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
             error={Boolean(touched.description && errors.description)}
             helperText={touched.description && errors.description}
           />
+          {isCreating && <Stack direction="column" spacing={2}>
+            <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+              <LoadingButton onClick={() => setFieldValue('foods', [...values.foods, { id: '', name: '', quantity: '', error: false }])} color="primary">
+                Add Food
+              </LoadingButton>
+            </Box>
 
-          <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-            <LoadingButton onClick={() => setFieldValue('foods', [...values.foods, { id: '', name: '', quantity: '', error: false }])} color="primary">
-              Add Food
-            </LoadingButton>
-          </Box>
-          {formik.values.foods.map((food, index) => (
+           {formik.values.foods.map((food, index) => (
             <Stack key={index} direction="row" spacing={2}>
               <TextField
                 fullWidth
@@ -215,67 +217,110 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
                 <DeleteIcon />
               </IconButton>
             </Stack>
-          ))}
-
-          <Stack direction="column" spacing={2}>
-            <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-              <LoadingButton onClick={() => setFieldValue('medicines', [...values.medicines, { medicine: '', dosage: '', error: false }])} color="primary">
-                Add Medicine
-              </LoadingButton>
-            </Box>
-            {formik.values.medicines.map((medicine, index) => (
-              <Stack key={index} direction="row" spacing={2}>
-                <TextField
-                  select
-                  fullWidth
-                  label={`Medicine ${index + 1}`}
-                  value={values?.medicines[index]?.id}
-                  error={medicine?.error}
-                  helperText={medicine?.error ? 'Medicine is required' : ''}
-                  onChange={(e) => {
-                    const medicineId = e.target.value;
-                    const selectedMedicine = medicineList.find(i => i.id === +medicineId);
-                    setFieldValue('medicines', values.medicines.map((m, i) => i === index ? { ...m, id: medicineId, name: selectedMedicine?.name } : m));
-
-                  }}
-                >
-                  {medicineList.map((option) => (
-                    <MenuItem key={option.name} value={option.id}>
-                      {option.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <TextField
-                  fullWidth
-                  label="Dosage"
-                  value={values.medicines[index]?.dosage}
-                  error={medicine.error && !medicine.dosage}
-                  helperText={medicine.error && !medicine.dosage ? 'Dosage is required' : ''}
-                  onChange={(e) => setFieldValue('medicines', values.medicines.map((p, i) => i === index ? { ...p, dose: e.target.value } : p))}
-                />
-                <IconButton onClick={() => setFieldValue('medicines', values.medicines.toSpliced(index, 1))} color="error">
-                  <DeleteIcon />
-                </IconButton>
-              </Stack>
             ))}
-          </Stack>
+          </Stack>}
+
+          {/* View Schedule */}
+
+          {!isCreating && <Stack direction="column" spacing={2}>
+            
+           {formik.values.foods.map((food, index) => (
+            <Stack key={index} direction="row" spacing={2}>
+              <TextField
+                fullWidth
+                disabled
+                label={`Food Type ${index + 1}`}
+                value={food?.foodTypeID?.name}
+              />
+              <TextField
+                fullWidth
+                label="Quantity"
+                disabled
+                value={food?.quantity}
+              />
+            </Stack>
+            ))}
+          </Stack>}
+          {isCreating &&
+            <Stack direction="column" spacing={2}>
+              <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+                <LoadingButton onClick={() => setFieldValue('medicines', [...values.medicines, { medicine: '', dosage: '', error: false }])} color="primary">
+                  Add Medicine
+                </LoadingButton>
+              </Box>
+              {formik.values.medicines.map((medicine, index) => (
+                <Stack key={index} direction="row" spacing={2}>
+                  <TextField
+                    select
+                    fullWidth
+                    label={`Medicine ${index + 1}`}
+                    value={values?.medicines[index]?.id}
+                    error={medicine?.error}
+                    helperText={medicine?.error ? 'Medicine is required' : ''}
+                    onChange={(e) => {
+                      const medicineId = e.target.value;
+                      const selectedMedicine = medicineList.find(i => i.id === +medicineId);
+                      setFieldValue('medicines', values.medicines.map((m, i) => i === index ? { ...m, id: medicineId, name: selectedMedicine?.name } : m));
+
+                    }}
+                  >
+                    {medicineList.map((option) => (
+                      <MenuItem key={option.name} value={option.id}>
+                        {option.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <TextField
+                    fullWidth
+                    label="Dosage"
+                    value={values.medicines[index]?.dosage}
+                    error={medicine.error && !medicine.dosage}
+                    helperText={medicine.error && !medicine.dosage ? 'Dosage is required' : ''}
+                    onChange={(e) => setFieldValue('medicines', values.medicines.map((p, i) => i === index ? { ...p, dose: e.target.value } : p))}
+                  />
+                  <IconButton onClick={() => setFieldValue('medicines', values.medicines.toSpliced(index, 1))} color="error">
+                    <DeleteIcon />
+                  </IconButton>
+                </Stack>
+              ))}
+            </Stack>
+          }
+          {/* View Medicine */}
+          {!isCreating &&
+            <Stack direction="column" spacing={2}>
+             {formik.values.medicines.map((medicine, index) => (
+                <Stack key={index} direction="row" spacing={2}>
+                  <TextField
+                    disabled
+                    fullWidth
+                    label={`Medicine ${index + 1}`}
+                    value={medicine?.medicineID?.name}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Dosage"
+                    value={medicine?.quantity}
+                    disabled
+                  />
+                </Stack>
+              ))}
+            </Stack>
+          }
 
           <Stack direction="row" spacing={1.0}>
-
-            {isCreating && cageList.map((cage) => (
-              <>
-                <p>
-                  {`Cage ${cage.id}`}
-                  <Checkbox value={cage.id} onChange={(e, checked) => {
-                    if (checked) { setFieldValue('cageId', [...values.cageId, e.target.value]) }
-                    else { setFieldValue('cageId', values.cageId.filter(i => i !== e.target.value)) }
-                  }} />
-                </p>
-              </>
-            ))}
-
-          </Stack>
-          <Stack direction="row" spacing={1.0}>
+            {!isCreating &&
+              <TextField
+                disabled
+                value={values.staffId.accountName}
+                fullWidth
+                label="Staff"
+              />}
+            <TextField
+              disabled={!isCreating}
+              // value={values.staffId.accountName}
+              fullWidth
+              label="Water"
+            />
 
             {!isCreating &&
               <TextField
@@ -304,13 +349,22 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
                 ))}
               </TextField>}
 
-            {!isCreating &&
-              <TextField
-                disabled
-                value={values.staffId.accountName}
-                fullWidth
-                label="Staff"
-              />}
+
+          </Stack>
+          <Stack direction="row" spacing={1.0}>
+
+            {isCreating && cageList.map((cage) => (
+              <>
+                <p>
+                  {`Cage ${cage.id}`}
+                  <Checkbox value={cage.id} onChange={(e, checked) => {
+                    if (checked) { setFieldValue('cageId', [...values.cageId, e.target.value]) }
+                    else { setFieldValue('cageId', values.cageId.filter(i => i !== e.target.value)) }
+                  }} />
+                </p>
+              </>
+            ))}
+
           </Stack>
 
           <Stack direction="row" spacing={1.0}>
@@ -325,7 +379,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
               SelectProps={{ native: true }}
             >
               {FEEDING_NOTE.map((f) => (
-                <option key={f.id} value={f.id}>
+                <option key={f.id} value={f.value}>
                   {f.value}
                 </option>
               ))}
@@ -361,11 +415,12 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
           )}
 
 
-          <ColorSinglePicker
+         {!isCreating && <ColorSinglePicker
             {...getFieldProps('textColor')}
             colors={COLOR_OPTIONS}
+            onChange={(e)=>setFieldValue('textColor', e.target.value)}
           />
-
+}
         </Stack>
 
         <DialogActions>

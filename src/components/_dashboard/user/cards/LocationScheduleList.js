@@ -1,21 +1,27 @@
 import { Grid, Typography } from '@material-ui/core';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const getStatusColor = (status) => {
+    console.log('status', status)
     switch (status) {
-        case 'Feeded':
+        case 1:
+            return '#808080';
+        case 2:
             return '#94D82D';
-        case 'Pending':
+        case 3:
             return '#FFC107';
-        case 'Late':
+        case 4:
             return '#FF4842';
         default:
-            return '#00AB55';
+            return '#808080';
     }
 };
 
-function CageLabel({ id, title, quantity, onClick, status }) {
-    const color = getStatusColor(status);
+function CageLabel({ id, title, quantity, onClick, color }) {
+    // const color = getStatusColor(status);
+    console.log('color', color)
     return (
         <Typography
             onClick={() => onClick(id)}
@@ -39,9 +45,9 @@ export default function LocationScheduleMap(props) {
                     <CageLabel
                         id={item.id}
                         title={item.cageId}
-                        quantity={item.foodQuantity}
+                        quantity={item?.foods[0]?.quantity ?? 10}
                         onClick={props.onClick}
-                        status={item.status}
+                        color={item.color}
                     />
                 </Grid>
 

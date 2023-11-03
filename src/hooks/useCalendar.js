@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
 import { useSnackbar } from "notistack5";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import useAuth from "./useAuth";
 import { closeModal, closeTaskDialog, getEvents, openCreateMultipleTaskDialog, openLocationDialog, openTaskDialog, selectRange, updateEvent } from "../redux/slices/calendar";
-import { getScheduleById } from "../utils/mock-data/localStorageUtil";
-import { scheduleData } from "../utils/mock-data/schedule";
 import { getLocationList } from "../redux/slices/location";
+import { getScheduleById } from "../utils/mock-data/localStorageUtil";
+import useAuth from "./useAuth";
 
 export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
 
@@ -15,20 +14,18 @@ export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
     const [selectedEvent, setSelectedEvent] = useState();
     const { events } = useSelector((state) => state.calendar);
     const { locationList } = useSelector((state) => state.location);
+    const { cageList } = useSelector((state) => state.cage);
 
-    // const events = scheduleData;
 
-    console.log('event', events)
     const { user } = useAuth();
     const [isCreating, setIsCreating] = useState(false);
 
-
-
+    console.log('event', events);
     const isManager = !!user && user?.role === 'manager';
-     const scheduleBaseOnCage = scheduleData.filter((data) => data?.id === 1);
-    
-    const fullScheduleBaseOnRole = isManager ? events : events.filter((data) => data.staffId === user.id);
-    const filteredScheduleData = fullScheduleBaseOnRole;
+    const scheduleBaseOnCage = events.filter((data) => data?.cageId === +cageId);
+
+    const fullScheduleBaseOnRole = isManager ? events : events.filter((data) => data.staffId.id === user.id);
+    const filteredScheduleData = cageId ? scheduleBaseOnCage :fullScheduleBaseOnRole;
 
 
 
@@ -157,7 +154,7 @@ export const useCalendar = ({ dispatch, isMobile, calendarRef, cageId }) => {
     const handleAddMultipleTasks = () => {
         dispatch(openCreateMultipleTaskDialog());
     }
-    
+
     return {
         date,
         view,
