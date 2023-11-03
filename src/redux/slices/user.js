@@ -32,6 +32,11 @@ const slice = createSlice({
       state.isLoading = false;
       state.myProfile = action.payload;
     },
+    // GET USERS
+    getUsersSuccess(state, action) {
+      state.isLoading = false;
+      state.users = action.payload;
+    },
 
     // DELETE USERS
     deleteUser(state, action) {
@@ -77,6 +82,17 @@ export function getUserList() {
     try {
       const response = await axios.get('/manager/accounts/');
       dispatch(slice.actions.getUserListSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+export function getUsers() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/user/all');
+      dispatch(slice.actions.getUsersSuccess(response.data.users));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

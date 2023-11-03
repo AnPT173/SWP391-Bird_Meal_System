@@ -4,6 +4,7 @@ import { Card, Container } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 import { useParams } from 'react-router-dom'; // Import Link from react-router-dom
 // redux
+import useAuth from '../../hooks/useAuth';
 import { useDispatch, useSelector } from '../../redux/store';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
@@ -15,6 +16,7 @@ import Page from '../../components/Page';
 
 import BirdProfile from '../../components/_dashboard/user/BirdProfileForm';
 import { getBirdList } from '../../redux/slices/bird';
+
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------

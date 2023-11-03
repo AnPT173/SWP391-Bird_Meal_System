@@ -72,7 +72,7 @@ export const managerSidebar = [
       { title: 'Food', path: PATH_DASHBOARD.food.card, icon: ICONS.cart },
       {
         title: 'Storage',
-        path: PATH_DASHBOARD.user.list,
+        path: PATH_DASHBOARD.food.list,
         icon: ICONS.storage
       },
       {

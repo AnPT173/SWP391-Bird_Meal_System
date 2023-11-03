@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
 // Redux
-import { getUsers } from '../../redux/slices/user';
 import { useDispatch, useSelector } from '../../redux/store';
 
 // Routes

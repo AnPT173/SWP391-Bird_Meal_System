@@ -86,7 +86,7 @@ export default function BirdStatus() {
         />
         <Stack spacing={5}>
           <Box>
-          <StatusForm isEdit currentPlan={currentPlan} />
+          <NewFoodNormForm isEdit currentPlan={currentPlan} />
           </Box>
         </Stack>
       </Container>

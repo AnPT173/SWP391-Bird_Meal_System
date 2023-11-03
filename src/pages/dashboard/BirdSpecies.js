@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Container, Grid, Skeleton } from '@material-ui/core';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getUsers } from '../../redux/slices/user';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks

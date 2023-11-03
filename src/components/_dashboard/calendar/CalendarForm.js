@@ -188,15 +188,15 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
                 onChange={(e) => {
                   const foodId = e.target.value;
                   const selectedFood = foodTypeList.find(i => i.id === +foodId);
-                  setFieldValue('foods', values.foods.map((f, i) => i === index ? { ...f, id: foodId, name: selectedFood?.name} : f));
+                  setFieldValue('foods', values.foods.map((f, i) => i === index ? { ...f, id: foodId, name: selectedFood?.name } : f));
                 }
-              }
+                }
               >
-{                foodTypeList.map(option => (
-                            <MenuItem key={option.id} value={option.id}>
-                              {option.name}
-                            </MenuItem>
-                          ))}
+                {foodTypeList.map(option => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.name}
+                  </MenuItem>
+                ))}
               </TextField>
               <TextField
                 fullWidth
@@ -225,10 +225,10 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
                   select
                   fullWidth
                   label={`Medicine ${index + 1}`}
-                  value={values.medicine[index]?.id}
+                  value={values.medicines[index]?.id}
                   error={medicine.error}
                   helperText={medicine.error ? 'Medicine is required' : ''}
-                  onChange={(e) => setFieldValue('medicines', values.medicines.map((p, i) => i === index ? { ...p, name: e.target.value } : p))}
+                  onChange={(e) => setFieldValue('medicines', values.medicines.map((p, i) => i === index ? { ...p, id: e.target.value } : p))}
                 >
                   {medicineList.map((option) => (
                     <MenuItem key={option.name} value={option.id}>
@@ -239,7 +239,7 @@ export default function CalendarForm({ event, isCreating, range, onCancel }) {
                 <TextField
                   fullWidth
                   label="Dosage"
-                  value={values.medicine[index]?.dosage}
+                  value={values.medicines[index]?.dosage}
                   error={medicine.error && !medicine.dosage}
                   helperText={medicine.error && !medicine.dosage ? 'Dosage is required' : ''}
                   onChange={(e) => setFieldValue('medicines', values.medicines.map((p, i) => i === index ? { ...p, dose: e.target.value } : p))}
