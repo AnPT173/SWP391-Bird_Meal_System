@@ -133,7 +133,7 @@ export default function Router() {
             { path: '/', element: <Navigate to="/dashboard/foodPlan/species" replace /> },
             { path: '/species', element: <SpeciesCards /> },
             { path: '/species/:speciesId/period', element: <PeriodCards /> },
-            { path: '/species/:speciesId/period/:periodId/status', element: <BirdStatus /> },
+            { path: '/species/:speciesId/period/:id/status', element: <NewFoodNormForm /> },
             { path: '/:cageId/schedule', element: <Calendar /> },
             { path: '/cards/:name/edit', element: <NewFoodNormForm /> },
             { path: '/cards', element: <FoodPlanCards /> },
