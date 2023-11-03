@@ -177,20 +177,23 @@ export function createMultipleEvent(values, cageList, foodNormList) {
 // ----------------------------------------------------------------------
 
 export function updateEvent(eventId, updateEvent) {
-
-  console.log('update 1')
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
       const originalData = await getOriginalScheduleById(eventId);
-      const { textColor } = updateEvent;
+      console.log('original data', originalData);
+      console.log('new ', updateEvent);
+      // payload.textColor, payload.feedingRegimen
+      const { textColor, feedingRegimen } = updateEvent;
 
       originalData.task.color = textColor;
-      console.log('update 12')
-      const response = await axios.post(`/manager/schedule/updateInfoTaskBird/${eventId}`, { ...originalData });
+      originalData.status = getStatusByColor(textColor);
+      originalData.note = getStatusByColor(feedingRegimen);
+
+      const response = await axios.put(`/manager/schedule/updateInfoTaskBird/${eventId}`, { ...originalData });
       dispatch(slice.actions.updateEventSuccess(response.data));
     } catch (error) {
-      console.log('update 13')
+
       dispatch(slice.actions.hasError(error));
     }
   };
@@ -266,7 +269,7 @@ export function selectRange(start, end) {
 function buildCreateTaskRequestBody(payload, foods, medicines) {
   return {
     accountID: payload.staffId,
-    color: payload.textColor,
+    color: '#808080',
     title: payload.title,
     description: payload.description,
     cageTaskDTOList: buildCageList(payload, foods, medicines)
@@ -283,7 +286,7 @@ function buildCageList(payload, foods, medicines) {
         startDate: formatDate(payload.start),
         endDate: formatDate(payload.start),
         staffID: payload.staffId,
-        note: 'abc',
+        note: payload?.feedingRegimen,
         status: 1,
         foodList: buildFoodList(payload, foods),
         medicineList: buildMedicineList(payload, medicines)
@@ -362,7 +365,7 @@ function buildTaskResponse(responses) {
 function buildRequestBodyForMultipleEvents(values, cageList, foodNormList) {
   return {
     accountID: values?.staffId ?? 1,
-    color: '#94D82D',
+    color: '#808080',
     title: 'Feeding bird',
     description: 'Feeding bird',
     cageTaskDTOList: buildCageListForCreateMultipleEvent(values, cageList, foodNormList)
@@ -432,4 +435,25 @@ function formatDate(input) {
   const date = new Date(input);
   const isoDate = date.toISOString().substring(0, 16).replace('T', ' ');
   return isoDate;
+}
+
+// { color: '#808080', title: 'Not feeded' }, // statusID: 1
+// { color: '#94D82D', title: 'Feeded' }, // statusID: 1
+// { color: '#FFC107', title: 'Pending' },// statusID: 2
+// { color: '#FF4842', title: 'Feeding Late' }// statusID: 3
+
+function getStatusByColor(color){
+  switch (color){
+    case "#808080" :
+      return 1;
+    case "#94D82D":
+      return 2;
+    case "#FFC107":
+      return 3;
+    case "#FF4842":
+      return 4;
+    default:
+      return 1
+  }
+
 }

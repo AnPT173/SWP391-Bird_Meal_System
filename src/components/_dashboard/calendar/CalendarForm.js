@@ -30,9 +30,10 @@ import ColorSinglePicker from '../../ColorSinglePicker';
 // ----------------------------------------------------------------------
 
 const COLOR_OPTIONS = [
-  { color: '#94D82D', title: 'Feeded' },
-  { color: '#FFC107', title: 'Pending' },
-  { color: '#FF4842', title: 'Feeding Late' }
+  { color: '#808080', title: 'Not feeded' }, // statusID: 1
+  { color: '#94D82D', title: 'Feeded' }, // statusID: 1
+  { color: '#FFC107', title: 'Pending' },// statusID: 2
+  { color: '#FF4842', title: 'Feeding Late' }// statusID: 3
 ];
 
 const STAFFS = [
@@ -298,7 +299,7 @@ console.log('event', event);
                   <TextField
                     fullWidth
                     label="Dosage"
-                    value={medicine?.name}
+                    value={medicine?.quantity}
                     disabled
                   />
                 </Stack>
@@ -378,7 +379,7 @@ console.log('event', event);
               SelectProps={{ native: true }}
             >
               {FEEDING_NOTE.map((f) => (
-                <option key={f.id} value={f.id}>
+                <option key={f.id} value={f.value}>
                   {f.value}
                 </option>
               ))}
@@ -414,11 +415,12 @@ console.log('event', event);
           )}
 
 
-          <ColorSinglePicker
+         {!isCreating && <ColorSinglePicker
             {...getFieldProps('textColor')}
             colors={COLOR_OPTIONS}
+            onChange={(e)=>setFieldValue('textColor', e.target.value)}
           />
-
+}
         </Stack>
 
         <DialogActions>

@@ -137,6 +137,7 @@ export default function Calendar() {
             {locationList && locationList?.map((item) => {
               if (filteredScheduleData[filteredScheduleData.length - 1] === '') { window.location.reload(); }
               const data = filteredScheduleData.filter((i) => i?.locationId?.id === item?.id);
+              console.log('data', data)
               return (
                 <>
                   {data && data.length > 0 && <Typography>{item.name}</Typography>}
