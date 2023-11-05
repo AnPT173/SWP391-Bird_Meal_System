@@ -51,7 +51,7 @@ export default function SpeciesCard() {
             <CardMediaStyle>
               <CoverImgStyle
                 alt="cover"
-                src={`/static/mock-images/cages/cage_${index + 1}.jpg`}
+                src={`/static/mock-images/birds/bird_${index + 1}.jpg`}
               />
             </CardMediaStyle>
 

@@ -167,7 +167,7 @@ export default function FoodList() {
             <Button
               variant="contained"
               component={RouterLink}
-              to={PATH_DASHBOARD.food.root}
+              to={PATH_DASHBOARD.food.edit}
               startIcon={<Icon icon={plusFill} />}
             >
               New Food

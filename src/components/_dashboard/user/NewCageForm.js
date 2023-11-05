@@ -7,12 +7,14 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import { useSnackbar } from 'notistack5';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { status } from '../../../utils/mock-data/status';
 import { getSpecieList } from '../../../redux/slices/bird';
 import { createCage } from '../../../redux/slices/cage';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { fData } from '../../../utils/formatNumber';
 import { cageType } from '../../../utils/mock-data/cage';
 import { UploadAvatar } from '../../upload';
+
 
 export default function CreateNewCageForm({location}) {
   const navigate = useNavigate();
@@ -28,6 +30,7 @@ export default function CreateNewCageForm({location}) {
 
 
   const NewCageSchema = Yup.object().shape({
+    status: Yup.string().required('Status is required'),
     species: Yup.string().required('Species is required'),
     cageType: Yup.string().required('Cage Type is required'),
     avatarUrl: Yup.mixed().required('Cage imnage is required'),
@@ -36,6 +39,7 @@ export default function CreateNewCageForm({location}) {
 
   const formik = useFormik({
     initialValues: {
+      status: '',
       species: '',
       cageType: '',
       quantity: '',
@@ -163,6 +167,18 @@ export default function CreateNewCageForm({location}) {
                     error={Boolean(touched.qualities && errors.qualities)}
                     helperText={touched.qualities && errors.qualities}
                   />
+                  <TextField
+                  fullWidth
+                  select
+                  label="Status"
+                  {...getFieldProps('status')}
+                  error={Boolean(touched.status && errors.status)}
+                  helperText={touched.status && errors.status}
+                  >{status.map((option)=>(
+                    <MenuItem key ={option.statusId} value={option.status}>
+                      {option.status}
+                    </MenuItem>
+                  ))}</TextField>
                 </Stack>
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                   <LoadingButton type="submit" variant="contained" loading={isSubmitting}>

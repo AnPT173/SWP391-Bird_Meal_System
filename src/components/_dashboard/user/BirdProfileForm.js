@@ -47,7 +47,7 @@ export default function BirdProfileForm({ currentBird }) {
 
   const NewBirdSchema = Yup.object().shape({
     birdName: Yup.string(),
-    birdAge: Yup.number(),
+    birdAge: Yup.date(),
     status: Yup.string(),
     species: Yup.string(),
     cageId: Yup.string(),

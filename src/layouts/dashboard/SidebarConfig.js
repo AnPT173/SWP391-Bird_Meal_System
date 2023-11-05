@@ -44,10 +44,10 @@ export const staffSidebar = [
         icon: ICONS.cage,
       },
       { title: 'Schedule', path: PATH_DASHBOARD.calendar, icon: ICONS.calendar },
-      { title: 'Food', path: PATH_DASHBOARD.food.species, icon: ICONS.cart },
+      { title: 'Food', path: PATH_DASHBOARD.food.card, icon: ICONS.cart },
       {
         title: 'Storage',
-        path: PATH_DASHBOARD.user.list,
+        path: PATH_DASHBOARD.food.list,
         icon: ICONS.storage
       }
     ]

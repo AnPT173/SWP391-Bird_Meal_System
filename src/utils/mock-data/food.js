@@ -7,7 +7,7 @@ export const foodsData = [
       price: 5.99,
       category: "Seeds",
       expirePeriod: "12 months",
-      quantity: "500g"
+      quantity: "5000g"
     },
     {
       id: 2,
@@ -17,7 +17,7 @@ export const foodsData = [
       price: 7.49,
       category: "Seeds",
       expirePeriod: "18 months",
-      quantity: "1kg"
+      quantity: "10000g"
     },
     {
       id: 3,
@@ -27,7 +27,7 @@ export const foodsData = [
       price: 3.99,
       category: "Suet",
       expirePeriod: "6 months",
-      quantity: "600g"
+      quantity: "6000g"
     },
     {
       id: 4,
@@ -37,7 +37,7 @@ export const foodsData = [
       price: 8.99,
       category: "Seeds",
       expirePeriod: "12 months",
-      quantity: "750g"
+      quantity: "7500g"
     },
     {
       id: 5,
@@ -47,7 +47,7 @@ export const foodsData = [
       price: 12.99,
       category: "Insects",
       expirePeriod: "24 months",
-      quantity: "200g"
+      quantity: "2000g"
     },
     {
       id: 6,
@@ -57,7 +57,7 @@ export const foodsData = [
       price: 2.49,
       category: "Fruit",
       expirePeriod: "7 days",
-      quantity: "300g"
+      quantity: "3000g"
     },
     {
       id: 7,
@@ -67,7 +67,7 @@ export const foodsData = [
       price: 3.99,
       category: "Fruit",
       expirePeriod: "7 days",
-      quantity: "500g"
+      quantity: "5000g"
     },
     {
       id: 8,
@@ -77,7 +77,7 @@ export const foodsData = [
       price: 4.99,
       category: "Fruit",
       expirePeriod: "7 days",
-      quantity: "500g"
+      quantity: "5000g"
     }
   ];
   

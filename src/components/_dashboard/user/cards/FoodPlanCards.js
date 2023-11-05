@@ -37,7 +37,7 @@ function FoodPlanCard({ foodPlan }) {
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card sx={{ bgcolor: statusColor }}>
-        <Link href={`${PATH_DASHBOARD.food.card}/${foodPlan.name}/edit`}>
+        <Link href={`${PATH_DASHBOARD.food.status}`}>
           <Typography variant="subtitle1" align="center" sx={{ mt: 2, fontWeight: 'bold' }}>
             {foodPlan.name}
           </Typography>
