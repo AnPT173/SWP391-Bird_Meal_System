@@ -166,9 +166,9 @@ function buildBirdCreateRequestBody(payload) {
   const bird = {
     name: payload.birdName,
     age: date[0],
-    birdTypeID: 1,
+    birdTypeID: payload.birdType.id,
     cageID: payload.cageId,
-    statusID: +payload.status,
+    statusID: 1,
     gender: payload.gender === '1',
     attituteds: payload.attitudes,
     qualities: payload.qualities,

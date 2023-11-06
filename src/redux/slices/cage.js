@@ -95,13 +95,14 @@ function buildCreateCageRequestBody(payload) {
 //     "locationID":1,
 //     "birdTypeID":1
 // }
+
   const data = new FormData();
   const cage = {
-    max: payload.statusId,
-    quantity: payload.statusId,
+    max: payload.quantity,
+    quantity: payload.quantity,
     type: payload.cageType,
     locationID: payload.location.id,
-    birdTypeID: payload.species
+    birdTypeID: getBirdTypeIdBySpeciesIDAndStatus(payload.birdTypeList, payload.species, payload.status)
   };
 
   const { file } = payload;

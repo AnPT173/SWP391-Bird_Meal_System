@@ -191,7 +191,7 @@ export function updateEvent(eventId, updateEvent) {
       // payload.textColor, payload.feedingRegimen
       const { textColor, feedingRegimen } = updateEvent;
 
-      originalData.task.color = textColor;
+      originalData.color = textColor;
       originalData.status = getStatusByColor(textColor);
       originalData.note = getStatusByColor(feedingRegimen);
 
@@ -357,7 +357,7 @@ function buildTaskResponse(responses) {
       staffId: staffid,
       feedingRegimen: response.note,
       locationId: cageid.locationid,
-      color: response?.task?.color
+      color: response?.color
     };
 
     return data;
@@ -390,7 +390,7 @@ function buildCageListForCreateMultipleEvent(values, cageList, foodNormList) {
         schedules: [
           {
             startDate: formatDate(addDays(new Date(values.fromDate), i)),
-            endDate: formatDate(addDays(new Date(values.toDate), i)),
+            endDate: formatDate(addDays(new Date(values.fromDateDate), i)),
             staffID: values?.staffId ?? 2,
             note: 'Batch schedule',
             status: 1,

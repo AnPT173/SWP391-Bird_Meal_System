@@ -1,31 +1,19 @@
+import { useParams } from 'react-router';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Grid, Typography, Divider, Link, styled } from '@material-ui/core';
 import Label from '../../../Label';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 
-const CardMediaStyle = styled('div')(({ theme }) => ({
-  display: 'flex',
-  position: 'relative',
-  justifyContent: 'center',
-  paddingTop: 'calc(100% * 9 / 16)',
-  '&:before': {
-    top: 0,
-    zIndex: 9,
-    content: "''",
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    WebkitBackdropFilter: 'blur(3px)', // Fix on Mobile
-  },
-}));
 FoodPlanCard.propTypes = {
-    isEdit: PropTypes.bool,
-    currentPlan: PropTypes.object,
-  };
+  isEdit: PropTypes.bool,
+  currentPlan: PropTypes.object,
+};
+
 function FoodPlanCard({ foodPlan }) {
   let statusColor = 'info';
 
+  const { id } = useParams();
   if (foodPlan.status === 'Normal') {
     statusColor = 'success';
   } else if (foodPlan.status === 'Sick') {
@@ -37,7 +25,7 @@ function FoodPlanCard({ foodPlan }) {
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card sx={{ bgcolor: statusColor }}>
-        <Link href={`${PATH_DASHBOARD.food.status}`}>
+        <Link href={`${PATH_DASHBOARD.food.card}/${foodPlan.id}/status`}>
           <Typography variant="subtitle1" align="center" sx={{ mt: 2, fontWeight: 'bold' }}>
             {foodPlan.name}
           </Typography>
@@ -60,15 +48,15 @@ function FoodPlanCard({ foodPlan }) {
               Status
             </Typography>
             <Label
-                  color={statusColor} 
-                  sx={{
-                    textTransform: 'uppercase',
-                    position: 'absolute',
-                    bottom: 23, 
-                    left: '50%', 
-                    transform: 'translateX(-50%)', 
-                  }}
-                >
+              color={statusColor}
+              sx={{
+                textTransform: 'uppercase',
+                position: 'absolute',
+                bottom: 23,
+                left: '50%',
+                transform: 'translateX(-50%)',
+              }}
+            >
               {foodPlan.status}
             </Label>
           </Grid>

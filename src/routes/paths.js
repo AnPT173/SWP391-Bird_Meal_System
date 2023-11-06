@@ -88,7 +88,7 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/foodPlan'),
     species: path(ROOTS_DASHBOARD, '/foodPlan/species'),
     period: path(ROOTS_DASHBOARD, '/foodPlan/species/:speciesId/period'),
-    status: path(ROOTS_DASHBOARD, '/foodPlan/cards/:name/status'),
+    status: path(ROOTS_DASHBOARD, '/foodPlan/cards/:id/status'),
     card: path(ROOTS_DASHBOARD,'/foodPlan/cards'),
     edit: path(ROOTS_DASHBOARD, '/foodPlan/cards/:name/edit'),
     list: path(ROOTS_DASHBOARD, '/foodPlan/storage'),

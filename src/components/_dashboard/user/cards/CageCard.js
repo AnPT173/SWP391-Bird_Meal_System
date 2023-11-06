@@ -2,6 +2,7 @@ import { Card, Divider, Grid, Link, Typography, styled } from '@material-ui/core
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import Label from '../../../Label';
 import SearchNotFound from '../../../SearchNotFound';
+import { saveCurrentCurrentBirdTypeName } from '../../../../utils/mock-data/localStorageUtil';
 
 
 const CardMediaStyle = styled('div')(({ theme }) => ({
@@ -38,22 +39,22 @@ function CageCard({ cageList }) {
           console.log('cage', cage)
           let statusColor = 'info';
 
-        if (cage.type === 'Normal') {
+        if (cage.birdTypeid.name === 'Normal') {
           statusColor = 'success'; 
-        } else if (cage.type === 'Birth') {
+        } else if (cage.birdTypeid.name === 'Birth') {
           statusColor = 'warning'; 
-        } else if (cage.type === 'Sick') {
+        } else if (cage.birdTypeid.name === 'Sick') {
           statusColor = 'error'; 
-        } else if (cage.type === 'Exotic'){
+        } else if (cage.birdTypeid.name === 'Exotic'){
           statusColor = 'secondary';
         }
-          if (cage.status === 'Feeded') {
-            statusColor = 'success';
-          } else if (cage.status === 'Pending') {
-            statusColor = 'warning';
-          } else if (cage.status === 'Late') {
-            statusColor = 'error';
-          }
+          // if (cage.status === 'Feeded') {
+          //   statusColor = 'success';
+          // } else if (cage.status === 'Pending') {
+          //   statusColor = 'warning';
+          // } else if (cage.status === 'Late') {
+          //   statusColor = 'error';
+          // }
 
           return (
             <Grid item xs={12} sm={6} md={4} key={cage?.id}>
@@ -64,9 +65,9 @@ function CageCard({ cageList }) {
                     src={cage?.image ?? `/static/mock-images/cages/cage_${index + 1}.jpg`}
                   />
                 </CardMediaStyle>
-                <Link href={`${PATH_DASHBOARD.cages.root}/${cage.id}/birds`}>
+                <Link href={`${PATH_DASHBOARD.cages.root}/${cage.id}/birds`} onClick={async ()=> { await saveCurrentCurrentBirdTypeName(cage?.birdTypeid)}}>
                   <Typography variant="subtitle1" align="center" sx={{ mt: 2, fontWeight: 'bold' }}>
-                    Cage ID: CA{cage.id}
+                    Cage ID: {cage.id}
                   </Typography>
                 </Link>
                 <Typography variant="body2" align="center" sx={{ color: 'text.secondary', marginTop: 1 }}>
@@ -86,7 +87,7 @@ function CageCard({ cageList }) {
                     <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>
                       Status
                     </Typography>
-                    {cage.status && (
+                    
                       <Label
                         color={statusColor}
                         sx={{
@@ -97,9 +98,9 @@ function CageCard({ cageList }) {
                           transform: 'translateX(-50%)',
                         }}
                       >
-                        {cage.status}
+                        {cage.birdTypeid.name}
                       </Label>
-                    )}
+                    
                   </Grid>
                   <Grid item xs={4}>
                     <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 'bold' }}>

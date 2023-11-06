@@ -26,6 +26,10 @@ export async function saveCurrentLocation(data) {
   localStorage.setItem('currentLocation', JSON.stringify(data));
 }
 
+export async function saveCurrentCurrentBirdTypeName(data) {
+  localStorage.setItem('birdTypeName', JSON.stringify(data));
+}
+
 
 // --------- GET ---------------------
 export async function getLocationData() {
@@ -70,5 +74,9 @@ export async function getScheduleById(id) {
 
 export async function getCurrentLocation(){
   const data = JSON.parse(localStorage.getItem('currentLocation'));
+  return data;
+}
+export async function getCurrentBirdTypeName(){
+  const data = JSON.parse(localStorage.getItem('birdTypeName'));
   return data;
 }

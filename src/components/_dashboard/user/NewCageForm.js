@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack5';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { status } from '../../../utils/mock-data/status';
-import { getSpecieList } from '../../../redux/slices/bird';
+import { getBirdType, getSpecieList } from '../../../redux/slices/bird';
 import { createCage } from '../../../redux/slices/cage';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { fData } from '../../../utils/formatNumber';
@@ -21,10 +21,11 @@ export default function CreateNewCageForm({location}) {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [cageImage, setCageImage] = useState();
-  const { species} = useSelector(state => state.bird);
-
+  const { species, birdTypeList} = useSelector(state => state.bird);
+  
   useEffect(()=>{
     dispatch(getSpecieList());
+    dispatch(getBirdType());
   },[])
 
 
@@ -48,7 +49,7 @@ export default function CreateNewCageForm({location}) {
     validationSchema: NewCageSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        dispatch(createCage({ ...values, location, file: cageImage }));
+        dispatch(createCage({ ...values, location, file: cageImage, birdTypeList}));
         resetForm();
         setSubmitting(false);
         enqueueSnackbar('Create success', { variant: 'success' });

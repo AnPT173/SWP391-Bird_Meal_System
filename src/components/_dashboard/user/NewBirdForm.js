@@ -1,32 +1,36 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 import { Box, Card, FormControlLabel, FormHelperText, Grid, MenuItem, Stack, TextField, Typography } from '@material-ui/core';
 import { DatePicker, LoadingButton } from '@material-ui/lab';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useSnackbar } from 'notistack5';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createBird } from '../../../redux/slices/bird';
+import { createBird, getSpecieList } from '../../../redux/slices/bird';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { fData } from '../../../utils/formatNumber';
-import { species } from '../../../utils/mock-data/species';
 import { UploadAvatar } from '../../upload';
 
 
-export default function NewBirdForm({location}) {
+export default function NewBirdForm({location, birdType}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [birdImage, setBirdImage] = useState();
   const [isExoticChecked, setExoticChecked] = useState(false);
+  const { species } = useSelector(state => state.bird);
 
   const { cageId } = useParams();
   
+
+  useEffect(()=>{
+    dispatch(getSpecieList());
+  },[])
+
   const NewBirdSchema = Yup.object().shape({
     birdName: Yup.string(),
     birdAge: Yup.number(),
-    status: Yup.string(),
     species: Yup.string(),
     avatarUrl: Yup.mixed(),
     birdGender: Yup.string(),
@@ -41,7 +45,6 @@ export default function NewBirdForm({location}) {
     initialValues: {
       birdName: '',
       birdAge: '',
-      status: '',
       species: '',
       cageId,
       avatarUrl: null,
@@ -57,7 +60,7 @@ export default function NewBirdForm({location}) {
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
 
-        dispatch(createBird({ ...values, file: birdImage }));
+        dispatch(createBird({ ...values, file: birdImage, birdType}));
         resetForm();
         setSubmitting(false);
         enqueueSnackbar('Create success', { variant: 'success' });
@@ -86,6 +89,7 @@ export default function NewBirdForm({location}) {
     [setFieldValue]
   );
 
+  console.log(birdType, values);
 
   return (
     <FormikProvider value={formik}>
@@ -151,21 +155,7 @@ export default function NewBirdForm({location}) {
                     error={Boolean(touched.birdAge && errors.birdAge)}
                     helperText={touched.birdAge && errors.birdAge}
                   />
-                                    <TextField
-                    select
-                    fullWidth
-                    label="Status"
-                    {...getFieldProps('status')}
-                    error={Boolean(touched.status && errors.status)}
-                    helperText={touched.status && errors.status}
-                  >
-                    <MenuItem value="" disabled>
-                      Select Status
-                    </MenuItem>
-                    <MenuItem value="1">Normal</MenuItem>
-                    <MenuItem value="2">Sick</MenuItem>
-                    <MenuItem value="3">Birth</MenuItem>
-                  </TextField>
+                    
                   {isExoticChecked && (
                     <TextField
                       fullWidth
@@ -191,8 +181,18 @@ export default function NewBirdForm({location}) {
                     disabled
                     fullWidth
                     label="Cage"
-                    value={`CA-${cageId}`}
+                    value={`Cage-${cageId}`}
                     />
+                                    
+                  
+                  <TextField
+                    disabled
+                    fullWidth
+                    label="Status"
+                    value={birdType?.name}
+                    
+                  />
+
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
                 <TextField
@@ -221,8 +221,8 @@ export default function NewBirdForm({location}) {
                       Select Species
                     </MenuItem>
                     {species.map((option) => (
-                      <MenuItem key={option.speciesID} value={option.specie}>
-                        {option.specie}
+                      <MenuItem key={option.id} value={option.id}>
+                        {option.name}
                       </MenuItem>
                     ))}
                   </TextField>

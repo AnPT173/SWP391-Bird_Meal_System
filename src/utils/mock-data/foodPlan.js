@@ -1,5 +1,7 @@
 const foodPlanData = [
     {
+      id:1,
+      specieId: 1,
       name: "Magpie-robin Normal",
       species: "Magpie-robin",
       period: "Altricial",
@@ -13,6 +15,8 @@ const foodPlanData = [
       note: "Provide fresh water daily."
     },
     {
+      id:2,
+      specieId: 3,
       name: "Red-whispered bulbul Birth",
       species: "Red-whispered bulbul",
       period: "Passerine",
@@ -26,6 +30,8 @@ const foodPlanData = [
       note: "Keep the feeding area clean."
     },
     {
+      id:3,
+      specieId: 2,
       name: "White-rumped Shama Sick",
       species: "White-rumped Shama",
       period: "Adult",
@@ -49,6 +55,8 @@ const foodPlanData = [
       ]
     },
     {
+      id:4,
+      specieId: 4,
       name: "Red-rumped Shama Normal",
       species: "Red-rumped Shama",
       period: "Altricial",
@@ -62,6 +70,8 @@ const foodPlanData = [
       note: "Provide a variety of fruits."
     },
     {
+      id:5,
+      specieId: 5,
       name: "Seychelles magpie-robin Exotic",
       species: "Seychelles magpie-robin",
       period: "Passerine",
@@ -75,6 +85,8 @@ const foodPlanData = [
       note: "Introduce new foods gradually."
     },
     {
+      id:6,
+      specieId: 6,
       name: "Magpie-robin Birth",
       species: "Magpie-robin",
       period: "Passerine",
@@ -88,6 +100,8 @@ const foodPlanData = [
       note: "Keep the feeding area clean."
     },
     {
+      id:7,
+      specieId: 7,
       name: "Red-whispered bulbul Normal",
       species: "Red-whispered bulbul",
       period: "Altricial",
@@ -101,6 +115,8 @@ const foodPlanData = [
       note: "Provide fresh water daily."
     },
     {
+      id:8,
+      specieId: 8,
       name: "White-rumped Shama Exotic",
       species: "White-rumped Shama",
       period: "Adult",
@@ -114,6 +130,8 @@ const foodPlanData = [
       note: "Introduce new foods gradually."
     },
     {
+      id:9,
+      specieId: 9,
       name: "Red-rumped Shama Sick",
       species: "Red-rumped Shama",
       period: "Adult",

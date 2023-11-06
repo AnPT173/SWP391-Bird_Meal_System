@@ -36,9 +36,11 @@ NewFoodNormForm.propTypes = {
 };
 
 export default function NewFoodNormForm({ isEdit, currentPlan }) {
+  console.log('current plan', currentPlan)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const {id} = useParams();
   const [products, setProducts] = useState([{ product: '', quantity: '', error: false }]);
   const [showMedicineFields, setShowMedicineFields] = useState(false);
   const [isCustomNumberOfFeedings, setIsCustomNumberOfFeedings] = useState(false);
@@ -52,9 +54,6 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
     dispatch(getMedicineList());
 
   }, [])
-
-
-  const { speciesId, periodId } = useParams();
 
   const FoodPlanSchema = Yup.object().shape({
     products: Yup.array().of(
@@ -112,7 +111,7 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
         //   formik.setFieldValue('products', updatedProducts);
         // }
 
-        dispatch(createFood({ ...values, birdTypeList, species, foodTypeList, medicineList, speciesId, periodId }));
+        dispatch(createFood({ ...values, birdTypeList, species, foodTypeList, medicineList, speciesId: id }));
         resetForm();
         setSubmitting(false);
         enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
@@ -213,7 +212,7 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
                         fullWidth
                         select
                         label={`Product ${index + 1}`}
-                        {...getFieldProps(`products.${index}.product`)}
+                        {...getFieldProps(`products[${index}]product`)}
                         error={product.error}
                         helperText={product.error ? 'Product is required' : ''}
                         onChange={(e) => handleProductChange(e, index)}
@@ -230,7 +229,7 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
                         fullWidth
                         label="Quantity"
                         disabled={false}
-                        {...getFieldProps(`products.${index}.quantity`)}
+                        {...getFieldProps(`products[${index}]quantity`)}
                         error={product.error && !product.quantity}
                         helperText={product.error && !product.quantity ? 'Quantity is required' : ''}
                         onChange={(e)=>handleQuantityChange(e,index)}
@@ -255,7 +254,7 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
                             select
                             fullWidth
                             label={`Medicine ${index + 1}`}
-                            {...getFieldProps(`medicines.${index}.medicine`)}
+                            {...getFieldProps(`medicines[${index}]medicine`)}
                             error={medicine.error}
                             helperText={medicine.error ? 'Medicine is required' : ''}
                             onChange={(e) => handleMedicineChange(e, index)}
@@ -269,7 +268,7 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
                           <TextField
                             fullWidth
                             label="Dosage"
-                            {...getFieldProps(`medicines.${index}.dosage`)}
+                            {...getFieldProps(`medicines[${index}]dosage`)}
                             error={medicine.error && !medicine.dosage}
                             helperText={medicine.error && !medicine.dosage ? 'Dosage is required' : ''}
                           />
