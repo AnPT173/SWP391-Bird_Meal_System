@@ -19,55 +19,45 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import { LoadingButton, MobileTimePicker } from '@material-ui/lab';
 import { useDispatch, useSelector } from 'react-redux';
-// utils
-import { birdMedicines } from '../../../utils/mock-data/medicine';
 // routes
 //
 import { getBirdType, getSpecieList } from '../../../redux/slices/bird';
-import { createFood, getFoodTypeList, getMedicineList } from '../../../redux/slices/food';
+import { createFood, getFoodList, getFoodTypeList, getMedicineList } from '../../../redux/slices/food';
 import { PATH_DASHBOARD } from '../../../routes/paths';
+import foodPlanData from '../../../utils/mock-data/foodPlan';
 
 
 // ----------------------------------------------------------------------
 
 NewFoodNormForm.propTypes = {
-  isEdit: PropTypes.bool,
-  currentPlan: PropTypes.object
+  isEdit: PropTypes.bool
 };
 
-export default function NewFoodNormForm({ isEdit, currentPlan }) {
-  console.log('current plan', currentPlan)
+export default function NewFoodNormForm({ isEdit }) {
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const {id} = useParams();
+  const { id } = useParams();
+  const [currentPlan, setCurrentFoodPlan] = useState();
   const [products, setProducts] = useState([{ product: '', quantity: '', error: false }]);
   const [showMedicineFields, setShowMedicineFields] = useState(false);
   const [isCustomNumberOfFeedings, setIsCustomNumberOfFeedings] = useState(false);
   const { birdTypeList, species } = useSelector(state => state.bird);
-  const { foodTypeList, medicineList } = useSelector(state => state.food);
+  const { foodList, foodTypeList, medicineList } = useSelector(state => state.food);
 
   useEffect(() => {
     dispatch(getBirdType());
     dispatch(getSpecieList());
+    dispatch(getFoodList());
     dispatch(getFoodTypeList());
     dispatch(getMedicineList());
-
   }, [])
 
+  // console.log('current food plan', currentFoodPlan)
+
   const FoodPlanSchema = Yup.object().shape({
-    products: Yup.array().of(
-      Yup.object().shape({
-        product: Yup.string().required('Product is required'),
-        quantity: Yup.string().required('Quantity is required'),
-      })
-    ),
-    medicines: Yup.array().of(
-      Yup.object().shape({
-        medicine: Yup.string(),
-        dosage: Yup.string(),
-      })
-    ),
+
     water: Yup.string().required('Water Amount is required'),
     numberOfFeedings: Yup.number()
       .typeError('Number of Feedings must be a number')
@@ -87,16 +77,16 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
   });
 
   const formik = useFormik({
-    enableReinitialize: true,
+    enableReinitialize: true,   
     initialValues: {
-      products: currentPlan?.products || [{ product: '', quantity: '', error: false }],
-      medicines: currentPlan?.medicines || [{ medicine: '', dosage: '', error: false }],
+      foods: currentPlan?.foods ?? [],
+      medicines: currentPlan?.medicines ?? [],
       water: currentPlan ? 10 : '',
       numberOfFeedings: currentPlan?.numberOfFeedings || 1,
-      note: currentPlan?.note || '',
+      note: currentPlan?.note ?? '',
       isCustomNumberOfFeedings: false,
-      duration: currentPlan?.duration || '',
-      start: currentPlan?.start || ''
+      duration: currentPlan?.duration ?? '',
+      start: currentPlan?.start ?? ''
     },
     validationSchema: FoodPlanSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
@@ -111,7 +101,7 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
         //   formik.setFieldValue('products', updatedProducts);
         // }
 
-        dispatch(createFood({ ...values, birdTypeList, species, foodTypeList, medicineList, speciesId: id }));
+        dispatch(createFood({ ...values, currentPlan, birdTypeList, species, foodTypeList, medicineList, speciesId: id }));
         resetForm();
         setSubmitting(false);
         enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
@@ -127,51 +117,33 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
   const { values, errors, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
 
 
-  const handleAddProductLine = () => {
-    const newProduct = { product: '', quantity: '', error: false };
-    formik.setFieldValue('products', [...formik.values.products, newProduct]);
-  };
+  
+  useEffect(() => {
+    // get current food plan from mock data
+    const data = foodPlanData.find(i => i.id === +id)
+    const { specieId, status } = data;
+    // const currentFoodPlan = foodList ? foodList.find(i => i?.id === 16) : null;
+    const currentFoodPlan = foodList ? foodList.find( i => i?.birdTypeid?.name === status && i?.birdTypeid?.specieid?.id === specieId) : null;
+    console.log('current food plan', currentFoodPlan)
+    if (currentFoodPlan) {
+      const { duration, foodnormFoods, foodnormMedicines,note,numberOfFeeding, startTime } = currentFoodPlan;
+      console.log(foodnormFoods, foodnormMedicines);
+      setFieldValue('foods', foodnormFoods);
+      setFieldValue('medicines', foodnormMedicines);
+      setFieldValue('note', note);
+      setFieldValue('numberOfFeeding', numberOfFeeding);
+      setShowMedicineFields(foodnormMedicines.length > 0);
+      setFieldValue('start', startTime);
+      setFieldValue('duration', duration);
 
-  const handleProductChange = (e, index) => {
-    const { value } = e.target;
-    const newProducts = [...formik.values.products];
-    newProducts[index] = { ...newProducts[index], product: value, error: false };
-    formik.setFieldValue('products', newProducts);
-  };
+      data.foods = foodnormFoods;
+      data.medicines = foodnormMedicines;
+    }
 
-  const handleQuantityChange = (e, index) => {
-    const { value } = e.target;
-    const newProducts = [...formik.values.products];
-    newProducts[index] = { ...newProducts[index], quantity: value, error: false };
-    formik.setFieldValue('products', newProducts);
-  };
+    setCurrentFoodPlan(data);
+  }, [foodList])
 
-  const handleDeleteProduct = (index) => {
-    const newProducts = [...formik.values.products];
-    newProducts.splice(index, 1);
-    formik.setFieldValue('products', newProducts);
-  };
-
-  const handleAddMedicineLine = () => {
-    const newMedicine = { medicine: '', dosage: '', error: false };
-    formik.setFieldValue('medicines', [...formik.values.medicines, newMedicine]);
-  };
-
-  const handleMedicineChange = (e, index) => {
-    const { value } = e.target;
-    const selectedMedicine = birdMedicines.find((medicine) => medicine.name === value);
-    const dosage = selectedMedicine ? selectedMedicine.dosage : '';
-    const newMedicines = [...formik.values.medicines];
-    newMedicines[index] = { ...newMedicines[index], medicine: value, dosage, error: false };
-    formik.setFieldValue('medicines', newMedicines);
-  };
-
-  const handleDeleteMedicine = (index) => {
-    const newMedicines = [...formik.values.medicines];
-    newMedicines.splice(index, 1);
-    formik.setFieldValue('medicines', newMedicines);
-  };
-
+  console.log('current plan', currentPlan)
   console.log("values", values);
   return (
     <FormikProvider value={formik}>
@@ -202,24 +174,30 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
                     />
                   </div>
                   <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-                    <LoadingButton onClick={handleAddProductLine} color="primary">
+                    <LoadingButton onClick={() => setFieldValue('foods', [...values.foods, { id: '', name: '', quantity: '', error: false }])} color="primary">
                       Add Product
                     </LoadingButton>
                   </Box>
-                  {formik.values.products.map((product, index) => (
+                  {formik.values.foods.map((product, index) => (
                     <Stack key={index} direction="row" spacing={2}>
                       <TextField
                         fullWidth
                         select
                         label={`Product ${index + 1}`}
-                        {...getFieldProps(`products[${index}]product`)}
                         error={product.error}
                         helperText={product.error ? 'Product is required' : ''}
-                        onChange={(e) => handleProductChange(e, index)}
+                        onChange={(e) => {
+                          const foodId = e.target.value;
+                          const selectedFood = foodTypeList.find(i => i.id === +foodId);
+                          setFieldValue('foods', values.foods.map((f, i) => i === index ? { ...f, id: foodId, name: selectedFood?.name , foodTypeID:{...selectedFood}, foodType:{...selectedFood}} : f));
+                        }}
+                        value={values?.foods[index]?.foodTypeID?.id}
                       >
                         {
                           foodTypeList.map(option => (
-                            <MenuItem key={option.id} value={option.id}>
+                            <MenuItem key={option.id} value={option.id}
+                              selected={option.id === values?.foods[index]?.foodTypeID?.id}
+                            >
                               {option.name}
                             </MenuItem>
                           ))
@@ -229,12 +207,12 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
                         fullWidth
                         label="Quantity"
                         disabled={false}
-                        {...getFieldProps(`products[${index}]quantity`)}
+                        value={values.foods[index]?.quantity}
                         error={product.error && !product.quantity}
                         helperText={product.error && !product.quantity ? 'Quantity is required' : ''}
-                        onChange={(e)=>handleQuantityChange(e,index)}
+                        onChange={(e) => setFieldValue('foods', formik.values.foods.map((f, i) => i === index ? { ...f, quantity: e.target.value } : f))}
                       />
-                      <IconButton onClick={() => handleDeleteProduct(index)} color="error">
+                      <IconButton onClick={() => setFieldValue('foods', values.foods.toSpliced(index, 1))} color="error">
                         <DeleteIcon />
                       </IconButton>
                     </Stack>
@@ -244,7 +222,7 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
                   {showMedicineFields && (
                     <Stack direction="column" spacing={2}>
                       <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-                        <LoadingButton onClick={handleAddMedicineLine} color="primary">
+                      <LoadingButton onClick={() => setFieldValue('medicines', [...values.medicines, { medicine: '', quantity: '', error: false }])} color="primary">
                           Add Medicine
                         </LoadingButton>
                       </Box>
@@ -254,13 +232,19 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
                             select
                             fullWidth
                             label={`Medicine ${index + 1}`}
-                            {...getFieldProps(`medicines[${index}]medicine`)}
                             error={medicine.error}
                             helperText={medicine.error ? 'Medicine is required' : ''}
-                            onChange={(e) => handleMedicineChange(e, index)}
+                            onChange={(e) => {
+                              const medicineId = e.target.value;
+                              const selectedMedicine = medicineList.find(i => i.id === +medicineId);
+                              console.log('selected me', selectedMedicine)
+                              setFieldValue('medicines', values.medicines.map((m, i) => i === index ? { ...m, id: medicineId, name: selectedMedicine?.name, medicineID: {...selectedMedicine} } : m));
+                              
+                            }}
+                            value={values?.medicines[index]?.medicineID?.id}
                           >
-                            {birdMedicines.map((option) => (
-                              <MenuItem key={option.name} value={option.name}>
+                            {medicineList.map((option) => (
+                              <MenuItem key={option.id} value={option.id} selected={option.id === values?.medicines[index]?.medicineID?.id}>
                                 {option.name}
                               </MenuItem>
                             ))}
@@ -268,11 +252,12 @@ export default function NewFoodNormForm({ isEdit, currentPlan }) {
                           <TextField
                             fullWidth
                             label="Dosage"
-                            {...getFieldProps(`medicines[${index}]dosage`)}
-                            error={medicine.error && !medicine.dosage}
-                            helperText={medicine.error && !medicine.dosage ? 'Dosage is required' : ''}
+                            value={values.medicines[index]?.quantity}
+                            onChange={(e) => setFieldValue('medicines', values.medicines.map((p, i) => i === index ? { ...p, quantity: e.target.value } : p))}
+                            error={medicine.error && !medicine.quantity}
+                            helperText={medicine.error && !medicine.quantity ? 'Dosage is required' : ''}
                           />
-                          <IconButton onClick={() => handleDeleteMedicine(index)} color="error">
+                          <IconButton onClick={() => setFieldValue('medicines', values.medicines.toSpliced(index, 1))} color="error">
                             <DeleteIcon />
                           </IconButton>
                         </Stack>

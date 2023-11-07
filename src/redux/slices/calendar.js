@@ -3,7 +3,7 @@ import { add, addDays } from 'date-fns';
 import { filter, map } from 'lodash';
 // utils
 import axios from '../../utils/axios';
-import { getOriginalScheduleById, saveOriginalSchedule, saveSchedule } from '../../utils/mock-data/localStorageUtil';
+import { getOriginalScheduleById,saveOriginalSchedule, saveSchedule } from '../../utils/mock-data/localStorageUtil';
 
 // ----------------------------------------------------------------------
 
@@ -197,7 +197,7 @@ export function updateEvent(eventId, updateEvent) {
 
       const response = await axios.put(`/manager/schedule/updateInfoTaskBird/${eventId}`, { ...originalData });
       dispatch(slice.actions.updateEventSuccess(response.data));
-      window.location.reload();
+       window.location.reload();
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -390,7 +390,7 @@ function buildCageListForCreateMultipleEvent(values, cageList, foodNormList) {
         schedules: [
           {
             startDate: formatDate(addDays(new Date(values.fromDate), i)),
-            endDate: formatDate(addDays(new Date(values.fromDateDate), i)),
+            endDate: formatDate(addDays(new Date(values.fromDate), i)),
             staffID: values?.staffId ?? 2,
             note: 'Batch schedule',
             status: 1,

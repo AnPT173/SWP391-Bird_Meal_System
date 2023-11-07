@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
+import { formatDate } from './calendar';
 
 // ----------------------------------------------------------------------
 
@@ -62,7 +63,7 @@ export function createFood(payload) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post('/manager/foodnorm/create', body);
+      const response = await axios.put(`/manager/foodnorm/update/${payload.currentPlan.id}`, body);
       dispatch(slice.actions.afterCreateFoodSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -108,90 +109,6 @@ export function getMedicineList() {
   };
 }
 
-function buildCreateFoodRequestBody(payload) {
-  console.log('create food payload', payload)
-  return {
-    // birdType: getBirdType(payload),
-    // foodType: getFoodType(payload),
-    // quantityFood: payload.products[0]?.quantity ?? 10,
-    // medicine: payload.medicineList[0],
-    // quantityMedicine: 10,
-    // numberOfFeeding: payload.numberOfFeedings,
-    // startTime: '2023-02-10T07:07:00',
-    // duration: payload.duration,
-    // note: payload.note
-
-
-    birdType: {
-      id: 1,
-      name: "t01",
-      specieid: {
-        id: 1,
-        name: "specie 1"
-      }
-    },
-    duration: 30,
-    numberOfFeeding: 2,
-    startTime: "07:00",
-    note: "abc",
-    foodNormMedicineDTOS: [
-      {
-        medicine: {
-          id: 1,
-          quantity: 10,
-          name: "meoo1"
-        },
-        quantity: 10
-      }
-    ],
-    foodNormFoodDTOS: [
-      {
-        foodType: {
-          id: 1,
-          quantity: 10,
-          name: "ff002"
-        },
-        quantity: 10
-      }
-    ]
-  }
-}
-// }
-
-function getBirdType(payload) {
-  // bird cage 
-  // get species id
-  // get status
-  const { birdTypeList, specieId } = payload;
-
-  const periodId = 1;
-  const birdInTheSameSpecie = birdTypeList.filter(item => item.specieid.id === + specieId);
-  const birdType = birdInTheSameSpecie.find(item => item.id === periodId);
-  return {
-    id: 1,
-    name: "t01",
-    specieid: {
-      id: 1,
-      name: "specie 1"
-    }
-  }
-}
-
-function getFoodType(payload) {
-  const { products, foodTypeList } = payload;
-  const foodTypeId = products[0]?.product ?? 1;
-  const foodType = foodTypeList.find(item => item.id === foodTypeId);
-  return {
-  }
-}
-
-export function getCurrentFoodPlan(speciesId, periodId, payload) {
-  const birdType = payload.filter(item => item.birdType?.id === periodId);
-  const species = birdType.find(item => item?.birdType?.specieid?.id === speciesId);
-  console.log('species', species);
-  return species;
-}
-
 
 // {
 //   "birdType" : {
@@ -227,3 +144,63 @@ export function getCurrentFoodPlan(speciesId, periodId, payload) {
 //   }
 //   ]
 //   }
+
+function buildCreateFoodRequestBody(payload) {
+  console.log('create food payload', payload)
+  const {currentPlan, birdTypeList} = payload;
+  return {
+    // birdType: getBirdType(payload),
+    // foodType: getFoodType(payload),
+    // quantityFood: payload.products[0]?.quantity ?? 10,
+    // medicine: payload.medicineList[0],
+    // quantityMedicine: 10,
+    // numberOfFeeding: payload.numberOfFeedings,
+    // startTime: '2023-02-10T07:07:00',
+    // duration: payload.duration,
+    // note: payload.note
+
+    // get from bird type list
+    id: currentPlan?.id,
+    birdType: getBirdType(currentPlan, birdTypeList),
+    duration: payload.duration,
+    numberOfFeeding: payload.numberOfFeedings,
+    startTime:getTimeInHHMM(payload.start),
+    note: payload.note,
+    foodNormMedicineDTOS: payload.medicines,
+    foodNormFoodDTOS: payload.foods,
+    water: payload.water
+  }
+}
+
+
+function getBirdType(currentPlan, birdTypeList) {
+  const { specieId, status} = currentPlan;
+  const selectedBirdType = birdTypeList.find(i => i?.specieid?.id === +specieId && i.name === status);
+  console.log('selected bird type', selectedBirdType);
+  return selectedBirdType
+}
+
+function getFoodType(payload) {
+  const { products, foodTypeList } = payload;
+  const foodTypeId = products[0]?.product ?? 1;
+  const foodType = foodTypeList.find(item => item.id === foodTypeId);
+  return {
+  }
+}
+
+export function getCurrentFoodPlan(speciesId, periodId, payload) {
+  const birdType = payload.filter(item => item.birdType?.id === periodId);
+  const species = birdType.find(item => item?.birdType?.specieid?.id === speciesId);
+  console.log('species', species);
+  return species;
+}
+
+function getTimeInHHMM(date) {
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  // Concatenate the hours and minutes with a colon
+  const time = `${hours < 10 ? '0': ''}${hours}:${minutes< 10 ? '0': ''}${minutes}:00`;
+  console.log('time in hh:mm', time)
+  return time;
+}

@@ -112,3 +112,12 @@ function buildCreateCageRequestBody(payload) {
   
   return data
 }
+
+// have species id, status id -> find bird type id
+
+// species id = 1, status id = 1 
+function getBirdTypeIdBySpeciesIDAndStatus(birdTypeList, specieID, status){
+
+  const selectedBirdTypeId = birdTypeList.find(i => i.name === status && i.specieid.id === specieID);
+  return selectedBirdTypeId.id;
+}

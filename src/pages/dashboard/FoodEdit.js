@@ -75,7 +75,6 @@ export default function FoodEditPage() {
         >
           <NewFoodNormForm
         isEdit
-        currentProduct={currentProduct}
           />
         </Card>
       </Container>
